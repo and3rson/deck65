@@ -1,4 +1,5 @@
 .segment "VECTORS"
-.word 0     ; nmi
+
+.word nmi   ; nmi
 .word init  ; main code
-.word 0     ; interrupt handler
+.word irq   ; interrupt handler

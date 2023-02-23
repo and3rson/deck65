@@ -1,2 +1,0 @@
-; .segment "ZP"
-; .word $BEEF

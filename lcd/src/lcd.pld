@@ -1,0 +1,11 @@
+GAL16V8
+Hex-7Seg
+
+NC    D0    NC    NC    NC    NC    NC    NC    NC    GND
+NC    A     NC    NC    NC    NC    NC    NC    NC    VCC
+
+A = D0
+
+DESCRIPTION
+
+Hexadecimal decoder for 7-segment displays
