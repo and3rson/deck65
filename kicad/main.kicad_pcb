@@ -2238,5 +2238,14 @@
   )
 
   (gr_rect (start 19.685 17.78) (end 119.38 105.41) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 53631491-60a5-440e-8778-71d088e784ce))
+  (gr_text "65C02 SBC" (at 87.63 83.185) (layer "F.SilkS") (tstamp 3a6b00e0-7299-4c09-903d-4e563a95a42c)
+    (effects (font (size 2.032 2.032) (thickness 0.3)))
+  )
+  (gr_text "v0.7" (at 87.63 85.725) (layer "F.SilkS") (tstamp 79f73844-106e-42c1-8074-aab5a625b3e7)
+    (effects (font (size 1.016 1.016) (thickness 0.15875)))
+  )
+  (gr_text "by and3rson" (at 87.63 87.63) (layer "F.SilkS") (tstamp f597d49c-c3bd-41f7-8f05-e04b4f2bbbdc)
+    (effects (font (size 1.5 1.5) (thickness 0.3)))
+  )
 
 )
