@@ -1,6 +1,8 @@
 # m6502
 
-Simple SBC based on 65c02s
+![65c02s SBC](./img/v08_3d.jpg)
+
+Simple SBC based on w65c02s
 
 Discussion: <http://forum.6502.org/viewtopic.php?f=12&t=7501>
 
