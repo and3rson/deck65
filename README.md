@@ -20,7 +20,7 @@ I/O:
 - 2004 LCD 16-pin header
 - 2 ports & control lines from 6522 VIA
 
-To be added in new version:
+To be added in future versions:
 - 8580R5 SID
 - 6551 ACIA
 
