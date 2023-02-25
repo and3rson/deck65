@@ -6,6 +6,8 @@ Simple SBC based on W65C02S
 
 Discussion: <http://forum.6502.org/viewtopic.php?f=12&t=7501>
 
+Pull with `git pull --recurse-submodules`.
+
 # Components
 
 - CPU: W65C02S(6TPG)
@@ -30,7 +32,7 @@ To be added in future versions:
 - [DipTrace PCBs](./diptrace)
 - [Circuits](./circuits) (created with [Digital](https://github.com/hneemann/Digital))
 - [ROM sources](./rom)
-- [LCD decoder](./lcd) using GAL16V8 (includes `galasm` sources)
+- [7-segment decoder](./sevenseg) using GAL16V8 (includes `galasm` as submodule)
 
 # Memory map
 
