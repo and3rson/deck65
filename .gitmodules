@@ -1,0 +1,3 @@
+[submodule "lcd/galasm"]
+	path = lcd/galasm
+	url = https://github.com/daveho/GALasm
