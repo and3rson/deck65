@@ -1244,10 +1244,10 @@
       (net 1 "GND") (pinfunction "A14") (pintype "input") (tstamp c793d23f-c0f9-47af-91c1-8bc5cfcd4e05))
     (pad "28" thru_hole oval (at 15.24 0) (size 2 1.44) (drill 1) (layers *.Cu *.Mask)
       (net 3 "+5V") (pinfunction "VCC") (pintype "power_in") (tstamp 4daefec1-af1c-47ce-8514-eb98a6a3cacf))
-    (model "${KICAD6_3DMODEL_DIR}/Socket.3dshapes/DIP_Socket-28_W11.9_W12.7_W15.24_W17.78_W18.5_3M_228-1277-00-0602J.wrl"
-      (offset (xyz 0 0 0))
+    (model "${KIPRJMOD}/3d/28ZIF_PlaceHolderRevB.stp"
+      (offset (xyz 7.5 -14.5 0))
       (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (rotate (xyz -90 0 -90))
     )
   )
 
