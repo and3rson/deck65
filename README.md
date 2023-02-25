@@ -28,10 +28,10 @@ To be added in future versions:
 
 # Resources
 
-- [Kicad files](./kicad)
-- [DipTrace PCBs](./diptrace)
+- [Kicad files](./kicad) - <https://www.kicad.org/>
+- [DipTrace PCBs](./diptrace) - <https://diptrace.com/>
 - [Circuits](./circuits) (created with [Digital](https://github.com/hneemann/Digital))
-- [ROM sources](./rom)
+- [ROM sources](./rom) (requires [cc65](https://cc65.github.io/) compiler)
 - [7-segment decoder](./sevenseg) using GAL16V8 (includes `galasm` as submodule)
 
 # Memory map
