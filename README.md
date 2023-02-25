@@ -43,14 +43,15 @@ To be added in future versions:
 | $0000 | RAM | NAND(A14, A15)         |
 | $BFFF | 48k |                        |
 +-------+-----+------------------------+
-| $C000 | I/O | !RAM && !A12 && !A13   |
-|  ...  | 4k  | $C000-$C0FF - LCD      |
-|  ...  |     | $C100-$C1FF - 6522 VIA |
-|  ...  |     | $C200-$C2FF - EEPROM?  |
-| $CFFF |     | $C300-$C3FF - SID?     |
+| $C000 | n/a | Reserved for future    |
+| $CFFF | 4k  |                        |
 +-------+-----+------------------------+
-| $D000 | n/a | Reserved for future    |
-| $DFFF | 4k  |                        |
+| $D000 | I/O | !RAM && !A12 && !A13   |
+|  ...  | 4k  | $D000-$D0FF - LCD      |
+|  ...  |     | $D100-$D1FF - 6522 VIA |
+|  ...  |     | $D200-$D2FF - EEPROM?  |
+|  ...  |     | $D300-$D3FF - EEPROM?  |
+| $DFFF |     | $D400-$D4FF - SID?     |
 +-------+-----+------------------------+
 | $E000 | ROM | !RAM && A13            |
 | $FFFF | 8k  |                        |
