@@ -1,7 +1,7 @@
 
 
-Pin 19 = NC           XOR = 0   AC1 = 0
-  0  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 19 = /IO5         XOR = 0   AC1 = 0
+  0  x--- -x-- x--- x--- ---- --x- --x- ----
   1  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   2  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   3  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -10,8 +10,8 @@ Pin 19 = NC           XOR = 0   AC1 = 0
   6  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   7  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 18 = NC           XOR = 0   AC1 = 0
-  8  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 18 = /IO4         XOR = 0   AC1 = 0
+  8  -x-- -x-- x--- x--- ---- --x- --x- ----
   9  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  10  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  11  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -20,8 +20,8 @@ Pin 18 = NC           XOR = 0   AC1 = 0
  14  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  15  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 17 = NC           XOR = 0   AC1 = 0
- 16  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 17 = /IO3         XOR = 0   AC1 = 0
+ 16  x--- x--- -x-- x--- ---- --x- --x- ----
  17  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  18  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  19  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -30,8 +30,8 @@ Pin 17 = NC           XOR = 0   AC1 = 0
  22  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  23  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 16 = NC           XOR = 0   AC1 = 0
- 24  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 16 = /IO2         XOR = 0   AC1 = 0
+ 24  -x-- x--- -x-- x--- ---- --x- --x- ----
  25  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  26  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  27  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -40,8 +40,8 @@ Pin 16 = NC           XOR = 0   AC1 = 0
  30  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  31  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 15 = NC           XOR = 0   AC1 = 0
- 32  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 15 = /VIA         XOR = 0   AC1 = 0
+ 32  x--- -x-- -x-- x--- ---- --x- --x- ----
  33  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  34  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  35  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -50,8 +50,8 @@ Pin 15 = NC           XOR = 0   AC1 = 0
  38  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  39  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 14 = NC           XOR = 0   AC1 = 0
- 40  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 14 = /LCD         XOR = 0   AC1 = 0
+ 40  -x-- -x-- -x-- x--- ---- --x- --x- ----
  41  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  42  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  43  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -60,8 +60,8 @@ Pin 14 = NC           XOR = 0   AC1 = 0
  46  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  47  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 13 = NC           XOR = 0   AC1 = 0
- 48  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 13 = /ROM         XOR = 0   AC1 = 0
+ 48  ---- ---- ---- ---- x--- ---- --x- ----
  49  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  50  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  51  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -70,9 +70,9 @@ Pin 13 = NC           XOR = 0   AC1 = 0
  54  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  55  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 12 = A            XOR = 1   AC1 = 0
- 56  x--- ---- ---- ---- ---- ---- ---- ----
- 57  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 12 = /RAM         XOR = 0   AC1 = 0
+ 56  ---- ---- ---- ---- ---- -x-- ---- ----
+ 57  ---- ---- ---- ---- ---- ---- -x-- ----
  58  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  59  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  60  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx

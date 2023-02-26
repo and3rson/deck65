@@ -1,0 +1,82 @@
+
+
+Pin 22 = g            XOR = 1   AC1 = 0
+  0  -x-- x--- -x-- ---- ---- ---- ---- ---- ---- ----
+  1  ---- -x-- x--- ---- ---- ---- ---- ---- ---- ----
+  2  ---- ---- x--- -x-- ---- ---- ---- ---- ---- ----
+  3  x--- -x-- ---- ---- ---- ---- ---- ---- ---- ----
+  4  x--- ---- ---- x--- ---- ---- ---- ---- ---- ----
+  5  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+  6  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+  7  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 21 = f            XOR = 1   AC1 = 0
+  8  -x-- x--- -x-- ---- ---- ---- ---- ---- ---- ----
+  9  ---- ---- -x-- -x-- ---- ---- ---- ---- ---- ----
+ 10  ---- x--- ---- -x-- ---- ---- ---- ---- ---- ----
+ 11  x--- -x-- ---- ---- ---- ---- ---- ---- ---- ----
+ 12  x--- ---- x--- ---- ---- ---- ---- ---- ---- ----
+ 13  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 14  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 15  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 20 = e            XOR = 1   AC1 = 0
+ 16  ---- -x-- ---- -x-- ---- ---- ---- ---- ---- ----
+ 17  ---- ---- x--- -x-- ---- ---- ---- ---- ---- ----
+ 18  x--- ---- x--- ---- ---- ---- ---- ---- ---- ----
+ 19  x--- x--- ---- ---- ---- ---- ---- ---- ---- ----
+ 20  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 21  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 22  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 23  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 19 = d            XOR = 1   AC1 = 0
+ 24  -x-- -x-- ---- -x-- ---- ---- ---- ---- ---- ----
+ 25  ---- -x-- x--- x--- ---- ---- ---- ---- ---- ----
+ 26  ---- x--- -x-- x--- ---- ---- ---- ---- ---- ----
+ 27  ---- x--- x--- -x-- ---- ---- ---- ---- ---- ----
+ 28  x--- ---- -x-- ---- ---- ---- ---- ---- ---- ----
+ 29  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 30  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 31  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 18 = c            XOR = 1   AC1 = 0
+ 32  -x-- ---- -x-- ---- ---- ---- ---- ---- ---- ----
+ 33  -x-- ---- ---- x--- ---- ---- ---- ---- ---- ----
+ 34  ---- ---- -x-- x--- ---- ---- ---- ---- ---- ----
+ 35  -x-- x--- ---- ---- ---- ---- ---- ---- ---- ----
+ 36  x--- -x-- ---- ---- ---- ---- ---- ---- ---- ----
+ 37  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 38  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 39  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 17 = b            XOR = 1   AC1 = 0
+ 40  -x-- ---- -x-- -x-- ---- ---- ---- ---- ---- ----
+ 41  -x-- ---- x--- x--- ---- ---- ---- ---- ---- ----
+ 42  x--- ---- -x-- x--- ---- ---- ---- ---- ---- ----
+ 43  ---- -x-- -x-- ---- ---- ---- ---- ---- ---- ----
+ 44  ---- -x-- ---- -x-- ---- ---- ---- ---- ---- ----
+ 45  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 46  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 47  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 16 = a            XOR = 1   AC1 = 0
+ 48  x--- -x-- -x-- ---- ---- ---- ---- ---- ---- ----
+ 49  -x-- x--- ---- x--- ---- ---- ---- ---- ---- ----
+ 50  x--- ---- ---- -x-- ---- ---- ---- ---- ---- ----
+ 51  -x-- ---- x--- ---- ---- ---- ---- ---- ---- ----
+ 52  ---- x--- x--- ---- ---- ---- ---- ---- ---- ----
+ 53  ---- -x-- ---- -x-- ---- ---- ---- ---- ---- ----
+ 54  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 55  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+
+Pin 15 = Q            XOR = 0   AC1 = 0
+ 56  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 57  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 58  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 59  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 60  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 61  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 62  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+ 63  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+

@@ -1,0 +1,17 @@
+Name     sevenseg_decoder.dig ;
+PartNo   00 ;
+Date     26.02.2023 ;
+Revision 01 ;
+Designer anderson ;
+Company  unknown ;
+Assembly None ;
+Location unknown ;
+Device   g16v8a ;
+
+/* inputs */
+
+/* outputs */
+PIN 12 = Y;
+
+/* combinatorial logic */
+Y = 'b'0;

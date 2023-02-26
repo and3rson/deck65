@@ -1,0 +1,29 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | CLK      | Input
+   2   | A        | Input
+   3   | B        | Input
+   4   | C        | Input
+   5   | D        | Input
+   6   | A1       | Input
+   7   | B1       | Input
+   8   | C1       | Input
+   9   | D1       | Input
+  10   | NC       | Input
+  11   | NC       | Input
+  12   | GND      | GND
+  13   | /OE      | Input
+  14   | NC       | Input
+  15   | Q        | NC
+  16   | a        | Output
+  17   | b        | Output
+  18   | c        | Output
+  19   | d        | Output
+  20   | e        | Output
+  21   | f        | Output
+  22   | g        | Output
+  23   | NC       | Input
+  24   | VCC      | VCC
+

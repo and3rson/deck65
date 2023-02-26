@@ -32,7 +32,7 @@ To be added in future versions:
 - [DipTrace PCBs](./diptrace) - <https://diptrace.com/>
 - [Circuits](./circuits) (created with [Digital](https://github.com/hneemann/Digital))
 - [ROM sources](./rom) (requires [cc65](https://cc65.github.io/) compiler)
-- [7-segment decoder](./sevenseg) using GAL16V8 (includes `galasm` as submodule)
+- [GAL stuff](./gal) (hexadecimal 7-segment decoder, address decoder, etc using GAL16V8/GAL20V8, includes `galasm` as submodule)
 
 # Memory map
 
@@ -46,7 +46,7 @@ To be added in future versions:
 | $C000 | n/a | Reserved for future    |
 | $CFFF | 4k  |                        |
 +-------+-----+------------------------+
-| $D000 | I/O | !RAM && !A12 && !A13   |
+| $D000 | I/O | !RAM && !ROM && A12    |
 |  ...  | 4k  | $D000-$D0FF - LCD      |
 |  ...  |     | $D100-$D1FF - 6522 VIA |
 |  ...  |     | $D200-$D2FF - EEPROM?  |

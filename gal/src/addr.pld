@@ -1,0 +1,23 @@
+GAL16V8
+AddrDeco
+
+; NC   A8   A9   A10  A12  A13  A14  A15  NC   NC   NC   GND
+; NC   NC  /RAM /ROM /LCD /VIA /IO2 /IO3 /IO4 /IO5  NC   VCC
+NC   A8   A9   A10  A12  A13  A14  A15  NC   GND
+NC  /RAM /ROM /LCD /VIA /IO2 /IO3 /IO4 /IO5  VCC
+
+; RAM: First 48k (A15..A14 in 00, 01, 10)
+RAM = /A14 + /A15
+; ROM: Last 8k (!RAM & A13)
+ROM = /RAM * A13
+; I/O: $D000-$D5FF (6 x 256-byte segments)
+LCD = /RAM * /ROM * A12 * /A8 * /A9 * /A10
+VIA = /RAM * /ROM * A12 *  A8 * /A9 * /A10
+IO2 = /RAM * /ROM * A12 * /A8 *  A9 * /A10
+IO3 = /RAM * /ROM * A12 *  A8 *  A9 * /A10
+IO4 = /RAM * /ROM * A12 * /A8 * /A9 *  A10
+IO5 = /RAM * /ROM * A12 *  A8 * /A9 *  A10
+
+DESCRIPTION
+Address Decoder for my 6502 SBC.
+See ../../README.md for memory map.

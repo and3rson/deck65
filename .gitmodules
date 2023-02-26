@@ -1,3 +1,3 @@
-[submodule "sevenseg/galasm"]
-	path = sevenseg/galasm
+[submodule "gal/galasm"]
+	path = gal/galasm
 	url = https://github.com/daveho/GALasm

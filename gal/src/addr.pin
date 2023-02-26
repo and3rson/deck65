@@ -1,0 +1,25 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | NC       | Input
+   2   | A8       | Input
+   3   | A9       | Input
+   4   | A10      | Input
+   5   | A12      | Input
+   6   | A13      | Input
+   7   | A14      | Input
+   8   | A15      | Input
+   9   | NC       | Input
+  10   | GND      | GND
+  11   | NC       | Input
+  12   | /RAM     | Output
+  13   | /ROM     | Output
+  14   | /LCD     | Output
+  15   | /VIA     | Output
+  16   | /IO2     | Output
+  17   | /IO3     | Output
+  18   | /IO4     | Output
+  19   | /IO5     | Output
+  20   | VCC      | VCC
+
