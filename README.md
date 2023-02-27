@@ -1,6 +1,6 @@
 # m6502
 
-![65c02s SBC](./img/v08_3d.jpg)
+![65c02s SBC](./img/v09_3d.jpg)
 
 Simple SBC based on W65C02S
 

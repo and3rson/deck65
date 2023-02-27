@@ -3,4 +3,5 @@
   (lib (name "65xx")(type "KiCad")(uri "${KIPRJMOD}/65xx.kicad_sym")(options "")(descr ""))
   (lib (name "LCD-20X4B")(type "KiCad")(uri "${KIPRJMOD}/LCD-20X4B.kicad_sym")(options "")(descr ""))
   (lib (name "ds1813")(type "KiCad")(uri "${KIPRJMOD}/ds1813.kicad_sym")(options "")(descr ""))
+  (lib (name "GAL20V8B-15LP")(type "KiCad")(uri "${KIPRJMOD}/GAL20V8B-15LP.kicad_sym")(options "")(descr ""))
 )

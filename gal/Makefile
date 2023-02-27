@@ -4,7 +4,7 @@ OBJECTS = $(SOURCES:.pld=.jed) $(SOURCES:.pld=.hex)
 all: $(OBJECTS)
 
 src/%.jed: src/%.pld bin/galasm
-	bin/galasm $<
+	bin/galasm -v $<
 
 src/%.hex: src/%.jed
 	./src/jedec2hex.py -i $< -o $@
