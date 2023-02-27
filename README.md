@@ -26,6 +26,10 @@ To be added in future versions:
 - 8580R5 SID
 - 6551 ACIA
 
+![65c02s SBC PCB](./img/v09_routed.png?1)
+
+![65c02s SBC PCB](./img/v09.png)
+
 # Resources
 
 - [Kicad files](./kicad) - <https://www.kicad.org/>
