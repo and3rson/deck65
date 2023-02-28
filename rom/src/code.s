@@ -1,19 +1,17 @@
-.segment "ZP"
-
-.res 3           ;6510 register area
-COLOR: .res 1
-CODE: .res 1
-
 .segment "CODE"
 
+.export _main
+_main:
 init:
-    ; TODO: C64 only
+    ; lda COLOR
+    ; tax
+    ; inx
+    ; txa
+    ; sta COLOR
+    ; jmp init
+
     sei
     stx $d016
-    jsr $fda3           ; prepare IRQ
-    jsr $fd50           ; init memory. Rewrite this routine to speed up boot process.
-    jsr $fd15           ; init I/O
-    jsr $ff5b           ; init video
 
     ; lda #$42
     lda #$03 ; color
@@ -56,7 +54,7 @@ init:
     sta $0404
     ; ina
     tax
-    ; inx
+    inx
     txa
     cmp $1A
     bne @save

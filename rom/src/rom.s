@@ -1,3 +1,4 @@
+.include "zp.s"
 .include "stack.s"
 .include "code.s"
 .include "interrupts.s"
