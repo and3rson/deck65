@@ -2641,7 +2641,7 @@
   )
 
   (gr_rect (start 19.685 17.145) (end 117.475 106.045) (layer "Edge.Cuts") (width 0.1) (fill none) (tstamp 53631491-60a5-440e-8778-71d088e784ce))
-  (gr_text "65C02 SBC" (at 106.68 90.932) (layer "F.SilkS") (tstamp 3a6b00e0-7299-4c09-903d-4e563a95a42c)
+  (gr_text "65ad02" (at 106.68 90.932) (layer "F.SilkS") (tstamp 3a6b00e0-7299-4c09-903d-4e563a95a42c)
     (effects (font (size 2.032 2.032) (thickness 0.3)))
   )
   (gr_text "Data" (at 113.665 46.355) (layer "F.SilkS") (tstamp 3d7f8faf-a30d-44ef-817e-c5bb0f98ff3e)
@@ -2659,7 +2659,7 @@
   (gr_text "RES" (at 71.12 101.6 90) (layer "F.SilkS") (tstamp 6b139e36-7e7b-45e6-9c66-59c2f4131155)
     (effects (font (size 1 1) (thickness 0.15)))
   )
-  (gr_text "v0.9" (at 106.68 93.472) (layer "F.SilkS") (tstamp 79f73844-106e-42c1-8074-aab5a625b3e7)
+  (gr_text "v0.9c" (at 106.68 93.472) (layer "F.SilkS") (tstamp 79f73844-106e-42c1-8074-aab5a625b3e7)
     (effects (font (size 1.016 1.016) (thickness 0.15875)))
   )
   (gr_text "Addr" (at 107.315 46.355) (layer "F.SilkS") (tstamp 9da9d9d6-dc68-49e3-8b7e-4d2e78a2132f)

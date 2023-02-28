@@ -1,0 +1,9 @@
+*.zip
+BotAssembly.gbr
+BotDimension.gbr
+BotPaste.gbr
+Drill_NonPlated_Through.gbr
+Drill_Plated_Through.gbr
+TopAssembly.gbr
+TopDimension.gbr
+TopPaste.gbr
