@@ -1,5 +1,7 @@
 # 65ad02
 
+![65c02s SBC](./img/v11.jpg)
+
 ![65c02s SBC](./img/v09_3d.jpg)
 
 Simple SBC based on W65C02S
@@ -26,8 +28,10 @@ To be added in future versions:
 - 8580R5 SID
 - 6551 ACIA
 
-![65c02s SBC PCB](./img/v09.png)
+V11 schematic:
+![65c02s SBC PCB](./img/v11.png)
 
+Original V9 PCB (Requires modifications):
 ![65c02s SBC PCB](./img/v09_routed2.png)
 
 # Resources
