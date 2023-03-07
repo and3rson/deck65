@@ -1,10 +1,7 @@
 .segment "CODE"
 
-S_HELLO: .byte "Hello there!\n\x00"
-S_SYSTEM: .byte "64K RAM SYSTEM\n\x00"
-S_READY: .byte "READY\n\x00"
-
 ; Wait until LCD is ready
+; Arguments: none
 lcd_busy:
         pha
     @wait:
@@ -13,9 +10,12 @@ lcd_busy:
         bne @wait
     @end:
         pla
+
         rts
 
+
 ; Initialize LCD
+; Arguments: none
 lcd_init:
         pha
         phx
@@ -53,7 +53,9 @@ lcd_init:
 
         rts
 
+
 ; Clear LCD
+; Arguments: none
 lcd_clear:
         pha
 
@@ -68,8 +70,10 @@ lcd_clear:
 
         rts
 
+
 ; Print character to LCD
-; A - character code
+; Arguments:
+;   A - character code
 lcd_printchar:
         pha
         phx
@@ -158,9 +162,11 @@ lcd_printchar:
 
         rts
 
+
 ; Print zero-terminated string to LCD
-; A - lower addr
-; X - higher addr
+; Arguments:
+;   A - string addr (low)
+;   X - string addr (high)
 lcd_printz:
         pha
         phx
@@ -188,23 +194,3 @@ lcd_printz:
 
         rts
 
-; .export _main
-; _main:
-init:
-    jsr lcd_init
-    jsr lcd_clear
-
-    lda #<S_HELLO
-    ldx #>S_HELLO
-    jsr lcd_printz
-
-    lda #<S_SYSTEM
-    ldx #>S_SYSTEM
-    jsr lcd_printz
-
-    lda #<S_READY
-    ldx #>S_READY
-    jsr lcd_printz
-
-    lda LCD0 ; for debug
-    stp
