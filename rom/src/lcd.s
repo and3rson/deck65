@@ -1,3 +1,12 @@
+.segment "ZEROPAGE"
+
+; generic 16-bit pointer for string operations
+LCD_PTR: .res 2
+
+LCD_CURSOR_X: .res 1
+LCD_CURSOR_Y: .res 1
+LCD_CHARS: .res 80
+
 .segment "CODE"
 
 ; Wait until LCD is ready
@@ -21,8 +30,8 @@ lcd_init:
         phx
 
         lda #0
-        sta CURSORX
-        sta CURSORY
+        sta LCD_CURSOR_X
+        sta LCD_CURSOR_Y
 
         ldx #$04
     @repeat:
@@ -81,7 +90,7 @@ lcd_printchar:
         cmp #10
         bne @normal
         ; Fill with spaces
-        ldx CURSORX
+        ldx LCD_CURSOR_X
     @whitespace:
         lda #' '
         sta LCD1
@@ -98,9 +107,9 @@ lcd_printchar:
         jsr lcd_busy
 
         ; Check cursor X
-        ldx CURSORX
+        ldx LCD_CURSOR_X
         inx
-        stx CURSORX
+        stx LCD_CURSOR_X
         txa
         ; If not at EOL, end
         cmp #20
@@ -109,10 +118,10 @@ lcd_printchar:
     @cr:
         ; Carriage return
         ldx #0
-        stx CURSORX
+        stx LCD_CURSOR_X
 
         ; Line feed
-        ldx CURSORY
+        ldx LCD_CURSOR_Y
         inx
         txa
         cmp #4
@@ -121,7 +130,7 @@ lcd_printchar:
         ; Wrap cursor to top line
         ldx #0
     @savecursor:
-        stx CURSORY
+        stx LCD_CURSOR_Y
 
         ; Update cursor position
         txa
@@ -173,13 +182,13 @@ lcd_printz:
         phy
 
         ; Store string start address to PTR
-        sta PTR
-        stx PTR+1
+        sta LCD_PTR
+        stx LCD_PTR+1
 
         ldx #0
 
     @printchar:
-        lda (PTR), Y
+        lda (LCD_PTR), Y
         cmp #0
         beq @end
 

@@ -2,17 +2,22 @@
 
 .include "define.s"
 
-; Internal
+; Zeropage & stack
+; zp.s must ALWAYS be defined first
 .include "zp.s"
 .include "stack.s"
+
 ; Ram
 .include "ram.s"
+
 ; I/O
 .include "io.s"
+
 ; Kernel
 .include "init.s"
 .include "time.s"
 .include "lcd.s"
+
 ; System
 .include "interrupts.s"
 .include "vectors.s"
