@@ -1,6 +1,6 @@
 ; LCD implementation with LF wrapping
 
-.segment "ZEROPAGE"
+.zeropage
 
 ; generic 16-bit pointer for string operations
 LCD_PTR: .res 2
@@ -9,7 +9,7 @@ LCD_CURSOR_X: .res 1
 LCD_CURSOR_Y: .res 1
 LCD_BUFFER: .res 80
 
-.segment "CODE"
+.code
 
 ; Wait until LCD is ready
 ; Arguments: none

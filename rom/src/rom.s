@@ -7,9 +7,6 @@
 .include "zp.s"
 .include "stack.s"
 
-; Ram
-.include "ram.s"
-
 ; I/O
 .include "io.s"
 

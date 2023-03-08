@@ -1,6 +1,6 @@
 ; LCD implementation with constant tty-like scrolling
 
-.segment "ZEROPAGE"
+.zeropage
 
 ; generic 16-bit pointer for string operations
 LCD_PTR: .res 2
@@ -14,7 +14,7 @@ LCD_BUFFER_60 = LCD_BUFFER + 60
 
 P_DD_LINE_ADDR: .res 2
 
-.segment "CODE"
+.code
 
 DD_LINE_ADDR: .byte 0, 64, 20, 84
 

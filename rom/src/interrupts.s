@@ -1,4 +1,4 @@
-.segment "CODE"
+.code
 
 irq:
         pha

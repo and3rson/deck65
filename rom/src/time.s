@@ -1,4 +1,4 @@
-.segment "CODE"
+.code
 
 ; Wait for around 300ms (@ 500 KHz)
 busywait:
