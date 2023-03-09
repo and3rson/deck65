@@ -45,6 +45,40 @@ init:
         ldx #>S_READY
         jsr lcd_printz
 
+        ; print VIA values
+        ; lda VIA1_SR
+        ; jsr lcd_printhex
+        ; lda VIA1_ACR
+        ; jsr lcd_printhex
+        ; lda VIA1_PCR
+        ; jsr lcd_printhex
+        ; lda VIA1_IFR
+        ; jsr lcd_printhex
+        ; lda VIA1_EFR
+        ; jsr lcd_printhex
+        ; lda VIA1_EFR
+        ; jsr lcd_printhex
+        ; lda #' '
+        ; jsr lcd_printchar
+
+        lda #%10101100
+        jsr lcd_printbin
+        lda #' '
+        jsr lcd_printchar
+        lda #%01010011
+        jsr lcd_printbin
+
+        ; Bit-bang all bits of VIA (port B)
+        ; lda #$FF
+        ; sta VIA1_DDRB
+        ; sta VIA1_RB
+    ; @flip:
+        ; inc VIA1_RB
+        ; dec VIA1_RB
+        ; inx
+        ; dex
+        ; jmp @flip
+
         ; lda #<S_LOADING
         ; ldx #>S_LOADING
         ; jsr lcd_printz
@@ -95,6 +129,9 @@ init:
 
         ; jmp @play
 
+        lda LCD0 ; for debug
+        stp
+
     songstart:
 ; .incbin "./music/mca_vrolijke_vier.sid"
 ; this currently works only for songs <256 bytes
@@ -120,6 +157,3 @@ init:
 
 ; TODO: Basic basic
 ; TODO: LOAD from SD card
-
-        lda LCD0 ; for debug
-        stp

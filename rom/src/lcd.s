@@ -139,6 +139,7 @@ lcd_clear:
 
 
 ; Print character to LCD
+; Do not print anything if no space is left
 ; Arguments:
 ;   A - character code
 lcd_printchar:
@@ -307,7 +308,7 @@ lcd_printz:
 
     @printchar:
         lda (LCD_PTR), Y
-        cmp #0
+        ; cmp #0
         beq @end
 
         jsr lcd_printchar
@@ -321,3 +322,82 @@ lcd_printz:
 
         rts
 
+; Print hexadecimal representation (4-bit)
+; Arguments:
+;   A - value (low nibble)
+lcd_printnibble:
+        pha
+
+        and #$0F
+        cmp #$0A
+        bcs @letter ; >= 10
+
+    @digit:
+        clc
+        adc #48  ; 0..9 -> ascii
+        jsr lcd_printchar
+        jmp @end
+
+    @letter:
+        clc
+        adc #55  ; 10..15 -> ascii
+        jsr lcd_printchar
+
+    @end:
+        pla
+
+        rts
+
+; Print hexadecimal representation (8-bit)
+; Arguments:
+;   A - value
+lcd_printhex:
+        pha
+        phx
+
+        tax
+        ; High nibble
+        lsr
+        lsr
+        lsr
+        lsr
+        jsr lcd_printnibble
+        txa
+        jsr lcd_printnibble
+
+        plx
+        pla
+
+        rts
+
+; Print binary representation
+; Arguments:
+;   A - value
+lcd_printbin:
+        pha
+        phx
+        phy
+
+        ldx #8
+        tay
+    @again:
+        tya  ; restore A & set sign bit
+        bmi @one
+    @zero:
+        lda #'0'
+        jmp @print
+    @one:
+        lda #'1'
+    @print:
+        jsr lcd_printchar
+        tya
+        rol
+        tay
+        dex
+        bne @again
+
+        ply
+        plx
+        pla
+
+        rts
