@@ -20,5 +20,5 @@ VIA1_SR:    .res  1
 VIA1_ACR:   .res  1
 VIA1_PCR:   .res  1
 VIA1_IFR:   .res  1
-VIA1_EFR:   .res  1
+VIA1_IER:   .res  1
 VIA1_ORNH:  .res  1

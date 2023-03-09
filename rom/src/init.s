@@ -4,19 +4,21 @@ PTR: .res 2
 
 .segment "CODE"
 
-S_BAR19: .byte "===================\n\x00"
-S_HELLO: .byte "Hello there!\n\x00"
-S_SYSTEM: .byte "64K RAM SYSTEM\n\x00"
-S_READY: .byte "READE\x08YX\x08\n\x00"
-S_LOADING: .byte "Loading song...\n\x00"
-S_INITIALIZING: .byte "Initializing...\n\x00"
-S_STARTING: .byte "Starting...\n\x00"
-S_PROGRESS: .byte ".\n\x00"
+S_BAR19: .asciiz "===================\n"
+S_HELLO: .asciiz "Hello there!\n"
+S_SYSTEM: .asciiz "64K RAM SYSTEM\n"
+S_READY: .asciiz "READE\x08YX\x08\n"
+S_LOADING: .asciiz "Loading song...\n"
+S_INITIALIZING: .asciiz "Initializing...\n"
+S_STARTING: .asciiz "Starting...\n"
+S_PROGRESS: .asciiz ".\n"
 
 
 ; Kernel entrypoint
 ; Arguments: none
 init:
+        cli
+
         lda #%10101010 ; digital analyzer trigger
 
         jsr lcd_init
@@ -54,19 +56,33 @@ init:
         ; jsr lcd_printhex
         ; lda VIA1_IFR
         ; jsr lcd_printhex
-        ; lda VIA1_EFR
-        ; jsr lcd_printhex
-        ; lda VIA1_EFR
+        ; lda VIA1_IER
         ; jsr lcd_printhex
         ; lda #' '
         ; jsr lcd_printchar
 
-        lda #%10101100
-        jsr lcd_printbin
-        lda #' '
-        jsr lcd_printchar
-        lda #%01010011
-        jsr lcd_printbin
+        ; http://archive.6502.org/datasheets/wdc_w65c22_sep_13_2010.pdf, page 27
+        lda #%11000000  ; set timer1 interrupt enable flag
+        sta VIA1_IER
+
+        lda #%01000000  ; set timer1 to continuous interrupts, no PB7 toggle
+        sta VIA1_ACR
+
+        lda #$FF
+        sta VIA1_T1CL
+        lda #$40
+        sta VIA1_T1CH
+
+    @again:
+        nop
+        jmp @again
+
+        ; lda #%10101100
+        ; jsr lcd_printbin
+        ; lda #' '
+        ; jsr lcd_printchar
+        ; lda #%01010011
+        ; jsr lcd_printbin
 
         ; Bit-bang all bits of VIA (port B)
         ; lda #$FF
