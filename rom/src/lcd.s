@@ -7,6 +7,7 @@
 LCD_PTR: .res 2
 LCD_REG: .res 2
 LCD_MEM: .res 2
+LCD_INIT: .res 1  ; Set to $01 if LCD was initialized in one of previous boots
 
 LCD_RS = %01000000
 LCD_RW = %00100000
@@ -155,20 +156,20 @@ lcd_read_clock:
         jsr lcd_wait32c
         lda VIA1_RA  ; read nibble
         and #$0F
-        sta LCD_MEM, X
+        sta LCD_MEM - 1, X
         lda #LCD_RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
         jsr lcd_wait32c
         dex
         bne @next
 
-        ; LCD_PTR[0, 1] = low, high
-        lda LCD_PTR+1
+        ; LCD_MEM[0, 1] = low, high
+        lda LCD_MEM+1
         asl
         asl
         asl
         asl
-        ora LCD_PTR
+        ora LCD_MEM
 
         plx
 
@@ -265,13 +266,21 @@ lcd_init:
         ; $4000 - 4.096 ms
         ; $FFFF - ~16.384 ms
 
+        ; lda LCD_INIT  ; Is LCD already initialized?
+        ; bne @postinit
+        ; inc
+        ; sta LCD_INIT
+
+    @init:
         ; https://www.microchip.com/forums/m/tm.aspx?m=1023133&p=1
+        ; ldy #$40  ; 1 s
+        ldy #$4  ; 64ms
+    @longinit:
         lda #$FF
         ldx #$FF
         jsr vdelay  ; 16.384 ms
-        jsr vdelay  ; 16.384 ms
-        jsr vdelay  ; 16.384 ms
-        jsr vdelay  ; 16.384 ms
+        dey
+        bne @longinit
 
         ; Initialize 4-bit mode
         lda #%0010
@@ -292,6 +301,7 @@ lcd_init:
         ldx #$01
         jsr vdelay  ; 64 us
 
+    @postinit:
         lda #%00101000  ; 4 bit, 2 lines, 5x8
         jsr lcd_writecmd
         jsr lcd_busy

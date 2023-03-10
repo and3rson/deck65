@@ -51,6 +51,9 @@ init:
         ldx #>S_HELLO
         jsr lcd_printz
 
+        lda LCD_INIT
+        jsr lcd_printhex
+
         ; ; ; ; jsr busywait
 
         ; lda #<S_SYSTEM
