@@ -17,9 +17,25 @@ S_PROGRESS: .asciiz ".\n"
 ; Kernel entrypoint
 ; Arguments: none
 init:
-        cli
+        ; cli
 
-        lda #%10101010 ; digital analyzer trigger
+        ; stp
+
+        ; !!!!!!!!!!!!!!!
+        sei
+
+        ; lda #%10101010 ; digital analyzer trigger
+
+        ; ; Bit-bang all bits of VIA (port B)
+        ; lda #$FF
+        ; sta VIA1_DDRB
+        ; sta VIA1_RB
+    ; @flip:
+        ; inc VIA1_RB
+        ; dec VIA1_RB
+        ; inx
+        ; dex
+        ; jmp @flip
 
         jsr lcd_init
 
@@ -35,47 +51,47 @@ init:
         ldx #>S_HELLO
         jsr lcd_printz
 
-        ; jsr busywait
+        ; ; ; jsr busywait
 
         lda #<S_SYSTEM
         ldx #>S_SYSTEM
         jsr lcd_printz
 
-        ; ; ; jsr busywait
+        ; ; ; ; ; jsr busywait
 
         lda #<S_READY
         ldx #>S_READY
         jsr lcd_printz
 
-        ; print VIA values
-        ; lda VIA1_SR
-        ; jsr lcd_printhex
-        ; lda VIA1_ACR
-        ; jsr lcd_printhex
-        ; lda VIA1_PCR
-        ; jsr lcd_printhex
-        ; lda VIA1_IFR
-        ; jsr lcd_printhex
-        ; lda VIA1_IER
-        ; jsr lcd_printhex
-        ; lda #' '
-        ; jsr lcd_printchar
+        ; ; print VIA values
+        ; ; lda VIA1_SR
+        ; ; jsr lcd_printhex
+        ; ; lda VIA1_ACR
+        ; ; jsr lcd_printhex
+        ; ; lda VIA1_PCR
+        ; ; jsr lcd_printhex
+        ; ; lda VIA1_IFR
+        ; ; jsr lcd_printhex
+        ; ; lda VIA1_IER
+        ; ; jsr lcd_printhex
+        ; ; lda #' '
+        ; ; jsr lcd_printchar
 
-        ; http://archive.6502.org/datasheets/wdc_w65c22_sep_13_2010.pdf, page 27
-        lda #%11000000  ; set timer1 interrupt enable flag
-        sta VIA1_IER
+        ; ; http://archive.6502.org/datasheets/wdc_w65c22_sep_13_2010.pdf, page 27
+        ; lda #%11000000  ; set timer1 interrupt enable flag
+        ; sta VIA1_IER
 
-        lda #%01000000  ; set timer1 to continuous interrupts, no PB7 toggle
-        sta VIA1_ACR
+        ; lda #%01000000  ; set timer1 to continuous interrupts, no PB7 toggle
+        ; sta VIA1_ACR
 
-        lda #$FF
-        sta VIA1_T1CL
-        lda #$40
-        sta VIA1_T1CH
+        ; lda #$FF
+        ; sta VIA1_T1CL
+        ; lda #$40
+        ; sta VIA1_T1CH
 
-    @again:
-        nop
-        jmp @again
+    ; @again:
+        ; nop
+        ; jmp @again
 
         ; lda #%10101100
         ; jsr lcd_printbin
@@ -145,7 +161,7 @@ init:
 
         ; jmp @play
 
-        lda LCD0 ; for debug
+        ; lda LCD0 ; for debug
         stp
 
     songstart:
