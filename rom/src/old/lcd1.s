@@ -1,4 +1,5 @@
 ; LCD implementation with LF wrapping
+; Uses LCD that's directly connected to CPU data & address bus
 
 .zeropage
 
@@ -10,6 +11,8 @@ LCD_CURSOR_Y: .res 1
 LCD_BUFFER: .res 80
 
 .code
+
+; The code below is timed to work at 500 KHz
 
 ; Wait until LCD is ready
 ; Arguments: none
