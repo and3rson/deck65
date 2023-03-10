@@ -27,15 +27,31 @@ P_DD_LINE_ADDR: .res 2
 
 DD_LINE_ADDR: .byte 0, 64, 20, 84
 
-lcd_busywait:
+; Wait >32 cycles (>8 us @ 4 MHz)
+lcd_wait32c:
+        pha
         phx
 
-        ldx #$80
-    @again:
-        dex
-        bne @again
+        lda #$20
+        ldx #$00
+        jsr vdelay
 
         plx
+        pla
+
+        rts
+
+; Wait >128 cycles (>32 us @ 4 MHz)
+lcd_wait128c:
+        pha
+        phx
+
+        lda #$80
+        ldx #$00
+        jsr vdelay
+
+        plx
+        pla
 
         rts
 
@@ -49,14 +65,26 @@ lcd_writenib:
         ldx #$FF
         stx VIA1_DDRA
 
+        tax
+        ; Assert RS
+        and #LCD_RS
         sta VIA1_RA
-        ; jsr lcd_busywait
+        jsr lcd_wait32c
+        txa
+
+        ; Assert data
+        sta VIA1_RA
+        jsr lcd_wait128c
+
+        ; Assert E=1
         eor #LCD_EN
         sta VIA1_RA
-        ; jsr lcd_busywait
+        jsr lcd_wait32c
+
+        ; Assert E=0
         eor #LCD_EN
         sta VIA1_RA
-        ; jsr lcd_busywait
+        jsr lcd_wait32c
 
         plx
         pla
@@ -119,17 +147,19 @@ lcd_read_clock:
     @next:
         lda #LCD_RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
+        jsr lcd_wait32c
         ; jsr lcd_busywait
         eor #LCD_EN  ; EN=1
         sta VIA1_RA
         ; jsr lcd_busywait
+        jsr lcd_wait32c
         lda VIA1_RA  ; read nibble
         and #$0F
-        dex
         sta LCD_MEM, X
         lda #LCD_RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
-        jsr lcd_busywait
+        jsr lcd_wait32c
+        dex
         bne @next
 
         ; LCD_PTR[0, 1] = low, high
@@ -226,66 +256,60 @@ lcd_init:
         cpx #80
         bne @clear
 
-        ldx #$FF
-    @longwait:
-        jsr lcd_busywait
-        dex
-        bne @longwait
+        ; vdelay @ 4 MHz:
+        ; $0020 - 8 us
+        ; $0080 - 32 us
+        ; $0100 - 64 us
+        ; $0200 - 128 us
+        ; $1000 - 1.024 ms
+        ; $4000 - 4.096 ms
+        ; $FFFF - ~16.384 ms
 
-        ; Initialize LCD
-        ; lda #%00000011
-        ; jsr lcd_writenib
-        ; jsr lcd_writenib
-        ; jsr lcd_writenib
+        ; https://www.microchip.com/forums/m/tm.aspx?m=1023133&p=1
+        lda #$FF
+        ldx #$FF
+        jsr vdelay  ; 16.384 ms
+        jsr vdelay  ; 16.384 ms
+        jsr vdelay  ; 16.384 ms
+        jsr vdelay  ; 16.384 ms
 
         ; Initialize 4-bit mode
         lda #%0010
         jsr lcd_writenib
-        ldx #$10
-    @longinit:
-        jsr lcd_busywait
-        dex
-        bne @longinit
+        lda #$00
+        ldx #$40
+        jsr vdelay  ; 4 ms
 
+        lda #%0010
         jsr lcd_writenib
-        jsr lcd_busywait
+        lda #$00
+        ldx #$02
+        jsr vdelay  ; 128 us
 
+        lda #%0010
         jsr lcd_writenib
-        jsr lcd_busywait
-
-        ; jsr lcd_writenib
-        ; jsr lcd_busywait
+        lda #$00
+        ldx #$01
+        jsr vdelay  ; 64 us
 
         lda #%00101000  ; 4 bit, 2 lines, 5x8
         jsr lcd_writecmd
         jsr lcd_busy
 
-        ; lda #%00101000 ; 4 bit, 2 lines, 5x8
-        ; phx
-        ; ldx #LCD_CMD
-        ; jsr lcd_write
-        ; plx
-
-        lda #%00000110 ; increment, no shift
+        lda #%00000110  ; increment, no shift
         jsr lcd_writecmd
         jsr lcd_busy
 
-        lda #%00001111 ; display on, cursor on, blink on
+        lda #%00001111  ; display on, cursor on, blink on
         jsr lcd_writecmd
         jsr lcd_busy
 
-        ; lda #%10000000 ; ddgram address set: $00
-        ; lda #(DD_LINE_ADDR | %10000000) ; ddram address set: line 3 start
-        ; sta LCD0
-        ; jsr lcd_busy
-
-        ; Clear screen
-        ; jsr lcd_clear
-
-        ; Clear screen
-        lda #%00000001
+        lda #%00000001  ; Clear screen
         jsr lcd_writecmd
         jsr lcd_busy
+        lda #$00
+        ldx #$40
+        jsr vdelay  ; 4 ms
 
         ldx #0
         ldy #3

@@ -5,7 +5,7 @@ PTR: .res 2
 .segment "CODE"
 
 S_BAR19: .asciiz "===================\n"
-S_HELLO: .asciiz "Hello there!\n"
+S_HELLO: .asciiz "Hello there!"
 S_SYSTEM: .asciiz "64K RAM SYSTEM\n"
 S_READY: .asciiz "READE\x08YX\x08\n"
 S_LOADING: .asciiz "Loading song...\n"
@@ -43,25 +43,25 @@ init:
         ; ldy #2
         ; jsr lcd_gotoxy
 
-        lda #<S_BAR19
-        ldx #>S_BAR19
-        jsr lcd_printz
+        ; lda #<S_BAR19
+        ; ldx #>S_BAR19
+        ; jsr lcd_printz
 
         lda #<S_HELLO
         ldx #>S_HELLO
         jsr lcd_printz
 
-        ; ; ; jsr busywait
+        ; ; ; ; jsr busywait
 
-        lda #<S_SYSTEM
-        ldx #>S_SYSTEM
-        jsr lcd_printz
+        ; lda #<S_SYSTEM
+        ; ldx #>S_SYSTEM
+        ; jsr lcd_printz
 
-        ; ; ; ; ; jsr busywait
+        ; ; ; ; ; ; jsr busywait
 
-        lda #<S_READY
-        ldx #>S_READY
-        jsr lcd_printz
+        ; lda #<S_READY
+        ; ldx #>S_READY
+        ; jsr lcd_printz
 
         ; ; print VIA values
         ; ; lda VIA1_SR

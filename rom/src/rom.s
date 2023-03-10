@@ -14,6 +14,7 @@
 .include "init.s"
 .include "time.s"
 .include "lcd.s"
+.include "vdelay.s"
 
 ; System
 .include "interrupts.s"
