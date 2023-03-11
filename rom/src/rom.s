@@ -11,9 +11,10 @@
 .include "io.s"
 
 ; Kernel
-.include "init.s"
 .include "time.s"
 .include "lcd.s"
+.include "ps2kbd.s"
+.include "init.s"
 .include "vdelay.s"
 
 ; System

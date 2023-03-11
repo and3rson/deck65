@@ -232,23 +232,6 @@ lcd_init:
         lda #>DD_LINE_ADDR
         sta P_DD_LINE_ADDR+1
 
-        ; Init VIA
-        ; Bits:
-        ; 7    - n/c
-        ; 6    - RS
-        ; 5    - R/W
-        ; 4    - EN
-        ; 3..0 - data
-        lda #%00100000
-        sta VIA1_RA
-        lda #$FF
-        sta VIA1_DDRA
-
-        ; Don't let T1 toggle PB7, PA, or PB latch
-        lda VIA1_ACR
-        and #$7C
-        sta VIA1_ACR
-
         ; Clear screen buffer
     @clear:
         lda #' '
@@ -274,7 +257,7 @@ lcd_init:
     @init:
         ; https://www.microchip.com/forums/m/tm.aspx?m=1023133&p=1
         ; ldy #$40  ; 1 s
-        ldy #$4  ; 64ms
+        ldy #$10  ; 256ms
     @longinit:
         lda #$FF
         ldx #$FF

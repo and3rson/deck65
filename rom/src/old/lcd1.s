@@ -34,9 +34,8 @@ lcd_init:
         pha
         phx
 
-        lda #0
-        sta LCD_CURSOR_X
-        sta LCD_CURSOR_Y
+        stz LCD_CURSOR_X
+        stz LCD_CURSOR_Y
 
         ldx #$04
     @repeat:

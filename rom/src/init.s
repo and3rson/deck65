@@ -5,7 +5,7 @@ PTR: .res 2
 .segment "CODE"
 
 S_BAR19: .asciiz "===================\n"
-S_HELLO: .asciiz "Hello there!"
+S_HELLO: .asciiz "Hi there!\n"
 S_SYSTEM: .asciiz "64K RAM SYSTEM\n"
 S_READY: .asciiz "READE\x08YX\x08\n"
 S_LOADING: .asciiz "Loading song...\n"
@@ -17,12 +17,14 @@ S_PROGRESS: .asciiz ".\n"
 ; Kernel entrypoint
 ; Arguments: none
 init:
+        sei
+        jsr kbd_init
+        jsr interrupts_init
+        cli
+
         ; cli
 
         ; stp
-
-        ; !!!!!!!!!!!!!!!
-        sei
 
         ; lda #%10101010 ; digital analyzer trigger
 
@@ -51,8 +53,39 @@ init:
         ldx #>S_HELLO
         jsr lcd_printz
 
-        lda LCD_INIT
-        jsr lcd_printhex
+        ; lda LCD_INIT
+        ; jsr lcd_printhex
+
+    ; @getch:
+    ;     lda KBD_RDY
+    ;     beq @getch  ; If zero - restart
+    ;     lda KBD_REG
+    ;     jsr lcd_printhex  ; Otherwise - print to screen
+    ;     lda #0
+    ;     sta KBD_RDY  ; Clear keyboard ready flag
+    ;     ; lda #10
+    ;     ; jsr lcd_printchar
+    ;     jmp @getch
+
+    @loop:
+        ; lda #<S_HELLO
+        ; ldx #>S_HELLO
+        ; jsr lcd_printz
+        ; lda #$FF
+        ; ldx #$FF
+        ; jsr vdelay
+        ; lda #<S_BAR19
+        ; ldx #>S_BAR19
+        ; jsr lcd_printz
+        ; lda #$FF
+        ; ldx #$FF
+        ; jsr vdelay
+        jsr kbd_getch
+        jsr lcd_printchar
+        ; jsr lcd_printhex
+        ; lda #','
+        ; jsr lcd_printchar
+        jmp @loop
 
         ; ; ; ; jsr busywait
 
