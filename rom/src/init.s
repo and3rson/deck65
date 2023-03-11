@@ -67,6 +67,7 @@ init:
     ;     ; jsr lcd_printchar
     ;     jmp @getch
 
+    ; REPL loop
     @loop:
         ; lda #<S_HELLO
         ; ldx #>S_HELLO
