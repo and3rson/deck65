@@ -7,7 +7,7 @@
   (title_block
     (title "65ad02")
     (date "2023-03-02")
-    (rev "11")
+    (rev "12")
     (company "Andrew Dunai")
   )
 
@@ -2935,7 +2935,6 @@
   )
 
   (bus_alias "Data" (members ))
-
   (junction (at 58.42 250.19) (diameter 0) (color 0 0 0 0)
     (uuid 0284fc96-2a2d-488e-9090-4d55bd24526d)
   )
@@ -6895,11 +6894,11 @@
     (pin "2" (uuid 21c0f4a4-ab06-4330-977c-defcd61fe716))
     (pin "3" (uuid 59a8d6fc-b635-4307-9847-f3c579e53db6))
     (pin "1-UB" (uuid f5ed3888-b93d-425c-b44d-ba9e04b32db4))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118b))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118b))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118c))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118c))
     (pin "1-UC" (uuid 3ae0b4dc-8c5f-4237-b19f-760d33ecf781))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd05))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd05))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd06))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd06))
   )
 
   (symbol (lib_id "Device:C") (at 139.7 91.44 0) (unit 1)
@@ -7512,11 +7511,11 @@
     (pin "2" (uuid 1a8328b8-a160-43ae-82bd-bbb920a77bc4))
     (pin "3" (uuid 641825f0-cfb2-4655-93c2-f50f55269073))
     (pin "1-UB" (uuid f5ed3888-b93d-425c-b44d-ba9e04b32db5))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118d))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118d))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118e))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118e))
     (pin "1-UC" (uuid 3ae0b4dc-8c5f-4237-b19f-760d33ecf782))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd07))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd07))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd08))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd08))
   )
 
   (symbol (lib_id "power:+5V") (at 320.04 104.14 0) (unit 1)

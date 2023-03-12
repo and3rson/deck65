@@ -17,19 +17,21 @@ Pull with `git pull --recurse-submodules`.
 - ROM: W27C512
 - I/O: VIA W65C22N(6TPG)
 - Glue logic: 74HC00, 74HC138
-- 1 MHz oscillator (DIP-14)
+- 4 MHz oscillator (DIP-14)
 - Traco Power TSC 1-2450 (drop-in replacement for LD7805)
 
 I/O:
-- 2004 LCD 16-pin header
-- 2 ports & control lines from 6522 VIA
+- 2004 LCD 16-pin header (through 6522)
+- PS/2 keyboard
+- Pin header for VIA: PB0..PB7, CB0, CB1
+- Pin headers for address bus, data bus, & CPU control lines
 
 To be added in future versions:
 - 8580R5 SID
 - 6551 ACIA
 
-V11 schematic:
-![65c02s SBC PCB](./img/v11.png)
+V12 schematic:
+![65c02s SBC PCB](./img/v12.png)
 
 Original V9 PCB (Requires modifications):
 ![65c02s SBC PCB](./img/v09_routed2.png)
