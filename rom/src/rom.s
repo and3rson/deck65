@@ -14,9 +14,10 @@
 .include "time.s"
 .include "lcd.s"
 .include "ps2kbd.s"
-.include "init.s"
 .include "vdelay.s"
 .include "functions.s"
+.include "repl.s"
+.include "init.s"
 
 ; System
 .include "interrupts.s"

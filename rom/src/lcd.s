@@ -28,12 +28,12 @@ P_DD_LINE_ADDR: .res 2
 
 DD_LINE_ADDR: .byte 0, 64, 20, 84
 
-; Wait >32 cycles (>8 us @ 4 MHz)
+; Wait ~8 us
 lcd_wait32c:
         pha
         phx
 
-        lda #$20
+        lda #(8 * CYCLES_PER_US)
         ldx #$00
         jsr vdelay
 
@@ -42,12 +42,12 @@ lcd_wait32c:
 
         rts
 
-; Wait >128 cycles (>32 us @ 4 MHz)
+; Wait ~32 us
 lcd_wait128c:
         pha
         phx
 
-        lda #$80
+        lda #(32 * CYCLES_PER_US)
         ldx #$00
         jsr vdelay
 
