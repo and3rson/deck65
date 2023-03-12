@@ -16,6 +16,7 @@
 .include "ps2kbd.s"
 .include "init.s"
 .include "vdelay.s"
+.include "functions.s"
 
 ; System
 .include "interrupts.s"

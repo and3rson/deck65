@@ -63,7 +63,7 @@ lcd_writenib:
         pha
         phx
 
-        ldx #$FF
+        ldx #$7F
         stx VIA1_DDRA
 
         tax
@@ -141,7 +141,7 @@ lcd_read_clock:
         ; Set data to input
         phx
 
-        lda #$F0
+        lda #$70
         sta VIA1_DDRA
 
         ldx #2
@@ -532,7 +532,7 @@ lcd_printnibble:
         pha
 
         and #$0F
-        cmp #$0A
+        cmp #10
         bcs @letter ; >= 10
 
     @digit:
@@ -601,6 +601,16 @@ lcd_printbin:
 
         ply
         plx
+        pla
+
+        rts
+
+lcd_crlf:
+        pha
+
+        lda #10
+        jsr lcd_printchar
+
         pla
 
         rts
