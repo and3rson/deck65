@@ -16,7 +16,7 @@
 .include "ps2kbd.s"
 .include "vdelay.s"
 .include "functions.s"
-.include "repl.s"
+.include "urepl.s"
 .include "init.s"
 
 ; System

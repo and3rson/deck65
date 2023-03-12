@@ -4,7 +4,7 @@ PTR: .res 2
 
 .code
 
-S_READY: .asciiz "REPL READY\n"
+S_READY: .asciiz "MicroREPL READY\n"
 S_LOADING: .asciiz "Loading song...\n"
 S_INITIALIZING: .asciiz "Initializing...\n"
 S_STARTING: .asciiz "Starting...\n"
