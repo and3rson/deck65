@@ -1,3 +1,7 @@
+.zeropage
+
+F_BYTE: .res 1
+
 .code
 
 ; Parse hexadecimal ASCII character into number
@@ -34,4 +38,23 @@ f_parse_hex:
     @invalid:
         lda #$F0
     @end:
+        rts
+
+; Parse two hexadecimal ASCII characters into number
+; Arguments:
+;   X - zeropage address of first of two ASCII characters
+; Return:
+;   A - value (0..255)
+f_parse_octet:
+        lda 0, X
+        jsr f_parse_hex
+        asl
+        asl
+        asl
+        asl
+        sta F_BYTE
+        lda 1, X
+        jsr f_parse_hex
+        ora F_BYTE
+
         rts

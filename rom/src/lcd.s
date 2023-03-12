@@ -29,7 +29,7 @@ P_DD_LINE_ADDR: .res 2
 DD_LINE_ADDR: .byte 0, 64, 20, 84
 
 ; Wait ~8 us
-lcd_wait32c:
+lcd_wait8us:
         pha
         phx
 
@@ -43,12 +43,26 @@ lcd_wait32c:
         rts
 
 ; Wait ~32 us
-lcd_wait128c:
+lcd_wait32us:
         pha
         phx
 
         lda #(32 * CYCLES_PER_US)
         ldx #$00
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+
+; Wait ~16 ms
+lcd_wait16ms:
+        pha
+        phx
+
+        lda #$FF
+        ldx #$FF
         jsr vdelay
 
         plx
@@ -70,22 +84,22 @@ lcd_writenib:
         ; Assert RS
         and #LCD_RS
         sta VIA1_RA
-        jsr lcd_wait32c
+        jsr lcd_wait8us
         txa
 
         ; Assert data
         sta VIA1_RA
-        jsr lcd_wait128c
+        jsr lcd_wait32us
 
         ; Assert E=1
         eor #LCD_EN
         sta VIA1_RA
-        jsr lcd_wait32c
+        jsr lcd_wait8us
 
         ; Assert E=0
         eor #LCD_EN
         sta VIA1_RA
-        jsr lcd_wait32c
+        jsr lcd_wait8us
 
         plx
         pla
@@ -148,18 +162,18 @@ lcd_read_clock:
     @next:
         lda #LCD_RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
-        jsr lcd_wait32c
+        jsr lcd_wait8us
         ; jsr lcd_busywait
         eor #LCD_EN  ; EN=1
         sta VIA1_RA
         ; jsr lcd_busywait
-        jsr lcd_wait32c
+        jsr lcd_wait8us
         lda VIA1_RA  ; read nibble
         and #$0F
         sta LCD_MEM - 1, X
         lda #LCD_RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
-        jsr lcd_wait32c
+        jsr lcd_wait8us
         dex
         bne @next
 

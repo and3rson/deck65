@@ -1,6 +1,25 @@
 .zeropage
 
 PTR: .res 2
+DAT: .res 1
+
+.segment "JMPTABLE"
+
+jt_count .set 0
+.macro jmptbl char, addr
+    .repeat char - jt_count
+        .word cmd_err
+    .endrep
+    .word addr
+    jt_count .set char + 1
+.endmacro
+
+CMD_JUMPTABLE:
+    jmptbl ' ', cmd_noop
+    jmptbl '!', cmd_writemem
+    jmptbl '?', cmd_printmem
+    jmptbl 'j', cmd_jmp
+    jmptbl 'm', cmd_printmem
 
 .code
 
@@ -11,18 +30,6 @@ S_STARTING: .asciiz "Starting...\n"
 S_UNKNOWN_COMMAND: .asciiz "Unknown cmd: "
 S_JMP: .asciiz "JMP: "
 S_PROGRESS: .asciiz ".\n"
-
-.align $100
-CMD_JUMPTABLE:
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err
-    .word cmd_noop, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_printmem
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_jmp, cmd_err, cmd_err, cmd_printmem, cmd_err, cmd_err
-    .word cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err, cmd_err
-
 
 cmd_noop:
         jmp cmd_done
@@ -40,46 +47,20 @@ cmd_err:
 
 
 cmd_printmem:
-        ldx #4
-    @read:
-        lda LCD_BUFFER_40, X
-        jsr f_parse_hex
-        ; TODO: Error checking
-        and #$0F
-        pha
-        dex
-        bne @read
-
-        ; Top of stack is high nibble of high byte
-        pla
-        asl
-        asl
-        asl
-        asl
-        sta PTR+1
-        pla
-        ora PTR+1
+        ldx #LCD_BUFFER_40+1
+        jsr f_parse_octet
         sta PTR+1
 
-        ; Top of stack is high nibble of low byte
-        pla
-        asl
-        asl
-        asl
-        asl
-        sta PTR
-        pla
-        ora PTR
+        inx
+        inx
+        jsr f_parse_octet
         sta PTR
 
         a8call lcd_printhex, PTR+1
         a8call lcd_printhex, PTR
         a8call lcd_printchar, #':'
         a8call lcd_printchar, #' '
-        ; a8call lcd_printhex, (PTR)
-        ; a8call lcd_printchar, #'('
-        ; a8call lcd_printchar, (PTR)
-        ; a8call lcd_printchar, #')'
+
         ldy #0
     @rep:
         lda (PTR), Y
@@ -93,37 +74,34 @@ cmd_printmem:
         jmp cmd_done
 
 
-cmd_jmp:
-        ldx #4
-    @read:
-        lda LCD_BUFFER_40, X
-        jsr f_parse_hex
-        ; TODO: Error checking
-        and #$0F
-        pha
-        dex
-        bne @read
-
-        ; Top of stack is high nibble of high byte
-        pla
-        asl
-        asl
-        asl
-        asl
-        sta PTR+1
-        pla
-        ora PTR+1
+cmd_writemem:
+        ldx #LCD_BUFFER_40+1
+        jsr f_parse_octet
         sta PTR+1
 
-        ; Top of stack is high nibble of low byte
-        pla
-        asl
-        asl
-        asl
-        asl
+        inx
+        inx
+        jsr f_parse_octet
         sta PTR
-        pla
-        ora PTR
+
+        inx
+        inx
+        inx
+        jsr f_parse_octet
+
+        sta (PTR)
+
+        jmp cmd_done
+
+
+cmd_jmp:
+        ldx #LCD_BUFFER_40+1
+        jsr f_parse_octet
+        sta PTR+1
+
+        inx
+        inx
+        jsr f_parse_octet
         sta PTR
 
         print S_JMP
