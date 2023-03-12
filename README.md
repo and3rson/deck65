@@ -66,6 +66,10 @@ Original V9 PCB (Requires modifications):
 +-------+-----+------------------------+
 ```
 
+# Credits
+- [6502.org community](forum.6502.org/) - Limitless help & support
+- https://github.com/4x1md/kicad_libraries - Mini-DIN-6 symbol & footprint
+
 # Links
 - 6502 Primer: http://wilsonminesco.com/6502primer/
 - Address Selector: https://circuitverse.org/simulator/embed/6502-address-selector

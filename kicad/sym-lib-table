@@ -1,6 +1,6 @@
 (sym_lib_table
-  (lib (name "cbm")(type "KiCad")(uri "${KIPRJMOD}/cbm.kicad_sym")(options "")(descr ""))
-  (lib (name "65xx")(type "KiCad")(uri "${KIPRJMOD}/65xx.kicad_sym")(options "")(descr ""))
-  (lib (name "LCD-20X4B")(type "KiCad")(uri "${KIPRJMOD}/LCD-20X4B.kicad_sym")(options "")(descr ""))
-  (lib (name "ds1813")(type "KiCad")(uri "${KIPRJMOD}/ds1813.kicad_sym")(options "")(descr ""))
+  (lib (name "cbm")(type "KiCad")(uri "${KIPRJMOD}/symbols/cbm.kicad_sym")(options "")(descr ""))
+  (lib (name "65xx")(type "KiCad")(uri "${KIPRJMOD}/symbols/65xx.kicad_sym")(options "")(descr ""))
+  (lib (name "ds1813")(type "KiCad")(uri "${KIPRJMOD}/symbols/ds1813.kicad_sym")(options "")(descr ""))
+  (lib (name "Custom_Symbols_Library")(type "Legacy")(uri "${KIPRJMOD}/symbols/Custom_Symbols/Custom_Symbols_Library.lib")(options "")(descr ""))
 )
