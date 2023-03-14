@@ -5,20 +5,39 @@ DIR: .res 1
 
 .code
 
-S_BAR19: .asciiz "===================\n"
+; S_BAR19: .asciiz "===================\n"
 S_SYSTEM: .asciiz "       65ad02\n"
+S_SDC_ERR: .asciiz "SD card err: "
 
 ; Kernel entrypoint
 ; Arguments: none
 init:
         sei
-        jsr interrupts_init
+        jsr via_init
         jsr kbd_init
         jsr lcd_init
+        jsr sdc_init
+        cmp #0
+        beq @sdc_ok
+        pha
+        print S_SDC_ERR
+        pla
+        jsr lcd_printhex
+        a8call lcd_printchar, #10
+    @sdc_ok:
         cli
 
+        jsr sdc_read_block
+        cmp #0
+        bne @read_err
+        print SDC_BUFFER
+        jmp @after_read
+    @read_err:
+        jsr lcd_printhex
+    @after_read:
+
         print S_SYSTEM
-        print S_BAR19
+        ; print S_BAR19
 
         jmp repl_main
 

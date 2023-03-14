@@ -14,6 +14,7 @@
 .include "time.s"
 .include "lcd.s"
 .include "ps2kbd.s"
+.include "sdcard.s"
 .include "vdelay.s"
 .include "functions.s"
 .include "urepl.s"

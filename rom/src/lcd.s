@@ -56,6 +56,20 @@ lcd_wait32us:
 
         rts
 
+; Wait ~2 ms
+lcd_wait2ms:
+        pha
+        phx
+
+        lda #$00
+        ldx #$20
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+
 ; Wait ~16 ms
 lcd_wait16ms:
         pha

@@ -70,7 +70,9 @@ Original V9 PCB (Requires modifications):
 
 # Credits
 - [6502.org community](forum.6502.org/) - Limitless help & support
+- https://www.masswerk.at/6502/6502_instruction_set.html
 - https://github.com/4x1md/kicad_libraries - Mini-DIN-6 symbol & footprint
+- http://39k.ca/reading-files-from-fat16/
 
 # Links
 - 6502 Primer: http://wilsonminesco.com/6502primer/
