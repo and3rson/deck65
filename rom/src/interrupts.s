@@ -20,7 +20,7 @@ irq:
         rol
         rol
         and #1
-        jsr kbd_process
+        jsr kbd::process
 
     @end:
         ; Clear all interrupt flags

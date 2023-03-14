@@ -37,17 +37,17 @@ cmd_noop:
 
 cmd_err:
         print S_UNKNOWN_COMMAND
-        a8call lcd_printchar, LCD_BUFFER_40
-        a8call lcd_printchar, #' '
-        a8call lcd_printchar, #'('
-        a8call lcd_printhex, LCD_BUFFER_40
-        a8call lcd_printchar, #')'
-        a8call lcd_printchar, #10
+        a8call lcd::printchar, lcd::BUFFER_40
+        a8call lcd::printchar, #' '
+        a8call lcd::printchar, #'('
+        a8call lcd::printhex, lcd::BUFFER_40
+        a8call lcd::printchar, #')'
+        a8call lcd::printchar, #10
         jmp cmd_done
 
 
 cmd_printmem:
-        ldx #LCD_BUFFER_40+1
+        ldx #lcd::BUFFER_40+1
         jsr f_parse_octet
         sta PTR+1
 
@@ -56,26 +56,26 @@ cmd_printmem:
         jsr f_parse_octet
         sta PTR
 
-        a8call lcd_printhex, PTR+1
-        a8call lcd_printhex, PTR
-        a8call lcd_printchar, #':'
-        a8call lcd_printchar, #' '
+        a8call lcd::printhex, PTR+1
+        a8call lcd::printhex, PTR
+        a8call lcd::printchar, #':'
+        a8call lcd::printchar, #' '
 
         ldy #0
     @rep:
         lda (PTR), Y
-        jsr lcd_printhex
-        a8call lcd_printchar, #' '
+        jsr lcd::printhex
+        a8call lcd::printchar, #' '
         iny
         cpy #4
         bne @rep
-        a8call lcd_printchar, #10
+        a8call lcd::printchar, #10
 
         jmp cmd_done
 
 
 cmd_writemem:
-        ldx #LCD_BUFFER_40+1
+        ldx #lcd::BUFFER_40+1
         jsr f_parse_octet
         sta PTR+1
 
@@ -95,7 +95,7 @@ cmd_writemem:
 
 
 cmd_jmp:
-        ldx #LCD_BUFFER_40+1
+    ldx #lcd::BUFFER_40+1
         jsr f_parse_octet
         sta PTR+1
 
@@ -105,9 +105,9 @@ cmd_jmp:
         sta PTR
 
         print S_JMP
-        a8call lcd_printhex, PTR+1
-        a8call lcd_printhex, PTR
-        a8call lcd_printchar, #10
+        a8call lcd::printhex, PTR+1
+        a8call lcd::printhex, PTR
+        a8call lcd::printchar, #10
 
         jmp (PTR)
 
@@ -118,14 +118,14 @@ repl_main:
     repl_loop:
         ; REPL loop
         ; Read
-        jsr kbd_getch
+        jsr kbd::getch
         ; Echo
-        jsr lcd_printchar
+        jsr lcd::printchar
         cmp #10  ; Return pressed
         bne repl_loop
-        lda LCD_BUFFER_40
+        lda lcd::BUFFER_40
         clc
-        adc LCD_BUFFER_40
+        adc lcd::BUFFER_40
         tax
         jmp (CMD_JUMPTABLE, X)
     cmd_done:

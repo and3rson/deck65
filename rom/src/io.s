@@ -25,7 +25,8 @@ VIA1_ORNH:  .res  1
 
 .code
 
-via_init:
+.scope via
+init:
         phx
 
         ; ****************
@@ -86,3 +87,4 @@ via_init:
         plx
 
         rts
+.endscope

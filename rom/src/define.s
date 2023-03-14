@@ -13,5 +13,5 @@ CYCLES_PER_US = CLOCK / 1000000
 .endmacro
 
 .macro print ax
-    ax16call lcd_printz, ax
+    ax16call lcd::printz, ax
 .endmacro

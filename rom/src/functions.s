@@ -58,3 +58,64 @@ f_parse_octet:
         ora F_BYTE
 
         rts
+
+
+; Wait ~8 us
+wait8us:
+        pha
+        phx
+
+        lda #(8 * CYCLES_PER_US)
+        ldx #$00
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+
+
+; Wait ~32 us
+wait32us:
+        pha
+        phx
+
+        lda #(32 * CYCLES_PER_US)
+        ldx #$00
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+
+
+; Wait ~2 ms
+wait2ms:
+        pha
+        phx
+
+        lda #$00
+        ldx #$20
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+
+
+; Wait ~16 ms
+wait16ms:
+        pha
+        phx
+
+        lda #$FF
+        ldx #$FF
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+

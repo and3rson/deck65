@@ -13,28 +13,28 @@ S_SDC_ERR: .asciiz "SD card err: "
 ; Arguments: none
 init:
         sei
-        jsr via_init
-        jsr kbd_init
-        jsr lcd_init
-        jsr sdc_init
+        jsr via::init
+        jsr kbd::init
+        jsr lcd::init
+        jsr sdc::init
         cmp #0
         beq @sdc_ok
         pha
         print S_SDC_ERR
         pla
-        jsr lcd_printhex
-        a8call lcd_printchar, #10
+        jsr lcd::printhex
+        a8call lcd::printchar, #10
     @sdc_ok:
         cli
 
-        jsr sdc_read_block
-        cmp #0
-        bne @read_err
-        print SDC_BUFFER
-        jmp @after_read
-    @read_err:
-        jsr lcd_printhex
-    @after_read:
+        ; jsr sdc::read_block_start
+        ; cmp #0
+        ; bne @read_err
+        ; print SDC_BUFFER
+        ; jmp @after_read
+    ; @read_err:
+        ; jsr lcd::printhex
+    ; @after_read:
 
         print S_SYSTEM
         ; print S_BAR19
@@ -69,14 +69,14 @@ init:
         jsr songplay
 
         ; print S_PROGRESS
-        jsr lcd_wait16ms
+        jsr wait16ms
 
         ; ldx CNT
         ; ldy DIR
         ; bne @inc
     ; @dec:
         ; lda #8
-        ; jsr lcd_printchar
+        ; jsr lcd::printchar
         ; dex
         ; bne @done
         ; lda #1
@@ -84,7 +84,7 @@ init:
         ; jmp @done
     ; @inc:
         ; lda #'+'
-        ; jsr lcd_printchar
+        ; jsr lcd::printchar
         ; inx
         ; cpx #19
         ; bne @done

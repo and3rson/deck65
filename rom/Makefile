@@ -4,7 +4,7 @@ all: rom.bin flash
 # all: rom.bin rom_sim65.bin
 
 rom.bin: src/*.s rom.cfg Makefile
-	ca65 --cpu $(CPU) -g ./src/rom.s -o ./rom.o
+	ca65 --cpu $(CPU) -g ./src/rom.s -l rom.lst -o ./rom.o
 	ld65 -C rom.cfg -o rom.bin ./rom.o
 
 flash:

@@ -1,18 +1,19 @@
+.scope kbd
 .zeropage
 
-KBD_CNT: .res 1
-KBD_SCA: .res 1
-KBD_RDY: .res 1
-KBD_FLAGS: .res 1  ; 7..3=n/c, 2=SHIFT, 1=EXT, 0=BREAK
-KBD_FLAG_BREAK = $1
-KBD_FLAG_EXT = $2
-KBD_FLAG_SHIFT = $4
-KBD_CHR: .res 1
+CNT: .res 1
+SCA: .res 1
+RDY: .res 1
+FLAGS: .res 1  ; 7..3=n/c, 2=SHIFT, 1=EXT, 0=BREAK
+FLAG_BREAK = $1
+FLAG_EXT = $2
+FLAG_SHIFT = $4
+CHR: .res 1
 
-KBD_SCA_EXT     =  $E0
-KBD_SCA_BREAK   =  $F0
-KBD_SCA_LSHIFT  =  $12
-KBD_SCA_RSHIFT  =  $59
+SCA_EXT     =  $E0
+SCA_BREAK   =  $F0
+SCA_LSHIFT  =  $12
+SCA_RSHIFT  =  $59
 
 .code
 
@@ -51,26 +52,26 @@ KEYMAP_SHIFTED:
     .byte "????????????????" ; E0-EF
     .byte "????????????????" ; F0-FF
 
-kbd_init:
-        stz KBD_CNT
-        stz KBD_SCA
-        stz KBD_RDY
-        stz KBD_FLAGS
-        stz KBD_CHR
+init:
+        stz CNT
+        stz SCA
+        stz RDY
+        stz FLAGS
+        stz CHR
 
         rts
 
 ; Process PS/2 bit, update keyboard state
 ; Arguments:
 ;   A - 0 or 1
-kbd_process:
+process:
         pha
         phx
         phy
 
-        ldx KBD_CNT
+        ldx CNT
         inx
-        stx KBD_CNT
+        stx CNT
 
         ; Decide what to do with bit
         cpx #1
@@ -82,23 +83,23 @@ kbd_process:
 
         ; Handle PS/2 bit as data
         ror A
-        ror KBD_SCA
+        ror SCA
         jmp @end
 
     @complete:
         ; Frame finished
-        stz KBD_CNT
-        ldx KBD_SCA
+        stz CNT
+        ldx SCA
         ; Check is scancode is BREAK
-        cpx #KBD_SCA_BREAK
+        cpx #SCA_BREAK
         bne @check_ext
-        smb0 KBD_FLAGS
+        smb0 FLAGS
         jmp @end
     @check_ext:
         ; Check is scancode is EXT
-        cpx #KBD_SCA_EXT
+        cpx #SCA_EXT
         bne @check_bat
-        smb1 KBD_FLAGS
+        smb1 FLAGS
         jmp @end
     @check_bat:
         ; Ignore BAT
@@ -106,19 +107,19 @@ kbd_process:
         beq @end
 
         ; Load all flags, clear BREAK & EXT
-        lda KBD_FLAGS
-        rmb0 KBD_FLAGS
-        rmb1 KBD_FLAGS
+        lda FLAGS
+        rmb0 FLAGS
+        rmb1 FLAGS
         ; If make/break shift - update shift flag
-        cpx #KBD_SCA_LSHIFT
+        cpx #SCA_LSHIFT
         beq @update_shift
-        cpx #KBD_SCA_RSHIFT
+        cpx #SCA_RSHIFT
         beq @update_shift
         tay
-        and #KBD_FLAG_BREAK  ; Is break flag set?
+        and #FLAG_BREAK  ; Is break flag set?
         bne @end
         tya
-        and #KBD_FLAG_SHIFT  ; Is shift flag set?
+        and #FLAG_SHIFT  ; Is shift flag set?
         bne @shifted
 
         ; Convert scancode into character
@@ -128,18 +129,18 @@ kbd_process:
         ; Convert scancode into shifted character
         lda KEYMAP_SHIFTED, X
     @print:
-        sta KBD_CHR
+        sta CHR
         lda #1
-        sta KBD_RDY
+        sta RDY
         jmp @end
 
     @update_shift:
-        and #KBD_FLAG_BREAK
+        and #FLAG_BREAK
         bne @clear_shift
-        smb2 KBD_FLAGS  ; Set shift flat
+        smb2 FLAGS  ; Set shift flat
         jmp @end
     @clear_shift:
-        rmb2 KBD_FLAGS  ; Clear shift flag
+        rmb2 FLAGS  ; Clear shift flag
         jmp @end
 
     @end:
@@ -153,16 +154,16 @@ kbd_process:
 ; Wait for next character
 ; Return:
 ;   A - character ASCII code
-kbd_getch:
+getch:
     @again:
-        lda KBD_RDY
+        lda RDY
         beq @again  ; Keyboard register not ready yet
 
         ; Keyboard register is ready
         sei
-        stz KBD_RDY  ; Clear readiness flag
-        lda KBD_CHR  ; Read register
+        stz RDY  ; Clear readiness flag
+        lda CHR  ; Read register
         cli
 
         rts
-
+.endscope

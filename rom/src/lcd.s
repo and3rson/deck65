@@ -3,22 +3,24 @@
 
 .zeropage
 
+.scope lcd
+
 ; generic 16-bit pointer for string operations
-LCD_PTR: .res 2
-LCD_REG: .res 2
-LCD_MEM: .res 2
-LCD_INIT: .res 1  ; Set to $01 if LCD was initialized in one of previous boots
+PTR: .res 2
+REG: .res 2
+MEM: .res 2
+INIT: .res 1  ; Set to $01 if LCD was initialized in one of previous boots
 
-LCD_RS = %01000000
-LCD_RW = %00100000
-LCD_EN = %00010000
+RS = %01000000
+RW = %00100000
+EN = %00010000
 
-LCD_CURSOR_X: .res 1
-LCD_CURSOR_Y: .res 1
-LCD_BUFFER: .res 80
-LCD_BUFFER_20 = LCD_BUFFER + 20
-LCD_BUFFER_40 = LCD_BUFFER + 40
-LCD_BUFFER_60 = LCD_BUFFER + 60
+CURSOR_X: .res 1
+CURSOR_Y: .res 1
+BUFFER: .res 80
+BUFFER_20 = BUFFER + 20
+BUFFER_40 = BUFFER + 40
+BUFFER_60 = BUFFER + 60
 
 P_DD_LINE_ADDR: .res 2
 
@@ -28,66 +30,10 @@ P_DD_LINE_ADDR: .res 2
 
 DD_LINE_ADDR: .byte 0, 64, 20, 84
 
-; Wait ~8 us
-lcd_wait8us:
-        pha
-        phx
-
-        lda #(8 * CYCLES_PER_US)
-        ldx #$00
-        jsr vdelay
-
-        plx
-        pla
-
-        rts
-
-; Wait ~32 us
-lcd_wait32us:
-        pha
-        phx
-
-        lda #(32 * CYCLES_PER_US)
-        ldx #$00
-        jsr vdelay
-
-        plx
-        pla
-
-        rts
-
-; Wait ~2 ms
-lcd_wait2ms:
-        pha
-        phx
-
-        lda #$00
-        ldx #$20
-        jsr vdelay
-
-        plx
-        pla
-
-        rts
-
-; Wait ~16 ms
-lcd_wait16ms:
-        pha
-        phx
-
-        lda #$FF
-        ldx #$FF
-        jsr vdelay
-
-        plx
-        pla
-
-        rts
-
 ; Write nibble with EN toggle
 ; Arguments:
 ;   A - nibble with register bit (%0x00xxxx)
-lcd_writenib:
+writenib:
         pha
         phx
 
@@ -96,24 +42,24 @@ lcd_writenib:
 
         tax
         ; Assert RS
-        and #LCD_RS
+        and #RS
         sta VIA1_RA
-        jsr lcd_wait8us
+        jsr wait8us
         txa
 
         ; Assert data
         sta VIA1_RA
-        jsr lcd_wait32us
+        jsr wait32us
 
         ; Assert E=1
-        eor #LCD_EN
+        eor #EN
         sta VIA1_RA
-        jsr lcd_wait8us
+        jsr wait8us
 
         ; Assert E=0
-        eor #LCD_EN
+        eor #EN
         sta VIA1_RA
-        jsr lcd_wait8us
+        jsr wait8us
 
         plx
         pla
@@ -123,7 +69,7 @@ lcd_writenib:
 ; Write cmd byte with EN toggle
 ; Arguments:
 ;   A - byte
-lcd_writecmd:
+writecmd:
         pha
 
         ; Write high nibble
@@ -131,19 +77,19 @@ lcd_writecmd:
         lsr
         lsr
         lsr
-        jsr lcd_writenib
+        jsr writenib
 
         ; Write low nibble
         pla
         and #$0F
-        jsr lcd_writenib
+        jsr writenib
 
         rts
 
 ; Write data byte with EN toggle
 ; Arguments:
 ;   A - byte
-lcd_writedata:
+writedata:
         pha
 
         ; Write high nibble
@@ -151,21 +97,21 @@ lcd_writedata:
         lsr
         lsr
         lsr
-        ora #LCD_RS
-        jsr lcd_writenib
+        ora #RS
+        jsr writenib
 
         ; Write low nibble
         pla
         and #$0F
-        ora #LCD_RS
-        jsr lcd_writenib
+        ora #RS
+        jsr writenib
 
         rts
 
 ; Read byte with EN toggle
 ; Return:
 ;   A - value
-lcd_read_clock:
+read_clock:
         ; Set data to input
         phx
 
@@ -174,30 +120,30 @@ lcd_read_clock:
 
         ldx #2
     @next:
-        lda #LCD_RW  ; RS=0, RW=1, EN=0
+        lda #RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
-        jsr lcd_wait8us
-        ; jsr lcd_busywait
-        eor #LCD_EN  ; EN=1
+        jsr wait8us
+        ; jsr busywait
+        eor #EN  ; EN=1
         sta VIA1_RA
-        ; jsr lcd_busywait
-        jsr lcd_wait8us
+        ; jsr busywait
+        jsr wait8us
         lda VIA1_RA  ; read nibble
         and #$0F
-        sta LCD_MEM - 1, X
-        lda #LCD_RW  ; RS=0, RW=1, EN=0
+        sta MEM - 1, X
+        lda #RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
-        jsr lcd_wait8us
+        jsr wait8us
         dex
         bne @next
 
-        ; LCD_MEM[0, 1] = low, high
-        lda LCD_MEM+1
+        ; MEM[0, 1] = low, high
+        lda MEM+1
         asl
         asl
         asl
         asl
-        ora LCD_MEM
+        ora MEM
 
         plx
 
@@ -205,11 +151,11 @@ lcd_read_clock:
 
 
 ; Block while LCD is busy
-lcd_busy:
+busy:
         pha
 
     @check:
-        jsr lcd_read_clock
+        jsr read_clock
         and #$80
         bne @check
 
@@ -222,23 +168,23 @@ lcd_busy:
 ; Arguments:
 ;   X - column
 ;   Y - row
-lcd_gotoxy:
+gotoxy:
         pha
         phx
         phy
 
-        stx LCD_CURSOR_X
-        sty LCD_CURSOR_Y
+        stx CURSOR_X
+        sty CURSOR_Y
         ; Get DDRAM addr for line start
         lda (P_DD_LINE_ADDR), Y
         ; Add X
         clc
-        adc LCD_CURSOR_X
+        adc CURSOR_X
         ; Add instruction flag
         ora #$80
         ; Move cursor
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
 
     @end:
         ply
@@ -249,7 +195,7 @@ lcd_gotoxy:
 
 ; Initialize LCD
 ; Arguments: none
-lcd_init:
+init:
         pha
         phx
         phy
@@ -263,7 +209,7 @@ lcd_init:
         ; Clear screen buffer
     @clear:
         lda #' '
-        sta LCD_BUFFER, X
+        sta BUFFER, X
         inx
         cpx #80
         bne @clear
@@ -277,10 +223,10 @@ lcd_init:
         ; $4000 - 4.096 ms
         ; $FFFF - ~16.384 ms
 
-        ; lda LCD_INIT  ; Is LCD already initialized?
+        ; lda INIT  ; Is LCD already initialized?
         ; bne @postinit
         ; inc
-        ; sta LCD_INIT
+        ; sta INIT
 
     @init:
         ; https://www.microchip.com/forums/m/tm.aspx?m=1023133&p=1
@@ -295,46 +241,46 @@ lcd_init:
 
         ; Initialize 4-bit mode
         lda #%0010
-        jsr lcd_writenib
+        jsr writenib
         lda #$00
         ldx #$40
         jsr vdelay  ; 4 ms
 
         lda #%0010
-        jsr lcd_writenib
+        jsr writenib
         lda #$00
         ldx #$02
         jsr vdelay  ; 128 us
 
         lda #%0010
-        jsr lcd_writenib
+        jsr writenib
         lda #$00
         ldx #$01
         jsr vdelay  ; 64 us
 
     @postinit:
         lda #%00101000  ; 4 bit, 2 lines, 5x8
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
 
         lda #%00000110  ; increment, no shift
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
 
         lda #%00001111  ; display on, cursor on, blink on
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
 
         lda #%00000001  ; Clear screen
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
         lda #$00
         ldx #$40
         jsr vdelay  ; 4 ms
 
         ldx #0
         ldy #3
-        jsr lcd_gotoxy
+        jsr gotoxy
 
     @end:
         ply
@@ -346,18 +292,18 @@ lcd_init:
 
 ; ; Clear LCD
 ; ; Arguments: none
-; lcd_clear:
+; clear:
 ;         pha
 ;         phx
 ;         phy
 
 ;         lda #%00000001 ; clear
-;         jsr lcd_write_cmd
+;         jsr write_cmd
 
 ;         ; Set cursor pos
 ;         ldx #0
 ;         ldy #3
-;         jsr lcd_gotoxy
+;         jsr gotoxy
 
 ;         ply
 ;         plx
@@ -370,7 +316,7 @@ lcd_init:
 ; Do not print anything if no space is left
 ; Arguments:
 ;   A - character code
-lcd_printchar:
+printchar:
         pha
         phx
         phy
@@ -384,15 +330,15 @@ lcd_printchar:
 
         ; Check if has space
         tax
-        lda LCD_CURSOR_X
+        lda CURSOR_X
         cmp #19
         beq @end  ; no more space
 
         ; Print character
         pha
         txa
-        jsr lcd_writedata
-        jsr lcd_busy
+        jsr writedata
+        jsr busy
         pla
 
         ; Char X-pos -> X, char code -> A
@@ -401,11 +347,11 @@ lcd_printchar:
         pla
 
         ; Write to screen buffer
-        sta LCD_BUFFER_60, X
+        sta BUFFER_60, X
 
         ; Increase cursor X-pos
         inx
-        stx LCD_CURSOR_X
+        stx CURSOR_X
 
         jmp @end
 
@@ -413,8 +359,8 @@ lcd_printchar:
         ; Scroll screen memory up by 20 bytes
         ldx #0
     @scroll1:
-        lda LCD_BUFFER_20, X
-        sta LCD_BUFFER, X
+        lda BUFFER_20, X
+        sta BUFFER, X
         inx
         cpx #60
         bne @scroll1
@@ -423,40 +369,40 @@ lcd_printchar:
         ldx #0
     @add_space:
         lda #' '
-        sta LCD_BUFFER_60, X
+        sta BUFFER_60, X
         inx
         cpx #20
         bne @add_space
 
-        jsr lcd_redraw
+        jsr redraw
 
         ldx #0
         ldy #3
-        jsr lcd_gotoxy
+        jsr gotoxy
 
         jmp @end
 
     @backspace:
-        lda LCD_CURSOR_X
+        lda CURSOR_X
         beq @end  ; already at first column
         ; Update cursor position & screen buffer
         tax
         dex
-        stx LCD_CURSOR_X
+        stx CURSOR_X
         lda #' '
-        sta LCD_BUFFER_60, X
+        sta BUFFER_60, X
         ; Move cursor left
         lda #%00010000
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
         ; Write space
         lda #' '
-        jsr lcd_writedata
-        jsr lcd_busy
+        jsr writedata
+        jsr busy
         ; Move cursor left
         lda #%00010000
-        jsr lcd_writecmd
-        jsr lcd_busy
+        jsr writecmd
+        jsr busy
 
     @end:
         ply
@@ -466,51 +412,51 @@ lcd_printchar:
         rts
 
 ; Redraw entire screen from memory buffer
-lcd_redraw:
+redraw:
         pha
         phx
         phy
 
         ldx #0
         ldy #0
-        jsr lcd_gotoxy
+        jsr gotoxy
     @print_line0:
-        lda LCD_BUFFER, X
-        jsr lcd_writedata
-        jsr lcd_busy
+        lda BUFFER, X
+        jsr writedata
+        jsr busy
         inx
         cpx #20
         bne @print_line0
 
         ldx #0
         ldy #1
-        jsr lcd_gotoxy
+        jsr gotoxy
     @print_line1:
-        lda LCD_BUFFER_20, X
-        jsr lcd_writedata
-        jsr lcd_busy
+        lda BUFFER_20, X
+        jsr writedata
+        jsr busy
         inx
         cpx #20
         bne @print_line1
 
         ldx #0
         ldy #2
-        jsr lcd_gotoxy
+        jsr gotoxy
     @print_line2:
-        lda LCD_BUFFER_40, X
-        jsr lcd_writedata
-        jsr lcd_busy
+        lda BUFFER_40, X
+        jsr writedata
+        jsr busy
         inx
         cpx #19
         bne @print_line2
 
         ldx #0
         ldy #3
-        jsr lcd_gotoxy
+        jsr gotoxy
     @print_line3:
-        lda LCD_BUFFER_60, X
-        jsr lcd_writedata
-        jsr lcd_busy
+        lda BUFFER_60, X
+        jsr writedata
+        jsr busy
         inx
         cpx #19
         bne @print_line3
@@ -526,23 +472,23 @@ lcd_redraw:
 ; Arguments:
 ;   A - string addr (low)
 ;   X - string addr (high)
-lcd_printz:
+printz:
         pha
         phx
         phy
 
         ; Store string start address to PTR
-        sta LCD_PTR
-        stx LCD_PTR+1
+        sta PTR
+        stx PTR+1
 
         ldy #0
 
     @printchar:
-        lda (LCD_PTR), Y
+        lda (PTR), Y
         ; cmp #0
         beq @end
 
-        jsr lcd_printchar
+        jsr printchar
         iny
         jmp @printchar
 
@@ -556,7 +502,7 @@ lcd_printz:
 ; Print hexadecimal representation (4-bit)
 ; Arguments:
 ;   A - value (low nibble)
-lcd_printnibble:
+printnibble:
         pha
 
         and #$0F
@@ -566,13 +512,13 @@ lcd_printnibble:
     @digit:
         clc
         adc #48  ; 0..9 -> ascii
-        jsr lcd_printchar
+        jsr printchar
         jmp @end
 
     @letter:
         clc
         adc #55  ; 10..15 -> ascii
-        jsr lcd_printchar
+        jsr printchar
 
     @end:
         pla
@@ -582,7 +528,7 @@ lcd_printnibble:
 ; Print hexadecimal representation (8-bit)
 ; Arguments:
 ;   A - value
-lcd_printhex:
+printhex:
         pha
         phx
 
@@ -592,9 +538,9 @@ lcd_printhex:
         lsr
         lsr
         lsr
-        jsr lcd_printnibble
+        jsr printnibble
         txa
-        jsr lcd_printnibble
+        jsr printnibble
 
         plx
         pla
@@ -604,7 +550,7 @@ lcd_printhex:
 ; Print binary representation
 ; Arguments:
 ;   A - value
-lcd_printbin:
+printbin:
         pha
         phx
         phy
@@ -620,7 +566,7 @@ lcd_printbin:
     @one:
         lda #'1'
     @print:
-        jsr lcd_printchar
+        jsr printchar
         tya
         rol
         tay
@@ -633,12 +579,13 @@ lcd_printbin:
 
         rts
 
-lcd_crlf:
+crlf:
         pha
 
         lda #10
-        jsr lcd_printchar
+        jsr printchar
 
         pla
 
         rts
+.endscope
