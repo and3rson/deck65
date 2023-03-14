@@ -7,13 +7,15 @@
 .scope kbd
 .zeropage
 
-CNT: .res 1
-SCA: .res 1
-RDY: .res 1
-FLAGS: .res 1  ; 7..3=n/c, 2=SHIFT, 1=EXT, 0=BREAK
-FLAG_BREAK = $1
-FLAG_EXT = $2
-FLAG_SHIFT = $4
+CNT:        .res  1
+SCA:        .res  1
+RDY:        .res  1
+FLAGS:      .res  1  ; 7..3=n/c, 2=SHIFT, 1=EXT, 0=BREAK
+
+FLAG_BREAK  =  $1
+FLAG_EXT    =  $2
+FLAG_SHIFT  =  $4
+
 CHR: .res 1
 
 SCA_EXT     =  $E0
@@ -23,6 +25,7 @@ SCA_RSHIFT  =  $59
 
 .code
 
+; Map stolen from Ben Eater :)
 KEYMAP:
     .byte "????????????? `?" ; 00-0F
     .byte "?????q1???zsaw2?" ; 10-1F
@@ -68,6 +71,7 @@ init:
         rts
 
 ; Process PS/2 bit, update keyboard state
+;
 ; Arguments:
 ;   A - 0 or 1
 process:
@@ -158,6 +162,7 @@ process:
 
 
 ; Wait for next character
+;
 ; Return:
 ;   A - character ASCII code
 getch:

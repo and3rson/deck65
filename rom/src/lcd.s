@@ -10,193 +10,32 @@
 .zeropage
 
 ; generic 16-bit pointer for string operations
-PTR: .res 2
-REG: .res 2
-MEM: .res 2
-INIT: .res 1  ; Set to $01 if LCD was initialized in one of previous boots
+PTR:   .res  2
+REG:   .res  2
+MEM:   .res  2
+INIT:  .res  1  ; Set to $01 if LCD was initialized in one of previous boots
 
-RS = %01000000
-RW = %00100000
-EN = %00010000
+RS  =  %01000000
+RW  =  %00100000
+EN  =  %00010000
 
-CURSOR_X: .res 1
-CURSOR_Y: .res 1
-BUFFER: .res 80
-BUFFER_20 = BUFFER + 20
-BUFFER_40 = BUFFER + 40
-BUFFER_60 = BUFFER + 60
+CURSOR_X:  .res  1
+CURSOR_Y:  .res  1
+BUFFER:    .res  80
+BUFFER_20  =  BUFFER + 20
+BUFFER_40  =  BUFFER + 40
+BUFFER_60  =  BUFFER + 60
 
 P_DD_LINE_ADDR: .res 2
 
 .code
 
-; The code below is timed to work at 4 MHz
+; The code below was tested at 4 MHz, but it should run on any frequency
+; as long as CLOCK is set to a proper value.
 
 DD_LINE_ADDR: .byte 0, 64, 20, 84
 
-; Write nibble with EN toggle
-; Arguments:
-;   A - nibble with register bit (%0x00xxxx)
-writenib:
-        pha
-        phx
-
-        ldx #$7F
-        stx VIA1_DDRA
-
-        tax
-        ; Assert RS
-        and #RS
-        sta VIA1_RA
-        jsr wait8us
-        txa
-
-        ; Assert data
-        sta VIA1_RA
-        jsr wait32us
-
-        ; Assert E=1
-        eor #EN
-        sta VIA1_RA
-        jsr wait8us
-
-        ; Assert E=0
-        eor #EN
-        sta VIA1_RA
-        jsr wait8us
-
-        plx
-        pla
-
-        rts
-
-; Write cmd byte with EN toggle
-; Arguments:
-;   A - byte
-writecmd:
-        pha
-
-        ; Write high nibble
-        lsr
-        lsr
-        lsr
-        lsr
-        jsr writenib
-
-        ; Write low nibble
-        pla
-        and #$0F
-        jsr writenib
-
-        rts
-
-; Write data byte with EN toggle
-; Arguments:
-;   A - byte
-writedata:
-        pha
-
-        ; Write high nibble
-        lsr
-        lsr
-        lsr
-        lsr
-        ora #RS
-        jsr writenib
-
-        ; Write low nibble
-        pla
-        and #$0F
-        ora #RS
-        jsr writenib
-
-        rts
-
-; Read byte with EN toggle
-; Return:
-;   A - value
-read_clock:
-        ; Set data to input
-        phx
-
-        lda #$70
-        sta VIA1_DDRA
-
-        ldx #2
-    @next:
-        lda #RW  ; RS=0, RW=1, EN=0
-        sta VIA1_RA
-        jsr wait8us
-        eor #EN  ; EN=1
-        sta VIA1_RA
-        jsr wait8us
-        lda VIA1_RA  ; read nibble
-        and #$0F
-        sta MEM - 1, X
-        lda #RW  ; RS=0, RW=1, EN=0
-        sta VIA1_RA
-        jsr wait8us
-        dex
-        bne @next
-
-        ; MEM[0, 1] = low, high
-        lda MEM+1
-        asl
-        asl
-        asl
-        asl
-        ora MEM
-
-        plx
-
-        rts
-
-
-; Block while LCD is busy
-busy:
-        pha
-
-    @check:
-        jsr read_clock
-        and #$80
-        bne @check
-
-        pla
-
-        rts
-
-
-; Move LCD cursor
-; Arguments:
-;   X - column
-;   Y - row
-gotoxy:
-        pha
-        phx
-        phy
-
-        stx CURSOR_X
-        sty CURSOR_Y
-        ; Get DDRAM addr for line start
-        lda (P_DD_LINE_ADDR), Y
-        ; Add X
-        clc
-        adc CURSOR_X
-        ; Add instruction flag
-        ora #$80
-        ; Move cursor
-        jsr writecmd
-        jsr busy
-
-    @end:
-        ply
-        plx
-        pla
-
-        rts
-
 ; Initialize LCD
-; Arguments: none
 init:
         pha
         phx
@@ -291,6 +130,173 @@ init:
 
         rts
 
+; Write nibble with EN toggle
+;
+; Arguments:
+;   A - nibble with register bit (%0x00xxxx)
+writenib:
+        pha
+        phx
+
+        ldx #$7F
+        stx VIA1_DDRA
+
+        tax
+        ; Assert RS
+        and #RS
+        sta VIA1_RA
+        jsr wait8us
+        txa
+
+        ; Assert data
+        sta VIA1_RA
+        jsr wait32us
+
+        ; Assert E=1
+        eor #EN
+        sta VIA1_RA
+        jsr wait8us
+
+        ; Assert E=0
+        eor #EN
+        sta VIA1_RA
+        jsr wait8us
+
+        plx
+        pla
+
+        rts
+
+; Write cmd byte with EN toggle
+;
+; Arguments:
+;   A - byte
+writecmd:
+        pha
+
+        ; Write high nibble
+        lsr
+        lsr
+        lsr
+        lsr
+        jsr writenib
+
+        ; Write low nibble
+        pla
+        and #$0F
+        jsr writenib
+
+        rts
+
+; Write data byte with EN toggle
+;
+; Arguments:
+;   A - byte
+writedata:
+        pha
+
+        ; Write high nibble
+        lsr
+        lsr
+        lsr
+        lsr
+        ora #RS
+        jsr writenib
+
+        ; Write low nibble
+        pla
+        and #$0F
+        ora #RS
+        jsr writenib
+
+        rts
+
+; Read byte with EN toggle
+;
+; Return:
+;   A - value
+read_clock:
+        ; Set data to input
+        phx
+
+        lda #$70
+        sta VIA1_DDRA
+
+        ldx #2
+    @next:
+        lda #RW  ; RS=0, RW=1, EN=0
+        sta VIA1_RA
+        jsr wait8us
+        eor #EN  ; EN=1
+        sta VIA1_RA
+        jsr wait8us
+        lda VIA1_RA  ; read nibble
+        and #$0F
+        sta MEM - 1, X
+        lda #RW  ; RS=0, RW=1, EN=0
+        sta VIA1_RA
+        jsr wait8us
+        dex
+        bne @next
+
+        ; MEM[0, 1] = low, high
+        lda MEM+1
+        asl
+        asl
+        asl
+        asl
+        ora MEM
+
+        plx
+
+        rts
+
+
+; Block while LCD is busy
+busy:
+        pha
+
+    @check:
+        jsr read_clock
+        and #$80
+        bne @check
+
+        pla
+
+        rts
+
+
+; Move LCD cursor
+;
+; Arguments:
+;   X - column
+;   Y - row
+gotoxy:
+        pha
+        phx
+        phy
+
+        stx CURSOR_X
+        sty CURSOR_Y
+        ; Get DDRAM addr for line start
+        lda (P_DD_LINE_ADDR), Y
+        ; Add X
+        clc
+        adc CURSOR_X
+        ; Add instruction flag
+        ora #$80
+        ; Move cursor
+        jsr writecmd
+        jsr busy
+
+    @end:
+        ply
+        plx
+        pla
+
+        rts
+
+
 
 ; ; Clear LCD
 ; ; Arguments: none
@@ -316,6 +322,7 @@ init:
 
 ; Print character to LCD
 ; Do not print anything if no space is left
+;
 ; Arguments:
 ;   A - character code
 printchar:
@@ -471,6 +478,7 @@ redraw:
 
 
 ; Print zero-terminated string to LCD
+;
 ; Arguments:
 ;   A - string addr (low)
 ;   X - string addr (high)
@@ -502,6 +510,7 @@ printz:
         rts
 
 ; Print hexadecimal representation (4-bit)
+;
 ; Arguments:
 ;   A - value (low nibble)
 printnibble:
@@ -528,6 +537,7 @@ printnibble:
         rts
 
 ; Print hexadecimal representation (8-bit)
+;
 ; Arguments:
 ;   A - value
 printhex:
@@ -550,6 +560,7 @@ printhex:
         rts
 
 ; Print binary representation
+;
 ; Arguments:
 ;   A - value
 printbin:

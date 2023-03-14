@@ -12,14 +12,21 @@ DIR: .res 1
 ; S_BAR19: .asciiz "===================\n"
 S_SYSTEM: .asciiz "       65ad02\n"
 S_SDC_ERR: .asciiz "SD card err: "
+S_FAT16_ERR: .asciiz "FAT16 err: "
+S_FAT16_BOOTSEC: .asciiz "FAT16 bootsec: "
 
 ; Kernel entrypoint
+;
 ; Arguments: none
 init:
         sei
+
         jsr via::init
+
         jsr kbd::init
+
         jsr lcd::init
+
         jsr sdc::init
         cmp #0
         beq @sdc_ok
@@ -28,8 +35,26 @@ init:
         pla
         jsr lcd::printhex
         a8call lcd::printchar, #10
+        jmp @post_init
     @sdc_ok:
-        cli
+
+        jsr fat16::init
+        cmp #0
+        beq @fat16_ok
+        pha
+        print S_FAT16_ERR
+        pla
+        jsr lcd::printhex
+        a8call lcd::printchar, #10
+        jmp @post_init
+    @fat16_ok:
+
+        print S_FAT16_BOOTSEC
+        lda fat16::BOOTSEC+1
+        jsr lcd::printhex
+        lda fat16::BOOTSEC
+        jsr lcd::printhex
+        a8call lcd::printchar, #10
 
         ; jsr sdc::read_block_start
         ; cmp #0
@@ -39,6 +64,9 @@ init:
     ; @read_err:
         ; jsr lcd::printhex
     ; @after_read:
+
+    @post_init:
+        cli
 
         print S_SYSTEM
         ; print S_BAR19

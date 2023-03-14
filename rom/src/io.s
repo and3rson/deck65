@@ -30,7 +30,10 @@ VIA1_ORNH:  .res  1
 .code
 
 .scope via
+
+; Initialize VIA
 init:
+        pha
         phx
 
         ; ****************
@@ -89,6 +92,8 @@ init:
         sta VIA1_IFR
 
         plx
+        pla
 
         rts
+
 .endscope

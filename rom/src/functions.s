@@ -9,6 +9,7 @@ F_BYTE: .res 1
 .code
 
 ; Parse hexadecimal ASCII character into number
+;
 ; Arguments:
 ;   A - ASCII character
 ; Return:
@@ -45,6 +46,7 @@ f_parse_hex:
         rts
 
 ; Parse two hexadecimal ASCII characters into number
+;
 ; Arguments:
 ;   X - zeropage address of first of two ASCII characters
 ; Return:

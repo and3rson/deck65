@@ -8,7 +8,7 @@ rom.bin: src/*.s rom.cfg Makefile
 	ld65 -C rom.cfg -o rom.bin ./rom.o
 
 flash:
-	minipro -p W27C512@DIP28 -w rom.bin -s
+	minipro -p W27C512@DIP28 -w rom.bin -S
 
 # rom_sim65.bin: src/*.s rom.cfg Makefile
 # 	true

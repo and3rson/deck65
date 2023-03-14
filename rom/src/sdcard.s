@@ -6,10 +6,8 @@
 
 .zeropage
 
-SDC_MISO  =  $1
-; SDC_DO    =  SDC_MISO  ; Slave's DO
-SDC_MOSI  =  $2
-; SDC_DI    =  SDC_MOSI  ; Slave's DI
+SDC_MISO  =  $1  ; Slave's DO
+SDC_MOSI  =  $2  ; Slave's DI
 SDC_CS    =  $4
 SDC_SCK   =  $8
 
@@ -18,48 +16,8 @@ SDC_HEADER = %01000000
 .code
 
 .scope sdc
-enable:
-        pha
-        phx
 
-        lda VIA1_RB
-        ldx #16  ; Pulse clock, 8 cycles
-    @pulse:
-        eor #SDC_SCK  ; Toggle edge
-        sta VIA1_RB
-        nop
-        nop
-        dex
-        bne @pulse
-
-        and #(SDC_CS ^ $FF)  ; Assert CS
-        sta VIA1_RB
-
-        ; Wait for CS to settle
-        jsr wait32us
-
-        plx
-        pla
-
-        rts
-
-disable:
-        pha
-
-        lda VIA1_RB
-        ora #SDC_CS  ; Release CS
-        sta VIA1_RB
-
-        ; Wait for CS to settle
-        lda #16
-    @again:
-        dec
-        bne @again
-
-        pla
-
-        rts
-
+; Initialize SD card
 init:
         phx
 
@@ -208,7 +166,54 @@ init:
 
         rts
 
+; Enable SD card
+enable:
+        pha
+        phx
+
+        lda VIA1_RB
+        ldx #16  ; Pulse clock, 8 cycles
+    @pulse:
+        eor #SDC_SCK  ; Toggle edge
+        sta VIA1_RB
+        nop
+        nop
+        dex
+        bne @pulse
+
+        and #(SDC_CS ^ $FF)  ; Assert CS
+        sta VIA1_RB
+
+        ; Wait for CS to settle
+        jsr wait32us
+
+        plx
+        pla
+
+        rts
+
+; Disable SD card
+disable:
+        pha
+
+        lda VIA1_RB
+        ora #SDC_CS  ; Release CS
+        sta VIA1_RB
+
+        ; Wait for CS to settle
+        lda #16
+    @again:
+        dec
+        bne @again
+
+        pla
+
+        rts
+
 ; Set block length for reading
+; NOTE: Card needs to be enabled/disabled before/after call to this function.
+; NOTE: Block length only up to number 65535 is supported (16-bit LBA).
+;
 ; Arguments:
 ;   A - low byte
 ;   X - high byte
@@ -223,7 +228,13 @@ set_blocklen:
         rts
 
 ; Start reading block
+; NOTE: Reading blocks only up to number 65535 is supported (16-bit LBA).
+;
 ; Arguments:
+;   A - low byte
+;   X - high byte
+; Return:
+;   A - 0 if success, otherwise error code
 read_block_start:
         phx
 
@@ -235,7 +246,12 @@ read_block_start:
         bne @end  ; error
         jsr _wait_byte  ; Wait for data token
         cmp #$FE
-        bne @end  ; error
+        bne @err  ; error
+        lda #0
+        jmp @end
+
+    @err:
+        lda #1
 
     @end:
         plx
@@ -243,21 +259,30 @@ read_block_start:
         rts
 
 ; Read next byte from block
+;
 ; Return:
 ;   A - byte
-read_block_next = _read_byte
+read_block_byte = _read_byte
 
 ; Stop block reading
+;
 ; read_block_stop:
 ;         .error "Not implemented"
 
 ; Finish reading block
 read_block_end:
+        pha
+
         ; Read checksum
         jsr _skip_byte
         jsr _skip_byte
 
-        jsr disable
+        lda #$FF  ; Is this needed? https://electronics.stackexchange.com/a/375423/273764
+        jsr _write_byte
+
+        pla
+
+        jmp disable  ; (jsr, rts)
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -268,14 +293,19 @@ read_block_end:
 _send_read_single_block:
         pha
 
+        pha  ; low byte
+        phx  ; high byte
+
         lda #(17 | SDC_HEADER)
         jsr _write_byte
         ; TODO
         lda #0  ; first block
-        jsr _write_byte  ; high byte?
         jsr _write_byte
         jsr _write_byte
-        jsr _write_byte  ; low byte?
+        pla
+        jsr _write_byte  ; high byte
+        pla
+        jsr _write_byte  ; low byte
         ; lda #%10010101  ; CRC & stop bit - unnecessary?
         lda #$3B  ; CRC & stop bit - unnecessary?
         jsr _write_byte
@@ -404,6 +434,10 @@ _send_set_blocklen:
 
         rts
 
+; Write SPI byte
+;
+; Arguments:
+;   A - byte
 _write_byte:
         pha
         phx
@@ -447,6 +481,10 @@ _write_byte:
 
         rts
 
+; Read SPI byte
+;
+; Return:
+;   A - byte
 _read_byte:
         phx
         phy
@@ -483,6 +521,7 @@ _read_byte:
 
         rts
 
+; Read & disregard 1 byte
 _skip_byte:
         pha
 
@@ -492,6 +531,7 @@ _skip_byte:
 
         rts
 
+; Read & disregard 4 bytes
 _skip_byte4:
         pha
 
@@ -504,6 +544,10 @@ _skip_byte4:
 
         rts
 
+; Wait for byte on MISO
+;
+; Return:
+;   A - received byte or $FF if no data was read (MISO stayed high & timed out)
 _wait_byte:
         phx
 
@@ -521,4 +565,5 @@ _wait_byte:
         plx
 
         rts
+
 .endscope
