@@ -1,3 +1,7 @@
+;
+; Helper functions
+;
+
 .zeropage
 
 F_BYTE: .res 1

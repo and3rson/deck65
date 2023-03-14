@@ -1,3 +1,9 @@
+;
+; PS/2 protocol implementation
+;
+; http://www.burtonsys.com/ps2_chapweske.htm
+;
+
 .scope kbd
 .zeropage
 

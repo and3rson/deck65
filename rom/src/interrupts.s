@@ -1,3 +1,7 @@
+;
+; Interrupt routines (mostly for VIA)
+;
+
 .code
 
 S_INTERRUPT: .asciiz "INT!\n"

@@ -1,3 +1,7 @@
+;
+; Memory-mapped I/O stuff - VIA, SID, etc
+;
+
 .segment "IO"
 
 ;LCD

@@ -1,3 +1,9 @@
+;
+; SD card driver
+;
+; http://elm-chan.org/docs/mmc/mmc_e.html
+;
+
 .zeropage
 
 SDC_MISO  =  $1
@@ -149,13 +155,13 @@ init:
         ; Max attempts reached, fail
         jmp @init_timeout
 
+        lda #00
+        ldx #02
+        jsr set_blocklen
+        cmp #$01
+        bne @set_blocklen_failed
+
     @wait_ok:
-        ; ; CMD16 - send set blocklen
-        ; jsr send_set_blocklen
-        ; jsr wait_byte  ; read header
-        ; jsr skip_byte  ; read tail
-        ; cmp #$01
-        ; bne @set_blocklen_failed
         ; CMD58 (7A) - send OCR
         jsr _send_ocr
         jsr _wait_byte  ; read header
@@ -202,6 +208,22 @@ init:
 
         rts
 
+; Set block length for reading
+; Arguments:
+;   A - low byte
+;   X - high byte
+; Return:
+;   A - $01 if success
+set_blocklen:
+        ; CMD16 - send set blocklen
+        jsr _send_set_blocklen
+        jsr _wait_byte  ; read header
+        jsr _skip_byte  ; read tail
+
+        rts
+
+; Start reading block
+; Arguments:
 read_block_start:
         phx
 
@@ -220,12 +242,20 @@ read_block_start:
 
         rts
 
+; Read next byte from block
+; Return:
+;   A - byte
 read_block_next = _read_byte
 
+; Stop block reading
+; read_block_stop:
+;         .error "Not implemented"
+
+; Finish reading block
 read_block_end:
         ; Read checksum
-        jsr _read_byte
-        jsr _read_byte
+        jsr _skip_byte
+        jsr _skip_byte
 
         jsr disable
 
@@ -352,19 +382,24 @@ _send_op_cond:
 ; CMD16
 _send_set_blocklen:
         pha
+        phx
+
+        pha  ; low byte
+        phx  ; high byte
 
         lda #(16 | SDC_HEADER)
         jsr _write_byte
         lda #0  ; arguments
         jsr _write_byte
         jsr _write_byte
-        lda #$02
+        pla  ; high byte
         jsr _write_byte
-        lda #0
+        pla  ; low byte
         jsr _write_byte
         lda #$81  ; CRC & stop bit
         jsr _write_byte
 
+        plx
         pla
 
         rts

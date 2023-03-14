@@ -1,3 +1,7 @@
+;
+; Simple interactive REPL shell & memory monitor
+;
+
 .zeropage
 
 PTR: .res 2

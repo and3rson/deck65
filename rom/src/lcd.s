@@ -1,9 +1,13 @@
-; LCD implementation with constant tty-like scrolling
+;
+; HD44780 20x04 LCD implementation with constant tty-like scrolling
+;
 ; Uses 6522 VIA w/ 4-bit data bus & busy flag polling
-
-.zeropage
+; https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
+;
 
 .scope lcd
+
+.zeropage
 
 ; generic 16-bit pointer for string operations
 PTR: .res 2
@@ -123,10 +127,8 @@ read_clock:
         lda #RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
         jsr wait8us
-        ; jsr busywait
         eor #EN  ; EN=1
         sta VIA1_RA
-        ; jsr busywait
         jsr wait8us
         lda VIA1_RA  ; read nibble
         and #$0F

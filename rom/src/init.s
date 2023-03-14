@@ -1,3 +1,7 @@
+;
+; Kernel entrypoint
+;
+
 .zeropage
 
 CNT: .res 1
