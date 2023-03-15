@@ -94,7 +94,10 @@ def list(device):
             # dev.seek(root_dir_sec * SEC + root_dir_entries * 32 + sector * SEC)
             # dev.seek(root_dir_sec * SEC)
             # dev.seek(root_dir_sec * SEC + root_dir_entries * 32)
-            dev.seek((data_sec + (cluster - 2) * sec_per_cluster) * SEC)
+            sector = data_sec + (cluster - 2) * sec_per_cluster
+            print(data_sec, cluster, sec_per_cluster)
+            print('Sector: ', sector)
+            dev.seek(sector * SEC)
             data = dev.read(SEC * sec_per_cluster)
             remaining -= SEC * sec_per_cluster
             if remaining < 0:

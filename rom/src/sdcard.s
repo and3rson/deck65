@@ -4,8 +4,11 @@
 ; http://elm-chan.org/docs/mmc/mmc_e.html
 ;
 
+.scope sdc
+
 .zeropage
 
+; TODO: Remove prefixes
 SDC_MISO  =  $1  ; Slave's DO
 SDC_MOSI  =  $2  ; Slave's DI
 SDC_CS    =  $4
@@ -13,9 +16,14 @@ SDC_SCK   =  $8
 
 SDC_HEADER = %01000000
 
-.code
+SELECTED_SEC: .res 2
+DEST: .res 2
 
-.scope sdc
+.segment "RAM"
+
+SECTOR_DATA: .res 512
+
+.code
 
 ; Initialize SD card
 init:
@@ -39,10 +47,10 @@ init:
     @warmup:
         eor #SDC_SCK
         sta VIA1_RB
-        nop
-        nop
-        nop
-        nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
         dex
         bne @warmup
 
@@ -113,12 +121,6 @@ init:
         ; Max attempts reached, fail
         jmp @init_timeout
 
-        lda #00
-        ldx #02
-        jsr set_blocklen
-        cmp #$01
-        bne @set_blocklen_failed
-
     @wait_ok:
         ; CMD58 (7A) - send OCR
         jsr _send_ocr
@@ -128,6 +130,14 @@ init:
         ; Bit 30 of OCR should now contain 1 (the card is a high-capacity card known as SDHC/SDXC)
         ; cmp #$01
         ; bne @ocr_failed
+
+        lda #0
+        ldx #2
+        jsr _set_blocklen
+        ; cmp #$01
+        ; !!!
+        cmp #$00
+        bne @set_blocklen_failed
 
         lda #0
         jmp @end
@@ -176,8 +186,8 @@ enable:
     @pulse:
         eor #SDC_SCK  ; Toggle edge
         sta VIA1_RB
-        nop
-        nop
+        ; nop
+        ; nop
         dex
         bne @pulse
 
@@ -210,25 +220,90 @@ disable:
 
         rts
 
-; Set block length for reading
-; NOTE: Card needs to be enabled/disabled before/after call to this function.
-; NOTE: Block length only up to number 65535 is supported (16-bit LBA).
+; Set sector for reading
 ;
 ; Arguments:
-;   A - low byte
-;   X - high byte
-; Return:
-;   A - $01 if success
-set_blocklen:
-        ; CMD16 - send set blocklen
-        jsr _send_set_blocklen
-        jsr _wait_byte  ; read header
-        jsr _skip_byte  ; read tail
+;
+;   A - sector low byte
+;   X - sector high byte
+select_sector:
+        sta SELECTED_SEC
+        stx SELECTED_SEC+1
 
         rts
 
+; Read selected sector into memory (512 bytes)
+; NOTE: select_sector must be called first!
+; NOTE: Reading blocks only up to number 65535 is supported (16-bit LBA).
+;
+;   A - destination low byte
+;   X - destination high byte
+; Return:
+;   A - 0 if success, otherwise error code
+
 ; Start reading block
 ; NOTE: Reading blocks only up to number 65535 is supported (16-bit LBA).
+read_sector:
+        phx
+        phy
+
+        jsr enable
+
+        sta DEST
+        stx DEST+1
+
+        lda SELECTED_SEC
+        ldx SELECTED_SEC+1
+        jsr read_block_start
+        cmp #0
+        bne @end
+
+        ldy #0
+    @next1:
+        jsr read_block_byte
+        sta (DEST), Y
+        iny
+        bne @next1
+
+        inc DEST+1  ; Advance pointer 256 bytes forward
+
+        ldy #0
+    @next2:
+        jsr read_block_byte
+        sta (DEST), Y
+        iny
+        bne @next2
+
+        ; lda #<SECTOR
+        ; sta PTR
+        ; lda #>SECTOR
+        ; stx PTR+1
+
+        ; ldx #0  ; 256 iterations, 2 bytes each time
+    ; @next:
+        ; jsr read_block_byte
+        ; sta (PTR)
+        ; jsr read_block_byte
+        ; sta (PTR+1)
+        ; clc
+        ; lda PTR
+        ; adc #2
+        ; sta PTR
+        ; lda PTR+1
+        ; adc #0
+        ; sta PTR+1
+        ; dex
+        ; bne @next
+
+        jsr read_block_end
+        lda #0
+
+        ply
+        plx
+
+    @end:
+        jmp disable  ; (jsr, rts)
+
 ;
 ; Arguments:
 ;   A - low byte
@@ -269,7 +344,6 @@ read_block_byte = _read_byte
 ; read_block_stop:
 ;         .error "Not implemented"
 
-; Finish reading block
 read_block_end:
         pha
 
@@ -289,6 +363,22 @@ read_block_end:
 ; Private routines follow below
 
 
+; Set block length for reading
+; NOTE: Card needs to be enabled/disabled before/after call to this function.
+; NOTE: Block length only up to number 65535 is supported (16-bit LBA).
+;
+; Arguments:
+;   A - low byte
+;   X - high byte
+; Return:
+;   A - $01 if success
+_set_blocklen:
+        jsr _send_set_blocklen
+        jsr _wait_byte  ; read header
+        jsr _skip_byte  ; read tail
+
+        rts
+
 ; CMD17 (51)
 _send_read_single_block:
         pha
@@ -299,15 +389,14 @@ _send_read_single_block:
         lda #(17 | SDC_HEADER)
         jsr _write_byte
         ; TODO
-        lda #0  ; first block
+        lda #0
         jsr _write_byte
         jsr _write_byte
         pla
         jsr _write_byte  ; high byte
         pla
         jsr _write_byte  ; low byte
-        ; lda #%10010101  ; CRC & stop bit - unnecessary?
-        lda #$3B  ; CRC & stop bit - unnecessary?
+        lda #$3B  ; CRC & stop bit
         jsr _write_byte
 
         pla
@@ -462,12 +551,12 @@ _write_byte:
         ; Pulse clock
         eor #SDC_SCK
         sta VIA1_RB
-        nop
-        nop
+        ; nop
+        ; nop
         eor #SDC_SCK
         sta VIA1_RB
-        nop
-        nop
+        ; nop
+        ; nop
 
         tya
         rol
@@ -496,8 +585,8 @@ _read_byte:
         ; Pulse clock
         eor #SDC_SCK
         sta VIA1_RB
-        nop
-        nop
+        ; nop
+        ; nop
 
         lda VIA1_RB
         ror
@@ -508,8 +597,8 @@ _read_byte:
         lda VIA1_RB
         eor #SDC_SCK
         sta VIA1_RB
-        nop
-        nop
+        ; nop
+        ; nop
 
         dex
         bne @read_bit

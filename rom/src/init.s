@@ -150,6 +150,7 @@ init:
     songplay = $035E
 
     .byte $AA, $BB
+    .word lcd::printz
     foo1: .byte >songstart
     foo2: .byte <songstart
     foo3: .byte >songdata

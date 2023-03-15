@@ -125,3 +125,23 @@ wait16ms:
 
         rts
 
+; Wait ~1 s
+wait1s:
+        pha
+        phx
+
+        ldx #60
+    @again:
+        phx
+        lda #$FF
+        ldx #$FF
+        jsr vdelay
+        plx
+        dex
+        bne @again
+
+        plx
+        pla
+
+        rts
+
