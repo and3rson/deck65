@@ -21,6 +21,11 @@ S_FAT16_BOOTSEC: .asciiz "FAT16 bootsec: "
 init:
         sei
 
+        ; Illegal nop test
+        ; Can be used for banking
+        ; https://laughtonelectronics.com/Arcana/KimKlone/Kimklone_opcode_mapping.html
+        .byte $C2, $42
+
         jsr via::init
 
         jsr kbd::init

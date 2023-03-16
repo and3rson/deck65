@@ -14,15 +14,22 @@ Pull with `git pull --recurse-submodules`.
 
 - CPU: W65C02S(6TPG)
 - RAM: AS6C1008
+  > Pin-compatible with AS6C2008 & AS6C4008.
 - ROM: W27C512
-- I/O: VIA W65C22N(6TPG)
+- I/O: VIA W65C22<ins>N</ins>(6TPG)
+  > Note: I'm using NMOS-compatible version (<ins>N</ins> suffix) with open-drain /IRQ line.<br />
+  > See http://archive.6502.org/datasheets/wdc_w65c22_sep_13_2010.pdf (page 25) for more details.
 - Glue logic: 74HC00, 74HC138
 - 4 MHz oscillator (DIP-14)
-- Traco Power TSC 1-2450 (drop-in replacement for LD7805)
+  > Using a machine-tooled socket actually allows to connect JCO-8 or JCO-14 oscillators.
+- Traco Power TSR 1-2450 (drop-in replacement for LD7805)
+  > I had some issues with it when connecting 8580R5 SID: regulator was simply not powering on<br />
+  > and was getting hot. Sticking to an L7805 for now. Not sure if it's a defect or if I'm doing something wrong.
 
 I/O:
 - 2004 LCD 16-pin header (through 6522)
 - PS/2 keyboard
+- Micro SD Card
 - Pin header for VIA: PB0..PB7, CB0, CB1
 - Pin headers for address bus, data bus, & CPU control lines
 
@@ -30,11 +37,20 @@ To be added in future versions:
 - 8580R5 SID
 - 6551 ACIA
 
-V12 schematic:
+New V12 schematic:
 ![65c02s SBC PCB](./img/v12.png)
 
-Original V9 PCB (Requires modifications):
-![65c02s SBC PCB](./img/v09_routed2.png)
+New V12 PCB:
+![65c02s SBC PCB](./img/v12_routed.png)
+
+# ROM
+
+Kernel code currently provides the following features:
+- Simple REPL shell to monitor memory & run programs
+- HD44780-based 2004 LCD (through VIA)
+- PS/2 keyboard (through VIA)
+- Micro SD Card in SPI mode (through VIA)
+- Basic FAT16 support - listing root folder, finding & reading files
 
 # Resources
 

@@ -11,8 +11,8 @@
 ; TODO: Remove prefixes
 SDC_MISO  =  $1  ; Slave's DO
 SDC_MOSI  =  $2  ; Slave's DI
-SDC_CS    =  $4
-SDC_SCK   =  $8
+SDC_SCK   =  $4
+SDC_CS    =  $8
 
 SDC_HEADER = %01000000
 
