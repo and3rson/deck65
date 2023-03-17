@@ -19,6 +19,8 @@ SDC_HEADER = %01000000
 SELECTED_SEC: .res 2
 DEST: .res 2
 
+ERR: .res 1
+
 .segment "RAM"
 
 SECTOR_DATA: .res 512
@@ -26,7 +28,11 @@ SECTOR_DATA: .res 512
 .code
 
 ; Initialize SD card
+;
+; Return:
+;   C - set if error
 init:
+        pha
         phx
 
         ; stz VIA1_RB  ; Ensure outputs are low
@@ -139,40 +145,45 @@ init:
         cmp #$00
         bne @set_blocklen_failed
 
-        lda #0
+        clc
         jmp @end
 
     @readiness_timeout:
         lda #$E1
-        jmp @end
+        jmp @err
 
     @voltage_failed:  ; SDHC unsupported, possibly card is SDSC
         lda #$E2
-        jmp @end
+        jmp @err
 
     @ocr_failed:
         lda #$E3
-        jmp @end
+        jmp @err
 
     @app_failed:
         lda #$E4
-        jmp @end
+        jmp @err
 
     @op_cond_failed:
         lda #$E5
-        jmp @end
+        jmp @err
 
     @init_timeout:
         lda #$E6
-        jmp @end
+        jmp @err
 
     @set_blocklen_failed:
         lda #$E7
+
+    @err:
+        sta ERR
+        sec
 
     @end:
         jsr disable
 
         plx
+        pla
 
         rts
 
@@ -239,11 +250,12 @@ select_sector:
 ;   A - destination low byte
 ;   X - destination high byte
 ; Return:
-;   A - 0 if success, otherwise error code
+;   C - set if error
 
 ; Start reading block
 ; NOTE: Reading blocks only up to number 65535 is supported (16-bit LBA).
 read_sector:
+        pha
         phx
         phy
 
@@ -255,8 +267,7 @@ read_sector:
         lda SELECTED_SEC
         ldx SELECTED_SEC+1
         jsr read_block_start
-        cmp #0
-        bne @end
+        bcs @err
 
         ldy #0
     @next1:
@@ -296,12 +307,18 @@ read_sector:
         ; bne @next
 
         jsr read_block_end
-        lda #0
 
-        ply
-        plx
+        clc
+        jmp @end
+
+    @err:
+        sec
 
     @end:
+        ply
+        plx
+        pla
+
         jmp disable  ; (jsr, rts)
 
 ;
@@ -309,8 +326,9 @@ read_sector:
 ;   A - low byte
 ;   X - high byte
 ; Return:
-;   A - 0 if success, otherwise error code
+;   C - set if error
 read_block_start:
+        pha
         phx
 
         jsr enable
@@ -318,18 +336,29 @@ read_block_start:
         jsr _send_read_single_block
         jsr _wait_byte
         cmp #0  ; ok?
-        bne @end  ; error
+        beq @header_ok
+        lda #$E1
+        jmp @err
+    @header_ok:
+
         jsr _wait_byte  ; Wait for data token
         cmp #$FE
-        bne @err  ; error
-        lda #0
+        beq @token_ok  ; error
+        lda #$E2
+        jmp @err
+    @token_ok:
+
+        ; ok
+        clc
         jmp @end
 
     @err:
-        lda #1
+        sta ERR
+        sec
 
     @end:
         plx
+        pla
 
         rts
 
@@ -371,11 +400,28 @@ read_block_end:
 ;   A - low byte
 ;   X - high byte
 ; Return:
-;   A - $01 if success
+;   C - set if error
 _set_blocklen:
+        pha
+        phx
+
         jsr _send_set_blocklen
         jsr _wait_byte  ; read header
         jsr _skip_byte  ; read tail
+        cmp #$00
+        bne @err
+
+        ; ok
+        clc
+        jmp @end
+
+    @err:
+        sec
+        sta ERR
+
+    @end:
+        plx
+        pla
 
         rts
 

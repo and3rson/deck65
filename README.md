@@ -89,6 +89,7 @@ Kernel code currently provides the following features:
 - https://www.masswerk.at/6502/6502_instruction_set.html
 - https://github.com/4x1md/kicad_libraries - Mini-DIN-6 symbol & footprint
 - http://39k.ca/reading-files-from-fat16/
+- https://octopart.componentsearchengine.com/part.php?partID=570717&ref=octopart - Aries 28-526-10 footprint
 
 # Links
 - 6502 Primer: http://wilsonminesco.com/6502primer/

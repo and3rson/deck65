@@ -11,32 +11,31 @@
 
 .zeropage
 
-MARKER:              .res  2  ; $0067
-BOOTSEC:             .res  2  ; $0069
+MARKER:              .res  2
+BOOTSEC:             .res  2
 
-SEC_PER_CLU:         .res  1  ; $006B
-RES_SEC_COUNT:       .res  2  ; $006C
-FAT_COUNT:           .res  1  ; $006E
-ROOT_DIR_ENTRIES:    .res  2  ; $006F
-SEC_PER_FAT:         .res  2  ; $0071
+SEC_PER_CLU:         .res  1
+RES_SEC_COUNT:       .res  2
+FAT_COUNT:           .res  1
+ROOT_DIR_ENTRIES:    .res  2
+SEC_PER_FAT:         .res  2
 
-FAT_SEC:             .res  2  ; = BOOTSEC + RES_SEC_COUNT,  $0073
-FAT_SEC_COUNT:       .res  2  ; = SEC_PER_FAT * 2,          $0075
-ROOT_DIR_SEC:        .res  2  ; = FAT_SEC + FAT_SEC_COUNT,  $0077
-ROOT_DIR_SEC_COUNT:  .res  2  ; = ROOT_DIR_ENTRIES * 32 / 512 (>>4),    $0079
-DATA_SEC:            .res  2  ; = ROOT_DIR_SEC + ROOT_DIR_SEC_COUNT,    $007B
+FAT_SEC:             .res  2  ; = BOOTSEC + RES_SEC_COUNT
+FAT_SEC_COUNT:       .res  2  ; = SEC_PER_FAT * 2
+ROOT_DIR_SEC:        .res  2  ; = FAT_SEC + FAT_SEC_COUNT
+ROOT_DIR_SEC_COUNT:  .res  2  ; = ROOT_DIR_ENTRIES * 32 / 512 (>>4)
+DATA_SEC:            .res  2  ; = ROOT_DIR_SEC + ROOT_DIR_SEC_COUNT
 
-F_NAME_EXT: .res 11  ; $007D
-; F_NAME      = F_NAME_EXT
-; F_EXT       = F_NAME_EXT + 8
-F_NULL:     .res  1  ; $0088
-F_CLU:      .res  2  ; $0089
-F_SIZE:     .res  4  ; $008B
+F_NAME_EXT: .res 11
+F_NULL:     .res  1
+F_CLU:      .res  2
+F_SIZE:     .res  4
 
-STR:      .res  2  ; $008F
-PTR:      .res  2  ; $0091
-COUNTER:  .res  1  ; $0093
-SECT:     .res  2  ; $0094
+STR:      .res  2
+PTR:      .res  2
+COUNTER:  .res  1
+SECT:     .res  2
+ERR:      .res  1
 
 .segment "RAM"
 
@@ -49,8 +48,9 @@ SECT:     .res  2  ; $0094
 ; Reads MBR & boot sector, stores info in zeropage.
 ;
 ; Return:
-;   A - 0 if success, non-zero if failed
+;   C - set if error
 init:
+        pha
         phx
 
         lda #$AB
@@ -65,10 +65,10 @@ init:
         lda #0
         ldx #0
         jsr sdc::read_block_start
-        cmp #0  ; ok?
-        beq @start_mbr_ok
+        bcc @start_mbr_ok
         lda #$E1
-        jmp @end
+        sta ERR
+        jmp @err
     @start_mbr_ok:
 
         ; Skip to $100
@@ -108,10 +108,10 @@ init:
         lda BOOTSEC
         ldx BOOTSEC+1
         jsr sdc::read_block_start
-        cmp #0  ; ok?
-        beq @start_bootsec_ok
+        bcc @start_bootsec_ok
         lda #$E2
-        jmp @end
+        sta ERR
+        jmp @err
     @start_bootsec_ok:
 
         ; Skip to $0D
@@ -170,7 +170,8 @@ init:
         cmp #1
         beq @sec_per_clu_ok
         lda #$E3
-        jmp @end
+        sta ERR
+        jmp @err
     @sec_per_clu_ok:
 
         ;;;;;;;;;;;;;;;;
@@ -230,10 +231,15 @@ init:
         adc ROOT_DIR_SEC_COUNT+1
         sta DATA_SEC+1
 
-        lda #0  ; return 0
+        clc  ; success
+        jmp @end
+
+    @err:
+        sec
 
     @end:
         plx
+        pla
 
         rts
 
@@ -243,8 +249,9 @@ init:
 ; Arguments:
 ;   A, X - low/high byte of string address
 ; Return:
-;   A - 0 if file was found, non-zero on error
+;   C - set if error
 open:
+        pha
         phx
         phy
 
@@ -275,10 +282,9 @@ open:
         lda #<sdc::SECTOR_DATA
         ldx #>sdc::SECTOR_DATA
         jsr sdc::read_sector
-        cmp #0
-        beq @read_ok
+        bcc @read_ok
         lda #$E1
-        jmp @end
+        jmp @err
     @read_ok:
         ; Iterate on possible 16 files in this sector
         lda #<sdc::SECTOR_DATA
@@ -320,7 +326,7 @@ open:
     @not_found:
         ; File not found
         lda #$E2
-        jmp @end
+        jmp @err
 
     @file_found:
         ; Populate F_NAME_EXT (11 bytes)
@@ -347,11 +353,17 @@ open:
         cpy #6
         bne @copy_f_clu_and_size
 
-        lda #0
+        clc  ; success
+        jmp @end
+
+    @err:
+        sta ERR
+        sec
 
     @end:
         ply
         plx
+        pla
 
         rts
 
@@ -361,8 +373,9 @@ open:
 ;   A - memory low byte
 ;   X - memory high byte
 ; Return:
-;   A - 0 if success
+;   C - set if error
 read:
+        pha
         phx
 
         ; TODO: We are only reading 1 cluster for now.
@@ -403,9 +416,20 @@ read:
         jsr sdc::select_sector
         lda PTR
         ldx PTR+1
-        jsr sdc::read_sector
+        jsr sdc::read_sector  ; sets carry flag on error
+        bcs @err
 
+        clc
+        jmp @end
+
+    @err:
+        lda sdc::ERR
+        sta ERR
+        sec
+
+    @end:
         plx
+        pla
 
         rts
 

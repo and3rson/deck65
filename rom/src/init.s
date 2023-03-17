@@ -33,22 +33,18 @@ init:
         jsr lcd::init
 
         jsr sdc::init
-        cmp #0
-        beq @sdc_ok
-        pha
+        bcc @sdc_ok
         print S_SDC_ERR
-        pla
+        lda sdc::ERR
         jsr lcd::printhex
         a8call lcd::printchar, #10
         jmp @post_init
     @sdc_ok:
 
         jsr fat16::init
-        cmp #0
-        beq @fat16_ok
-        pha
+        bcc @fat16_ok
+        lda fat16::ERR
         print S_FAT16_ERR
-        pla
         jsr lcd::printhex
         a8call lcd::printchar, #10
         jmp @post_init

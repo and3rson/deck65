@@ -128,8 +128,7 @@ cmd_find:
         lda #<(lcd::BUFFER_40+1)
         ldx #>(lcd::BUFFER_40+1)
         jsr fat16::open
-        cmp #0
-        bne @not_found
+        bcs @not_found
         a8call lcd::printhex, fat16::F_SIZE+3
         a8call lcd::printhex, fat16::F_SIZE+2
         a8call lcd::printhex, fat16::F_SIZE+1
@@ -138,9 +137,8 @@ cmd_find:
         jmp @end
 
     @not_found:
-        pha
         print S_NOT_FOUND
-        pla
+        lda fat16::ERR
         jsr lcd::printhex
         lda #10
         jsr lcd::printchar
@@ -152,31 +150,27 @@ cmd_run:
         lda #<(lcd::BUFFER_40+1)
         ldx #>(lcd::BUFFER_40+1)
         jsr fat16::open
-        cmp #0
-        bne @not_found
+        bcs @not_found
 
         lda #<APP_START
         ldx #>APP_START
         jsr fat16::read
-        cmp #0
-        bne @read_failed
+        bcs @read_failed
 
         jsr APP_START
         jmp @end
 
     @not_found:
-        pha
         print S_NOT_FOUND
-        pla
+        lda fat16::ERR
         jsr lcd::printhex
         lda #10
         jsr lcd::printchar
         jmp @end
 
     @read_failed:
-        pha
         print S_READ_ERROR
-        pla
+        lda fat16::ERR
         jsr lcd::printhex
         lda #10
         jsr lcd::printchar
