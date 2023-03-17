@@ -1,6 +1,7 @@
 ;
 ; PS/2 protocol implementation
 ;
+; Reference:
 ; http://www.burtonsys.com/ps2_chapweske.htm
 ;
 

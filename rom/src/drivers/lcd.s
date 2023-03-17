@@ -2,7 +2,7 @@
 ; HD44780 20x04 LCD implementation with constant tty-like scrolling
 ;
 ; Uses 6522 VIA w/ 4-bit data bus & busy flag polling
-; https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
+; Datasheet: https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
 ;
 
 .scope lcd
@@ -26,7 +26,7 @@ BUFFER_20  =  BUFFER + 20
 BUFFER_40  =  BUFFER + 40
 BUFFER_60  =  BUFFER + 60
 
-P_DD_LINE_ADDR: .res 2
+ADDR:  .res 2
 
 .code
 
@@ -42,10 +42,10 @@ init:
         phy
 
         ; Set up pointer to array with line addresses
-        lda #<DD_LINE_ADDR
-        sta P_DD_LINE_ADDR
-        lda #>DD_LINE_ADDR
-        sta P_DD_LINE_ADDR+1
+        ; lda #<DD_LINE_ADDR
+        ; sta P_DD_LINE_ADDR
+        ; lda #>DD_LINE_ADDR
+        ; sta P_DD_LINE_ADDR+1
 
         ; Clear screen buffer
     @clear:
@@ -279,7 +279,7 @@ gotoxy:
         stx CURSOR_X
         sty CURSOR_Y
         ; Get DDRAM addr for line start
-        lda (P_DD_LINE_ADDR), Y
+        lda DD_LINE_ADDR, Y
         ; Add X
         clc
         adc CURSOR_X
@@ -482,8 +482,9 @@ redraw:
 ; Arguments:
 ;   A - string addr (low)
 ;   X - string addr (high)
+; Return:
+;   A - number of characters printed (i. e. string length)
 printz:
-        pha
         phx
         phy
 
@@ -503,9 +504,40 @@ printz:
         jmp @printchar
 
     @end:
+        tya
         ply
         plx
-        pla
+
+        rts
+
+; Print zero-terminated string that follows jsr which calls this function
+;
+; Registers:
+;   A - not preserved
+printfz:
+        pla         ; low return PC
+        clc
+        adc #1      ; first byte after jsr
+        sta ADDR
+        pla         ; high return PC
+        adc #0      ; carry
+        sta ADDR+1
+
+        phx         ; preserve X
+        tax
+        lda ADDR    ; A:X now point to string start
+        jsr printz  ; A now contains string length minus one (position of trailing zero byte)
+        plx
+
+        ; New return address = ADDR + A (no need to add 1)
+        clc
+        adc ADDR
+        sta ADDR    ; low return PC
+        lda ADDR+1
+        adc #0
+        pha         ; high return PC
+        lda ADDR
+        pha         ; low return PC
 
         rts
 

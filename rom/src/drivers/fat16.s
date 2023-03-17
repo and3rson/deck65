@@ -3,6 +3,7 @@
 ;
 ; IMPORTANT: File names with whitespaces won't work properly because I'm too lazy to fix string comparison for them.
 ;
+; References:
 ; http://39k.ca/reading-files-from-fat16/
 ; http://www.maverick-os.dk/FileSystemFormats/FAT16_FileSystem.html
 ;

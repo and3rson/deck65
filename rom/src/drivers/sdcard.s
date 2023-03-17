@@ -1,6 +1,7 @@
 ;
 ; SD card driver
 ;
+; Reference:
 ; http://elm-chan.org/docs/mmc/mmc_e.html
 ;
 
@@ -35,12 +36,6 @@ init:
         pha
         phx
 
-        ; stz VIA1_RB  ; Ensure outputs are low
-        ; jsr wait32us
-        ; lda #$FF
-        ; sta VIA1_RB
-        ; jmp init
-
         ; Wait at least 1 ms
         jsr wait2ms
 
@@ -53,19 +48,8 @@ init:
     @warmup:
         eor #SDC_SCK
         sta VIA1_RB
-        ; nop
-        ; nop
-        ; nop
-        ; nop
         dex
         bne @warmup
-
-        ; Send CMD0
-        ; jsr enable
-        ; lda #%01000000
-        ; jsr write
-        ; jsr commit  ; Checksum, stop bit, & pull MOSI high
-        ; jsr disable
 
         jsr enable
 
@@ -134,8 +118,6 @@ init:
         jsr _skip_byte4  ; 32 bits
         jsr _skip_byte  ; read tail
         ; Bit 30 of OCR should now contain 1 (the card is a high-capacity card known as SDHC/SDXC)
-        ; cmp #$01
-        ; bne @ocr_failed
 
         lda #0
         ldx #2
@@ -285,27 +267,6 @@ read_sector:
         iny
         bne @next2
 
-        ; lda #<SECTOR
-        ; sta PTR
-        ; lda #>SECTOR
-        ; stx PTR+1
-
-        ; ldx #0  ; 256 iterations, 2 bytes each time
-    ; @next:
-        ; jsr read_block_byte
-        ; sta (PTR)
-        ; jsr read_block_byte
-        ; sta (PTR+1)
-        ; clc
-        ; lda PTR
-        ; adc #2
-        ; sta PTR
-        ; lda PTR+1
-        ; adc #0
-        ; sta PTR+1
-        ; dex
-        ; bne @next
-
         jsr read_block_end
 
         clc
@@ -321,6 +282,7 @@ read_sector:
 
         jmp disable  ; (jsr, rts)
 
+; Start reading of block
 ;
 ; Arguments:
 ;   A - low byte
@@ -368,11 +330,8 @@ read_block_start:
 ;   A - byte
 read_block_byte = _read_byte
 
-; Stop block reading
-;
-; read_block_stop:
-;         .error "Not implemented"
-
+; Finish block reading
+; Must be called only after all data was read.
 read_block_end:
         pha
 

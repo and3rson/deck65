@@ -5,7 +5,7 @@ all: rom.bin flash
 
 rom.bin: src/*.s rom.cfg Makefile
 	ca65 --cpu $(CPU) -g ./src/rom.s -l rom.lst -o ./rom.o
-	ld65 -C rom.cfg -o rom.bin ./rom.o
+	ld65 -C rom.cfg -o rom.bin -m rom.map ./rom.o
 
 flash:
 	minipro -p W27C512@DIP28 -w rom.bin -S
@@ -16,7 +16,7 @@ flash:
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin
+	rm -f *.o *.bin *.lst *.map
 
 .PHONY: run
 run:

@@ -14,10 +14,11 @@
 .include "io.s"
 
 ; Kernel
-.include "lcd.s"
-.include "ps2kbd.s"
-.include "sdcard.s"
-.include "fat16.s"
+.include "drivers/lcd.s"
+.include "drivers/ps2kbd.s"
+.include "drivers/sdcard.s"
+.include "drivers/fat16.s"
+
 .include "vdelay.s"
 .include "functions.s"
 .include "urepl.s"
