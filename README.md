@@ -59,6 +59,7 @@ Kernel code currently provides the following features:
 - [Circuits](./circuits) (created with [Digital](https://github.com/hneemann/Digital))
 - [ROM sources](./rom) (requires [cc65](https://cc65.github.io/) compiler)
 - [GAL stuff](./gal) (hexadecimal 7-segment decoder, address decoder, etc using GAL16V8/GAL20V8, includes `galasm` as submodule)
+- [Composite video test](./compvid) using ATtiny45 (requires [avra](https://github.com/Ro5bert/avra))
 
 # Memory map
 
