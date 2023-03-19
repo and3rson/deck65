@@ -7177,11 +7177,11 @@
     (pin "2" (uuid 21c0f4a4-ab06-4330-977c-defcd61fe716))
     (pin "3" (uuid 59a8d6fc-b635-4307-9847-f3c579e53db6))
     (pin "1-UB" (uuid f5ed3888-b93d-425c-b44d-ba9e04b32db4))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118e))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e8118e))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e81190))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e81190))
     (pin "1-UC" (uuid 3ae0b4dc-8c5f-4237-b19f-760d33ecf781))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd08))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd08))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd0a))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd0a))
     (instances
       (project "main"
         (path "/ee3e9410-932c-4ddb-8ce8-606010f57976"
@@ -8031,11 +8031,11 @@
     (pin "2" (uuid 1a8328b8-a160-43ae-82bd-bbb920a77bc4))
     (pin "3" (uuid 641825f0-cfb2-4655-93c2-f50f55269073))
     (pin "1-UB" (uuid f5ed3888-b93d-425c-b44d-ba9e04b32db5))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e81190))
-    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e81190))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e81192))
+    (pin "~{-UB}" (uuid 1feccebe-5972-455c-b745-3cae31e81192))
     (pin "1-UC" (uuid 3ae0b4dc-8c5f-4237-b19f-760d33ecf782))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd0a))
-    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd0a))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd0c))
+    (pin "~{-UC}" (uuid e7fa2471-d833-41aa-9856-f62a0ceabd0c))
     (instances
       (project "main"
         (path "/ee3e9410-932c-4ddb-8ce8-606010f57976"
@@ -9792,6 +9792,23 @@
         (path "/ee3e9410-932c-4ddb-8ce8-606010f57976"
           (reference "#PWR044") (unit 1)
         )
+      )
+    )
+  )
+
+  (sheet (at 441.96 102.87) (size 33.02 21.59) (fields_autoplaced)
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid c84e1035-d800-44d4-80b7-781681b7ad17)
+    (property "Sheetname" "Untitled Sheet" (at 441.96 102.1584 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" "untitled.kicad_sch" (at 441.96 125.0446 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+    (instances
+      (project "main"
+        (path "/ee3e9410-932c-4ddb-8ce8-606010f57976" (page "2"))
       )
     )
   )
