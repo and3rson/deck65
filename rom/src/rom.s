@@ -10,20 +10,20 @@
 ; zp.s must ALWAYS be defined first
 .include "zp.s"
 
-; I/O
-.include "io.s"
+; Kernel (high 8K ROM)
+.include "kore/io.s"
+.include "kore/drivers/lcd.s"
+.include "kore/drivers/ps2kbd.s"
+.include "kore/drivers/sdcard.s"
+.include "kore/drivers/fat16.s"
 
-; Kernel
-.include "drivers/lcd.s"
-.include "drivers/ps2kbd.s"
-.include "drivers/sdcard.s"
-.include "drivers/fat16.s"
+.include "kore/vdelay.s"
+.include "kore/functions.s"
+.include "kore/interrupts.s"
+.include "kore/init.s"
 
-.include "vdelay.s"
-.include "functions.s"
-.include "urepl.s"
-.include "init.s"
+; System (low 16K ROM)
+.include "system/urepl.s"
 
-; System
-.include "interrupts.s"
+; Vectors
 .include "vectors.s"

@@ -28,7 +28,7 @@ BUFFER_60  =  BUFFER + 60
 
 ADDR:  .res 2
 
-.code
+.segment "KORE"
 
 ; The code below was tested at 4 MHz, but it should run on any frequency
 ; as long as CLOCK is set to a proper value.

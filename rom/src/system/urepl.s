@@ -31,7 +31,7 @@ CMD_JUMPTABLE:
 
 APP_START = $1000
 
-.code
+.segment "SYSTEM"
 
 cmd_noop:
         jmp cmd_done
@@ -173,23 +173,23 @@ cmd_run:
     @end:
         jmp cmd_done
 
-repl_main:
+urepl_main:
         jsr lcd::printfz
         .asciiz "MicroREPL READY.\n"
 
-    repl_loop:
+    urepl_loop:
         ; REPL loop
         ; Read
         jsr kbd::getch
         ; Echo
         jsr lcd::printchar
         cmp #10  ; Return pressed
-        bne repl_loop
+        bne urepl_loop
         lda lcd::BUFFER_40
         clc
         adc lcd::BUFFER_40
         tax
         jmp (CMD_JUMPTABLE, X)
     cmd_done:
-        jmp repl_loop
+        jmp urepl_loop
 

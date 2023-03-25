@@ -6,7 +6,7 @@
 
 F_BYTE: .res 1
 
-.code
+.segment "KORE"
 
 ; Parse hexadecimal ASCII character into number
 ;

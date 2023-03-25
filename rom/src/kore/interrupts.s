@@ -2,7 +2,7 @@
 ; Interrupt routines (mostly for VIA)
 ;
 
-.code
+.segment "KORE"
 
 S_INTERRUPT: .asciiz "INT!\n"
 

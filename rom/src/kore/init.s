@@ -6,8 +6,9 @@
 
 CNT: .res 1
 DIR: .res 1
+INIT_PTR: .res 2
 
-.code
+.segment "KORE"
 
 ; Kernel entrypoint
 ;
@@ -70,16 +71,16 @@ init:
         .asciiz "       65ad02\n"
         ; print S_BAR19
 
-        jmp repl_main
+        jmp urepl_main
 
         ; load song into RAM
         ldy #0
     @copy_byte:
         lda songdata,Y
         sta songdest,Y
-        lda PTR
+        lda INIT_PTR
         inc
-        sta PTR
+        sta INIT_PTR
         iny
         cpy #songlen
         bne @copy_byte

@@ -27,7 +27,7 @@ VIA1_IFR:   .res  1
 VIA1_IER:   .res  1
 VIA1_ORNH:  .res  1
 
-.code
+.segment "KORE"
 
 .scope via
 

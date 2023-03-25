@@ -43,7 +43,7 @@ ERR:      .res  1
 ; BUFFER: .res 512  ; Reserved for reading sectors & parsing them in-memory
 ; START: .res 4096
 
-.code
+.segment "KORE"
 
 ; Initialize FAT16 interface
 ; Reads MBR & boot sector, stores info in zeropage.

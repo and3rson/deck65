@@ -26,7 +26,7 @@ ERR: .res 1
 
 SECTOR_DATA: .res 512
 
-.code
+.segment "KORE"
 
 ; Initialize SD card
 ;

@@ -24,7 +24,7 @@ SCA_BREAK   =  $F0
 SCA_LSHIFT  =  $12
 SCA_RSHIFT  =  $59
 
-.code
+.segment "KORE"
 
 ; Map stolen from Ben Eater :)
 KEYMAP:
