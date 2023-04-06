@@ -17,12 +17,16 @@ irq:
         ; lda VIA1_T1CL
 
         lda VIA1_IFR
-        ; and #%00001000  ; Is CB2? (PS/2 keyboard)
-        and #%00000001  ; Is CA2? (PS/2 keyboard)
+        and #%00001000  ; Is CB2? (PS/2 keyboard)
+        ; and #%00000001  ; Is CA2? (PS/2 keyboard)
         beq @end
-        lda VIA1_RA
-        rol
-        rol
+        lda VIA1_RB
+        ; rol
+        ; rol
+        ror
+        ror
+        ror
+        ror
         and #1
         jsr kbd::process
 

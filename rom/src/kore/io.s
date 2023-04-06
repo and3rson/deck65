@@ -5,9 +5,9 @@
 .segment "IO"
 
 ;LCD
-_OLD_LCD0:     .res  1
-_OLD_LCD1:     .res  1
-_OLD_LCD_BAD:  .res  254
+; _OLD_LCD0:     .res  1
+; _OLD_LCD1:     .res  1
+; _OLD_LCD_BAD:  .res  254
 
 ; VIA
 VIA1_RB:    .res  1
@@ -45,29 +45,29 @@ init:
         stz VIA1_ACR
         ; Keyboard interrupts with CB2
         lda VIA1_PCR
-        ; ora #%00100000  ; CB2 - Independent interrupt input-negative edge (page 13)
-        ora #%00000010  ; CA2 - Independent interrupt input-negative edge (page 13)
+        ora #%00100000  ; CB2 - Independent interrupt input-negative edge (page 13)
+        ; ora #%00000010  ; CA2 - Independent interrupt input-negative edge (page 13)
         ; and #%00011111  ; CB2 - Input-negative active edge (page 13)
         sta VIA1_PCR
         ; Enable interrupts for keyboard only
         lda #%01111111  ; Disable all interrupts
         sta VIA1_IER
-        ; lda #%10001000  ; Set interrupt flag for CB2 (page 27)
-        lda #%10000001  ; Set interrupt flag for CA2 (page 27)
+        lda #%10001000  ; Set interrupt flag for CB2 (page 27)
+        ; lda #%10000001  ; Set interrupt flag for CA2 (page 27)
         sta VIA1_IER
+        ; Disable shift register
+        stz VIA1_SR
 
         ; ****************
         ; VIA - Port A
         ; ****************
-        ; PS/2 Keyboard
-        ;   CB2 - Clock
-        ;   PA7      - data
         ; LCD
-        ;   PA6      - RS
-        ;   PA5      - R/W
-        ;   PA4      - EN
+        ;   PA7      - RS
+        ;   PA6      - R/W
+        ;   PA5      - EN2
+        ;   PA4      - EN1
         ;   PA3..PA0 - data
-        lda #%10100000
+        lda #%01000000
         sta VIA1_RA
         lda #$FF
         sta VIA1_DDRA
@@ -75,14 +75,17 @@ init:
         ; ****************
         ; VIA - Port B
         ; ****************
+        ; PS/2 Keyboard
+        ;   CB2 - clock
+        ;   PB4 - data
         ; SD Card
         ;   PB0 - MISO
         ;   PB1 - MOSI
-        ;   PB2 - CS
-        ;   PB3 - SCK
-        lda #%00000100  ; Set CS high, all other bits - low
+        ;   PB2 - SCK
+        ;   PB3 - CS
+        lda #%00001000  ; Set CS high, all other bits - low
         sta VIA1_RB
-        lda #%11111110  ; ; PB0 - input, PB1..PB3 - outputs
+        lda #%11101110  ; ; PB0 & PB4 - input, PB1..PB3 - outputs
         sta VIA1_DDRB
 
         ; ****************

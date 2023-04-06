@@ -1,9 +1,10 @@
 CPU := 65c02
+SRC = $(shell find . -name '*.s')
 
 all: rom.bin flash
 # all: rom.bin rom_sim65.bin
 
-rom.bin: src/*.s rom.cfg Makefile
+rom.bin: $(SRC) rom.cfg Makefile
 	ca65 --cpu $(CPU) -g ./src/rom.s -l rom.lst -o ./rom.o
 	ld65 -C rom.cfg -o rom.bin -m rom.map ./rom.o
 

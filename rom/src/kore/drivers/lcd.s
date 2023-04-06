@@ -15,9 +15,10 @@ REG:   .res  2
 MEM:   .res  2
 INIT:  .res  1  ; Set to $01 if LCD was initialized in one of previous boots
 
-RS  =  %01000000
-RW  =  %00100000
-EN  =  %00010000
+RS  =  %10000000
+RW  =  %01000000
+EN2 =  %00100000
+EN1 =  %00010000
 
 CURSOR_X:  .res  1
 CURSOR_Y:  .res  1
@@ -130,7 +131,7 @@ init:
 
         rts
 
-; Write nibble with EN toggle
+; Write nibble with EN1 toggle
 ;
 ; Arguments:
 ;   A - nibble with register bit (%0x00xxxx)
@@ -138,7 +139,9 @@ writenib:
         pha
         phx
 
-        ldx #$7F
+        ; ldx #$7F
+        ; Set data lines to output
+        ldx #(RS | RW | EN1 | $F)
         stx VIA1_DDRA
 
         tax
@@ -152,13 +155,13 @@ writenib:
         sta VIA1_RA
         jsr wait32us
 
-        ; Assert E=1
-        eor #EN
+        ; Assert EN1
+        eor #EN1
         sta VIA1_RA
         jsr wait8us
 
-        ; Assert E=0
-        eor #EN
+        ; Release EN1
+        eor #EN1
         sta VIA1_RA
         jsr wait8us
 
@@ -167,12 +170,13 @@ writenib:
 
         rts
 
-; Write cmd byte with EN toggle
+; Write cmd byte with EN1 toggle
 ;
 ; Arguments:
 ;   A - byte
 writecmd:
         pha
+        pha
 
         ; Write high nibble
         lsr
@@ -186,13 +190,16 @@ writecmd:
         and #$0F
         jsr writenib
 
+        pla
+
         rts
 
-; Write data byte with EN toggle
+; Write data byte with EN1 toggle
 ;
 ; Arguments:
 ;   A - byte
 writedata:
+        pha
         pha
 
         ; Write high nibble
@@ -209,9 +216,11 @@ writedata:
         ora #RS
         jsr writenib
 
+        pla
+
         rts
 
-; Read byte with EN toggle
+; Read byte with EN1 toggle
 ;
 ; Return:
 ;   A - value
@@ -219,21 +228,22 @@ read_clock:
         ; Set data to input
         phx
 
-        lda #$70
+        ; lda #$70
+        lda #(RS | RW | EN1)
         sta VIA1_DDRA
 
         ldx #2
     @next:
-        lda #RW  ; RS=0, RW=1, EN=0
+        lda #RW  ; RS=0, RW=1, EN1=0
         sta VIA1_RA
         jsr wait8us
-        eor #EN  ; EN=1
+        eor #EN1  ; EN1=1
         sta VIA1_RA
         jsr wait8us
         lda VIA1_RA  ; read nibble
         and #$0F
         sta MEM - 1, X
-        lda #RW  ; RS=0, RW=1, EN=0
+        lda #RW  ; RS=0, RW=1, EN1=0
         sta VIA1_RA
         jsr wait8us
         dex

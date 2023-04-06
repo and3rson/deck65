@@ -16,6 +16,40 @@ INIT_PTR: .res 2
 init:
         sei
 
+        ; lda #$AA
+        ; lda #$BB
+        ; lda #$CC
+        ; lda #$DD
+        ; lda #$EE
+        ; lda #$FF
+        ; stp
+
+        ; lda #$FF
+        ; sta VIA1_DDRA
+; @test:
+        ; lda #$FF
+        ; sta VIA1_RA
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; lda #$00
+        ; sta VIA1_RA
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; nop
+        ; jmp @test
+
+
         ; Illegal nop test
         ; Can be used for banking
         ; https://laughtonelectronics.com/Arcana/KimKlone/Kimklone_opcode_mapping.html
@@ -26,6 +60,18 @@ init:
         jsr kbd::init
 
         jsr lcd::init
+
+        jsr lcd::printfz
+        .asciiz "asdasd\n"
+        jsr lcd::printfz
+        .asciiz "fghfgh\n"
+
+        ; jsr lcd::printfz
+        ; .asciiz "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDD\n"
+        ; .asciiz "EEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHH\n"
+        ; .asciiz "IIIIIIIIJJJJJJJJKKKKKKKKLLLLLLLL\n"
+        ; .asciiz "MMMMMMMMNNNNNNNNOOOOOOOOPPPPPPPP\n"
+        stp
 
         jsr sdc::init
         bcc @sdc_ok

@@ -51,4 +51,9 @@
   (pad "16" thru_hole circle (at 5.04 33.38) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 77c08816-4dce-4631-bc03-f2eed6b95c6c))
   (pad "17" thru_hole circle (at 2.5 35.92) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 0a0e1708-e019-4300-a336-bd5a28c4fee0))
   (pad "18" thru_hole circle (at 5.04 35.92) (size 1.7 1.7) (drill 1) (layers "*.Cu" "*.Mask") (tstamp 4952f8b0-8d52-44b6-9c85-5f116ba05c8a))
+  (model "${KIPRJMOD}/3dmodels/74779_lcd_4x40.wrl"
+    (offset (xyz 95 -38 17.5))
+    (scale (xyz 19.8 19.8 19.8))
+    (rotate (xyz 90 0 0))
+  )
 )
