@@ -1,7 +1,7 @@
 ;
-; HD44780 20x04 LCD implementation with constant tty-like scrolling
+; HD44780 40x04 LCD implementation with constant tty-like scrolling
 ;
-; Uses 6522 VIA w/ 4-bit data bus & busy flag polling
+; Uses port A of 6522 VIA w/ 4-bit data bus & busy flag polling
 ; Datasheet: https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
 ;
 
@@ -10,10 +10,11 @@
 .zeropage
 
 ; generic 16-bit pointer for string operations
-PTR:   .res  2
-REG:   .res  2
-MEM:   .res  2
-INIT:  .res  1  ; Set to $01 if LCD was initialized in one of previous boots
+PTR:     .res  2
+REG:     .res  2
+MEM:     .res  2
+INIT:    .res  1  ; Set to $01 if LCD was initialized in one of previous boots
+ENFLAG:  .res  1  ; Used by writenib
 
 RS  =  %10000000
 RW  =  %01000000
@@ -22,10 +23,9 @@ EN1 =  %00010000
 
 CURSOR_X:  .res  1
 CURSOR_Y:  .res  1
-BUFFER:    .res  80
-BUFFER_20  =  BUFFER + 20
-BUFFER_40  =  BUFFER + 40
-BUFFER_60  =  BUFFER + 60
+BUFFER:    .res  160
+BUFFER_PREV = BUFFER + 80
+BUFFER_CURRENT = BUFFER + 120
 
 ADDR:  .res 2
 
@@ -34,7 +34,7 @@ ADDR:  .res 2
 ; The code below was tested at 4 MHz, but it should run on any frequency
 ; as long as CLOCK is set to a proper value.
 
-DD_LINE_ADDR: .byte 0, 64, 20, 84
+DD_LINE_ADDR: .byte 0, 64, 0, 64
 
 ; Initialize LCD
 init:
@@ -53,7 +53,7 @@ init:
         lda #' '
         sta BUFFER, X
         inx
-        cpx #80
+        cpx #160
         bne @clear
 
         ; vdelay @ 4 MHz:
@@ -81,6 +81,8 @@ init:
         dey
         bne @longinit
 
+        ldx #(EN1 | EN2)
+        stx ENFLAG
         ; Initialize 4-bit mode
         lda #%0010
         jsr writenib
@@ -131,17 +133,17 @@ init:
 
         rts
 
-; Write nibble with EN1 toggle
+; Write nibble with EN toggle
 ;
 ; Arguments:
-;   A - nibble with register bit (%0x00xxxx)
+;   A - nibble with register bit (%x000xxxx)
 writenib:
         pha
         phx
 
         ; ldx #$7F
         ; Set data lines to output
-        ldx #(RS | RW | EN1 | $F)
+        ldx #(RS | RW | EN2 | EN1 | $F)
         stx VIA1_DDRA
 
         tax
@@ -155,13 +157,13 @@ writenib:
         sta VIA1_RA
         jsr wait32us
 
-        ; Assert EN1
-        eor #EN1
+        ; Assert EN
+        eor ENFLAG
         sta VIA1_RA
         jsr wait8us
 
-        ; Release EN1
-        eor #EN1
+        ; Release EN
+        eor ENFLAG
         sta VIA1_RA
         jsr wait8us
 
@@ -170,7 +172,7 @@ writenib:
 
         rts
 
-; Write cmd byte with EN1 toggle
+; Write cmd byte with EN toggle
 ;
 ; Arguments:
 ;   A - byte
@@ -194,7 +196,7 @@ writecmd:
 
         rts
 
-; Write data byte with EN1 toggle
+; Write data byte with EN toggle
 ;
 ; Arguments:
 ;   A - byte
@@ -220,7 +222,7 @@ writedata:
 
         rts
 
-; Read byte with EN1 toggle
+; Read byte with EN toggle
 ;
 ; Return:
 ;   A - value
@@ -229,21 +231,21 @@ read_clock:
         phx
 
         ; lda #$70
-        lda #(RS | RW | EN1)
+        lda #(RS | RW | EN2 | EN1)
         sta VIA1_DDRA
 
         ldx #2
     @next:
-        lda #RW  ; RS=0, RW=1, EN1=0
+        lda #RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
         jsr wait8us
-        eor #EN1  ; EN1=1
+        eor ENFLAG  ; Assert EN
         sta VIA1_RA
         jsr wait8us
         lda VIA1_RA  ; read nibble
         and #$0F
         sta MEM - 1, X
-        lda #RW  ; RS=0, RW=1, EN1=0
+        lda #RW  ; RS=0, RW=1, EN
         sta VIA1_RA
         jsr wait8us
         dex
@@ -265,12 +267,27 @@ read_clock:
 ; Block while LCD is busy
 busy:
         pha
+        phx
 
-    @check:
+        ldx ENFLAG
+
+        lda #EN1
+        sta ENFLAG
+    @check_1:
         jsr read_clock
         and #$80
-        bne @check
+        bne @check_1
 
+        lda #EN2
+        sta ENFLAG
+    @check_2:
+        jsr read_clock
+        and #$80
+        bne @check_2
+
+        stx ENFLAG
+
+        plx
         pla
 
         rts
@@ -288,6 +305,30 @@ gotoxy:
 
         stx CURSOR_X
         sty CURSOR_Y
+        cpy #2
+        bcs @bottom
+    @top:
+        lda #EN1
+        jmp @done
+    @bottom:
+        lda #EN2
+    @done:
+        ; Disable cursor for another half
+        eor #(EN1 | EN2)
+        sta ENFLAG
+        lda #%00001100  ; display on, cursor off, blink off
+        jsr writecmd
+        jsr busy
+
+        ; Enable cursor for current half
+        lda ENFLAG
+        eor #(EN1 | EN2)
+        sta ENFLAG
+        lda #%00001111  ; display on, cursor on, blink on
+        jsr writecmd
+        jsr busy
+        ; sta ENFLAG
+
         ; Get DDRAM addr for line start
         lda DD_LINE_ADDR, Y
         ; Add X
@@ -350,7 +391,7 @@ printchar:
         ; Check if has space
         tax
         lda CURSOR_X
-        cmp #19
+        cmp #39
         beq @end  ; no more space
 
         ; Print character
@@ -366,7 +407,7 @@ printchar:
         pla
 
         ; Write to screen buffer
-        sta BUFFER_60, X
+        sta BUFFER_CURRENT, X
 
         ; Increase cursor X-pos
         inx
@@ -375,22 +416,22 @@ printchar:
         jmp @end
 
     @newline:
-        ; Scroll screen memory up by 20 bytes
+        ; Scroll screen memory up by 40 bytes
         ldx #0
     @scroll1:
-        lda BUFFER_20, X
+        lda BUFFER + 40, X
         sta BUFFER, X
         inx
-        cpx #60
+        cpx #120
         bne @scroll1
 
         ; Fill line 3 with spaces
         ldx #0
     @add_space:
         lda #' '
-        sta BUFFER_60, X
+        sta BUFFER_CURRENT, X
         inx
-        cpx #20
+        cpx #40
         bne @add_space
 
         jsr redraw
@@ -409,17 +450,20 @@ printchar:
         dex
         stx CURSOR_X
         lda #' '
-        sta BUFFER_60, X
+        sta BUFFER_CURRENT, X
         ; Move cursor left
         lda #%00010000
+        ldx #EN2
         jsr writecmd
         jsr busy
         ; Write space
         lda #' '
+        ldx #EN2
         jsr writedata
         jsr busy
         ; Move cursor left
         lda #%00010000
+        ldx #EN2
         jsr writecmd
         jsr busy
 
@@ -444,40 +488,40 @@ redraw:
         jsr writedata
         jsr busy
         inx
-        cpx #20
+        cpx #40
         bne @print_line0
 
         ldx #0
         ldy #1
         jsr gotoxy
     @print_line1:
-        lda BUFFER_20, X
+        lda BUFFER + 40, X
         jsr writedata
         jsr busy
         inx
-        cpx #20
+        cpx #40
         bne @print_line1
 
         ldx #0
         ldy #2
         jsr gotoxy
     @print_line2:
-        lda BUFFER_40, X
+        lda BUFFER + 80, X
         jsr writedata
         jsr busy
         inx
-        cpx #19
+        cpx #40
         bne @print_line2
 
         ldx #0
         ldy #3
         jsr gotoxy
     @print_line3:
-        lda BUFFER_60, X
+        lda BUFFER_CURRENT, X
         jsr writedata
         jsr busy
         inx
-        cpx #19
+        cpx #40
         bne @print_line3
 
         ply

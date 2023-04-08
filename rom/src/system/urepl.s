@@ -7,7 +7,11 @@
 PTR: .res 2
 DAT: .res 1
 
-.segment "JMPTABLE"
+.segment "RAM"
+
+APP_START = $1000
+
+.segment "SYSTEM"
 
 jt_count .set 0
 .macro jmptbl char, addr
@@ -27,9 +31,7 @@ CMD_JUMPTABLE:
     jmptbl 'm', cmd_printmem
     jmptbl 'r', cmd_run
 
-.segment "RAM"
-
-APP_START = $1000
+.align 256
 
 .segment "SYSTEM"
 
@@ -40,17 +42,17 @@ cmd_noop:
 cmd_err:
         jsr lcd::printfz
         .asciiz "Unknown cmd: "
-        acall lcd::printchar, lcd::BUFFER_40
+        acall lcd::printchar, lcd::BUFFER_PREV
         acall lcd::printchar, #' '
         acall lcd::printchar, #'('
-        acall lcd::printhex, lcd::BUFFER_40
+        acall lcd::printhex, lcd::BUFFER_PREV
         acall lcd::printchar, #')'
         acall lcd::printchar, #10
         jmp cmd_done
 
 
 cmd_printmem:
-        ldx #lcd::BUFFER_40+1
+        ldx #lcd::BUFFER_PREV+1
         jsr f_parse_octet
         sta PTR+1
 
@@ -78,7 +80,7 @@ cmd_printmem:
 
 
 cmd_writemem:
-        ldx #lcd::BUFFER_40+1
+        ldx #lcd::BUFFER_PREV+1
         jsr f_parse_octet
         sta PTR+1
 
@@ -98,7 +100,7 @@ cmd_writemem:
 
 
 cmd_jmp:
-        ldx #lcd::BUFFER_40+1
+        ldx #lcd::BUFFER_PREV+1
         jsr f_parse_octet
         sta PTR+1
 
@@ -117,8 +119,8 @@ cmd_jmp:
 
 
 cmd_find:
-        lda #<(lcd::BUFFER_40+1)
-        ldx #>(lcd::BUFFER_40+1)
+        lda #<(lcd::BUFFER_PREV+1)
+        ldx #>(lcd::BUFFER_PREV+1)
         jsr fat16::open
         bcs @not_found
         acall lcd::printhex, fat16::F_SIZE+3
@@ -140,8 +142,8 @@ cmd_find:
         jmp cmd_done
 
 cmd_run:
-        lda #<(lcd::BUFFER_40+1)
-        ldx #>(lcd::BUFFER_40+1)
+        lda #<(lcd::BUFFER_PREV+1)
+        ldx #>(lcd::BUFFER_PREV+1)
         jsr fat16::open
         bcs @not_found
 
@@ -155,7 +157,7 @@ cmd_run:
 
     @not_found:
         jsr lcd::printfz
-        .asciiz "Not fnd: "
+        .asciiz "Not found: "
         lda fat16::ERR
         jsr lcd::printhex
         lda #10
@@ -164,7 +166,7 @@ cmd_run:
 
     @read_failed:
         jsr lcd::printfz
-        .asciiz "Read err: "
+        .asciiz "Read error: "
         lda fat16::ERR
         jsr lcd::printhex
         lda #10
@@ -185,9 +187,9 @@ urepl_main:
         jsr lcd::printchar
         cmp #10  ; Return pressed
         bne urepl_loop
-        lda lcd::BUFFER_40
+        lda lcd::BUFFER_PREV
         clc
-        adc lcd::BUFFER_40
+        adc lcd::BUFFER_PREV
         tax
         jmp (CMD_JUMPTABLE, X)
     cmd_done:

@@ -16,40 +16,6 @@ INIT_PTR: .res 2
 init:
         sei
 
-        ; lda #$AA
-        ; lda #$BB
-        ; lda #$CC
-        ; lda #$DD
-        ; lda #$EE
-        ; lda #$FF
-        ; stp
-
-        ; lda #$FF
-        ; sta VIA1_DDRA
-; @test:
-        ; lda #$FF
-        ; sta VIA1_RA
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; lda #$00
-        ; sta VIA1_RA
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; nop
-        ; jmp @test
-
-
         ; Illegal nop test
         ; Can be used for banking
         ; https://laughtonelectronics.com/Arcana/KimKlone/Kimklone_opcode_mapping.html
@@ -62,21 +28,12 @@ init:
         jsr lcd::init
 
         jsr lcd::printfz
-        .asciiz "asdasd\n"
-        jsr lcd::printfz
-        .asciiz "fghfgh\n"
-
-        ; jsr lcd::printfz
-        ; .asciiz "AAAAAAAABBBBBBBBCCCCCCCCDDDDDDDD\n"
-        ; .asciiz "EEEEEEEEFFFFFFFFGGGGGGGGHHHHHHHH\n"
-        ; .asciiz "IIIIIIIIJJJJJJJJKKKKKKKKLLLLLLLL\n"
-        ; .asciiz "MMMMMMMMNNNNNNNNOOOOOOOOPPPPPPPP\n"
-        stp
+        .asciiz "                 65ad02\n"
 
         jsr sdc::init
         bcc @sdc_ok
         jsr lcd::printfz
-        .asciiz "SD card err: "
+        .asciiz "SD card error: "
         lda sdc::ERR
         jsr lcd::printhex
         acall lcd::printchar, #10
@@ -86,7 +43,7 @@ init:
         jsr fat16::init
         bcc @fat16_ok
         jsr lcd::printfz
-        .asciiz "FAT16 err: "
+        .asciiz "FAT16 error: "
         lda fat16::ERR
         jsr lcd::printhex
         acall lcd::printchar, #10
@@ -94,7 +51,7 @@ init:
     @fat16_ok:
 
         jsr lcd::printfz
-        .asciiz "FAT16 bootsec: "
+        .asciiz "FAT16 bootsector: "
         lda fat16::BOOTSEC+1
         jsr lcd::printhex
         lda fat16::BOOTSEC
@@ -113,8 +70,6 @@ init:
     @post_init:
         cli
 
-        jsr lcd::printfz
-        .asciiz "       65ad02\n"
         ; print S_BAR19
 
         jmp urepl_main

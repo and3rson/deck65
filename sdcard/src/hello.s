@@ -3,7 +3,8 @@
 .org $1000
 
 ; lcd_printz = $E250
-lcd_printz = $E317
+; lcd_printz = $E317
+lcd_printz = $E25B
 
 main:
         lda #<HELLO
