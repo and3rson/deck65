@@ -26,6 +26,15 @@ VIA1_PCR:   .res  1
 VIA1_IFR:   .res  1
 VIA1_IER:   .res  1
 VIA1_ORNH:  .res  1
+.align 256
+
+; ACIA
+
+ACIA1_DATA:  .res  1
+ACIA1_STAT:  .res  1
+ACIA1_CMD:   .res  1
+ASIA1_CTRL:  .res  1
+.align 256
 
 .segment "KORE"
 

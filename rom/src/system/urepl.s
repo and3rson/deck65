@@ -64,16 +64,35 @@ cmd_printmem:
         acall lcd::printhex, PTR+1
         acall lcd::printhex, PTR
         acall lcd::printchar, #':'
-        acall lcd::printchar, #' '
 
         ldy #0
-    @rep:
+    @rep1:
         lda (PTR), Y
         jsr lcd::printhex
         acall lcd::printchar, #' '
         iny
-        cpy #4
-        bne @rep
+        cpy #8
+        bne @rep1
+
+        acall lcd::printchar, #'['
+
+        ldy #0
+    @rep2:
+        lda (PTR), Y
+        cmp #32
+        bcc @fix  ; <32
+        cmp #126
+        bcs @fix  ; >= 128
+        jmp @print
+    @fix:
+        lda #'.'
+    @print:
+        jsr lcd::printchar
+        iny
+        cpy #8
+        bne @rep2
+
+        acall lcd::printchar, #']'
         acall lcd::printchar, #10
 
         jmp cmd_done
@@ -188,8 +207,7 @@ urepl_main:
         cmp #10  ; Return pressed
         bne urepl_loop
         lda lcd::BUFFER_PREV
-        clc
-        adc lcd::BUFFER_PREV
+        asl
         tax
         jmp (CMD_JUMPTABLE, X)
     cmd_done:

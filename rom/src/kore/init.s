@@ -27,6 +27,8 @@ init:
 
         jsr lcd::init
 
+        cli
+
         jsr lcd::printfz
         .asciiz "                 65ad02\n"
 
@@ -68,7 +70,6 @@ init:
     ; @after_read:
 
     @post_init:
-        cli
 
         ; print S_BAR19
 
