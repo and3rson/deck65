@@ -9,6 +9,7 @@
 ; Zeropage & stack
 ; zp.s must ALWAYS be defined first
 .include "zp.s"
+.include "program.s"
 
 ; Kernel (high 8K ROM)
 .include "kore/io.s"
@@ -21,6 +22,7 @@
 .include "kore/functions.s"
 .include "kore/interrupts.s"
 .include "kore/init.s"
+.include "kore/api/api.s"
 
 ; System (low 16K ROM)
 .include "system/urepl.s"

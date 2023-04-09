@@ -10,6 +10,8 @@ DAT: .res 1
 .segment "RAM"
 
 APP_START = $1000
+__STARTUP__ = $1000
+.export __STARTUP__
 
 .segment "SYSTEM"
 
@@ -52,12 +54,13 @@ cmd_err:
 
 
 cmd_printmem:
-        ldx #lcd::BUFFER_PREV+1
+        lda #<(lcd::BUFFER_PREV+1)
+        ldx #>(lcd::BUFFER_PREV+1)
         jsr f_parse_octet
         sta PTR+1
 
-        inx
-        inx
+        lda #<(lcd::BUFFER_PREV+3)
+        ldx #>(lcd::BUFFER_PREV+3)
         jsr f_parse_octet
         sta PTR
 
@@ -99,12 +102,13 @@ cmd_printmem:
 
 
 cmd_writemem:
-        ldx #lcd::BUFFER_PREV+1
+        lda #<(lcd::BUFFER_PREV+1)
+        ldx #>(lcd::BUFFER_PREV+1)
         jsr f_parse_octet
         sta PTR+1
 
-        inx
-        inx
+        lda #<(lcd::BUFFER_PREV+3)
+        ldx #>(lcd::BUFFER_PREV+3)
         jsr f_parse_octet
         sta PTR
 
@@ -119,12 +123,13 @@ cmd_writemem:
 
 
 cmd_jmp:
-        ldx #lcd::BUFFER_PREV+1
+        lda #<(lcd::BUFFER_PREV+1)
+        ldx #>(lcd::BUFFER_PREV+1)
         jsr f_parse_octet
         sta PTR+1
 
-        inx
-        inx
+        lda #<(lcd::BUFFER_PREV+3)
+        ldx #>(lcd::BUFFER_PREV+3)
         jsr f_parse_octet
         sta PTR
 

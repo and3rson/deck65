@@ -1,15 +1,13 @@
 .feature string_escapes
 
-.org $1000
+.import _puts
 
-; lcd_printz = $E250
-; lcd_printz = $E317
-lcd_printz = $E25B
+.segment "PROGRAM"
 
 main:
         lda #<HELLO
         ldx #>HELLO
-        jsr lcd_printz
+        jsr _puts
         rts
 
 HELLO: .asciiz "Hello from SD Card!\n"

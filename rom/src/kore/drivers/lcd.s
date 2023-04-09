@@ -23,11 +23,14 @@ EN1 =  %00010000
 
 CURSOR_X:  .res  1
 CURSOR_Y:  .res  1
+
+ADDR:  .res 2
+
+.segment "RAM"
+
 BUFFER:    .res  160
 BUFFER_PREV = BUFFER + 80
 BUFFER_CURRENT = BUFFER + 120
-
-ADDR:  .res 2
 
 .segment "KORE"
 

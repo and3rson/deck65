@@ -7,6 +7,7 @@ all: rom.bin flash
 rom.bin: $(SRC) rom.cfg Makefile
 	ca65 --cpu $(CPU) -g ./src/rom.s -l rom.lst -o ./rom.o
 	ld65 -C rom.cfg -o rom.bin -m rom.map ./rom.o
+	ar65 r rom.lib rom.o
 
 flash:
 	minipro -p W27C512@DIP28 -w rom.bin -S

@@ -5,6 +5,7 @@
 .zeropage
 
 F_BYTE: .res 1
+F_PTR: .res 2
 
 .segment "KORE"
 
@@ -48,20 +49,31 @@ f_parse_hex:
 ; Parse two hexadecimal ASCII characters into number
 ;
 ; Arguments:
-;   X - zeropage address of first of two ASCII characters
+;   A - lower address of first of two ASCII characters
+;   X - higher address of first of two ASCII characters
 ; Return:
 ;   A - value (0..255)
 f_parse_octet:
-        lda 0, X
+        phx
+        phy
+
+        sta F_PTR
+        stx F_PTR+1
+        lda (F_PTR)
         jsr f_parse_hex
         asl
         asl
         asl
         asl
         sta F_BYTE
-        lda 1, X
+
+        ldy #1
+        lda (F_PTR), Y
         jsr f_parse_hex
         ora F_BYTE
+
+        ply
+        plx
 
         rts
 
