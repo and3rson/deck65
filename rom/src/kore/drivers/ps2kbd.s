@@ -162,7 +162,7 @@ process:
         rts
 
 
-; Wait for next character
+; Get character, block if keyboard buffer is empty
 ;
 ; Return:
 ;   A - character ASCII code
@@ -178,4 +178,29 @@ getch:
         cli
 
         rts
+
+
+; Get character immediately, return 0 if keyboard buffer is empty
+;
+; Return:
+;   A - character ASCII code
+igetch:
+        sei
+
+        lda RDY
+        bne @read  ; Keyboard register ready
+        lda #0
+        jmp @end
+
+    @read:
+        ; Keyboard register is ready
+        stz RDY  ; Clear readiness flag
+        lda CHR  ; Read register
+
+    @end:
+        cli
+
+        rts
+
+
 .endscope
