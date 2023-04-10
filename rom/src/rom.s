@@ -22,7 +22,6 @@
 .include "kore/functions.s"
 .include "kore/interrupts.s"
 .include "kore/init.s"
-.include "kore/api/api.s"
 
 ; System (low 16K ROM)
 .include "system/urepl.s"

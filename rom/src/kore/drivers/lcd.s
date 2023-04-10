@@ -7,6 +7,11 @@
 
 .scope lcd
 
+_puts = lcd::printz
+.export _puts
+_gotoxy = lcd::gotoxy
+.export _gotoxy
+
 .zeropage
 
 ; generic 16-bit pointer for string operations
