@@ -8,6 +8,10 @@
 
 .zeropage
 
+.exportzp sp, sreg, regsave
+.exportzp ptr1, ptr2, ptr3, ptr4
+.exportzp tmp1, tmp2, tmp3, tmp4
+
 sp:             .res    2       ; Stack pointer
 sreg:           .res    2       ; Secondary register/high 16 bit for longs
 regsave:        .res    4       ; Slot to save/restore (E)AX into

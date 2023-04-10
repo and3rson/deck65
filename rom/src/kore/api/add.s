@@ -12,8 +12,6 @@
 
         .export         tosadda0, tosaddax
 
-        .macpack        cpu
-
 tosadda0:
         ldx     #0
 tosaddax:
