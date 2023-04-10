@@ -2,7 +2,7 @@
 
 .import _puts
 
-.segment "PROGRAM"
+.segment "CODE"
 
 main:
         lda #<HELLO

@@ -1,20 +1,17 @@
 CPU := 65c02
 
-all: bin bin/hello.bin bin/ctest.bin
+all: bin bin/hello.bin bin/cltest.bin # bin/ctest.bin
 
 bin:
 	mkdir bin
 
-bin/hello.bin: src/hello.s
+bin/hello.bin: Makefile rom.cfg src/hello.s
 	ca65 --cpu $(CPU) ./src/hello.s
-	ld65 -C ../rom/rom.cfg ./src/hello.o -o bin/hello.bin --lib ../rom/rom.lib
+	ld65 -C ../rom/rom.cfg ./src/hello.o -o bin/hello.bin ../rom/rom.lib
 
-bin/ctest.bin: src/ctest.c
+bin/cltest.bin: Makefile rom.cfg src/cltest.c
 	# https://cc65.github.io/doc/intro.html#ss1.2
-	cc65 --cpu $(CPU) ./src/ctest.c --inline-stdfuncs -T
-	cat ./src/loader.s ./src/ctest.s | tee ./src/ctest.s > /dev/null
-	ca65 --cpu $(CPU) ./src/ctest.s
-	ld65 -C ../rom/rom.cfg ./src/ctest.o -o bin/ctest.bin --lib ../rom/rom.lib
+	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/cltest.c ../rom/rom.lib -o ./bin/cltest.bin -m cltest.map
 
 format:
 	# Fill (part of) device with zeroes
@@ -36,7 +33,7 @@ copy:
 	cat file1.txt | sudo tee /mnt/1/file1.txt
 	# for i in `seq 2 50`; do echo "This is file $$i" | sudo tee /mnt/1/file$${i}.txt; done
 	sudo cp ./bin/hello.bin /mnt/1/
-	sudo cp ./bin/ctest.bin /mnt/1/
+	sudo cp ./bin/cltest.bin /mnt/1/
 	sudo umount /mnt/1
 	sync
 

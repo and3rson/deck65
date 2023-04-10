@@ -2,6 +2,8 @@
 ; Kernel entrypoint
 ;
 
+.import __STACK_START__
+
 .zeropage
 
 CNT: .res 1
@@ -15,6 +17,11 @@ INIT_PTR: .res 2
 ; Arguments: none
 init:
         sei
+
+        lda #<(__STACK_START__)
+        sta sp
+        lda #>(__STACK_START__)
+        sta sp+1
 
         ; Illegal nop test
         ; Can be used for banking

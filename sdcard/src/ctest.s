@@ -15,13 +15,87 @@ jmp _main
 	.macpack	longbranch
 	.forceimport	__STARTUP__
 	.import		_puts
+	.export		_foo
 	.export		_main
 
 .segment	"RODATA"
 
 .segment	"PROGRAM"
-L0005:
+L0017:
 	.byte	$48,$65,$6C,$6C,$6F,$20,$66,$72,$6F,$6D,$20,$43,$21,$0A,$00
+L0010:
+	.byte	$54,$65,$73,$74,$00
+L0013	:=	L0017+13
+
+; ---------------------------------------------------------------
+; void __near__ foo (unsigned char, unsigned char)
+; ---------------------------------------------------------------
+
+.segment	"PROGRAM"
+
+.proc	_foo: near
+
+.segment	"PROGRAM"
+
+;
+; void foo(unsigned char a, unsigned char b) {
+;
+	jsr     pusha
+;
+; for (i = 0; i < 5; i++) {
+;
+	jsr     decsp2
+	ldx     #$00
+	lda     #$00
+	ldy     #$00
+	jsr     staxysp
+L0005:	ldy     #$01
+	jsr     ldaxysp
+	cmp     #$05
+	txa
+	sbc     #$00
+	bvc     L000C
+	eor     #$80
+L000C:	asl     a
+	lda     #$00
+	ldx     #$00
+	rol     a
+	jne     L0008
+	jmp     L0006
+;
+; puts("Test");
+;
+L0008:	lda     #<(L0010)
+	ldx     #>(L0010)
+	jsr     _puts
+;
+; for (i = 0; i < 5; i++) {
+;
+	ldy     #$01
+	jsr     ldaxysp
+	sta     regsave
+	stx     regsave+1
+	ina
+	bne     L000E
+	inx
+L000E:	ldy     #$00
+	jsr     staxysp
+	lda     regsave
+	ldx     regsave+1
+	jmp     L0005
+;
+; puts("\n");
+;
+L0006:	lda     #<(L0013)
+	ldx     #>(L0013)
+	jsr     _puts
+;
+; }
+;
+	jsr     incsp4
+	rts
+
+.endproc
 
 ; ---------------------------------------------------------------
 ; void __near__ main (void)
@@ -36,9 +110,16 @@ L0005:
 ;
 ; puts("Hello from C!\n");
 ;
-	lda     #<(L0005)
-	ldx     #>(L0005)
+	lda     #<(L0017)
+	ldx     #>(L0017)
 	jsr     _puts
+;
+; foo(2, 5);
+;
+	lda     #$02
+	jsr     pusha
+	lda     #$05
+	jsr     _foo
 ;
 ; }
 ;
