@@ -53,8 +53,10 @@ def list(device):
         print("FAT count:", fat_count)
         print("Sectors per FAT:", sec_per_fat)
         print("Root dir entries:", root_dir_entries)
+        print("Root dir size:", root_dir_entries * 32 // 512)
         print("Sectors per cluster:", sec_per_cluster)
         fat_sec = bootsect_sec + reserved_count
+        print("FAT sector:", fat_sec)
         root_dir_sec = fat_sec + fat_count * sec_per_fat
         print("Root dir sector:", root_dir_sec)
 
@@ -74,8 +76,8 @@ def list(device):
         data_sec = ceil(root_dir_sec + root_dir_entries * 32 / 512)
         print('Data sector:', data_sec)
 
-        # Read first file
-        entry = entries[0]
+        # Read fourth file
+        entry = entries[3]
         # Get sector chain
         # first_sector = entry.first_cluster * 2
         current_cluster = entry.first_cluster

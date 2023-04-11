@@ -1,17 +1,21 @@
 CPU := 65c02
 
-all: bin bin/hello.bin bin/cltest.bin # bin/ctest.bin
+all: bin bin/hello.bin bin/cltest.bin bin/maze.bin
 
 bin:
 	mkdir bin
 
-bin/hello.bin: Makefile rom.cfg src/hello.s
+bin/hello.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/hello.s
 	ca65 --cpu $(CPU) ./src/hello.s
 	ld65 -C ../rom/rom.cfg ./src/hello.o -o bin/hello.bin ../rom/rom.lib
 
-bin/cltest.bin: Makefile rom.cfg src/cltest.c
+bin/cltest.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/cltest.c
 	# https://cc65.github.io/doc/intro.html#ss1.2
 	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/cltest.c ../rom/rom.lib -o ./bin/cltest.bin -m cltest.map
+
+bin/maze.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/maze.c
+	# https://cc65.github.io/doc/intro.html#ss1.2
+	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/maze.c ../rom/rom.lib -o ./bin/maze.bin -m maze.map
 
 format:
 	# Fill (part of) device with zeroes
@@ -27,13 +31,14 @@ format:
 	# sudo mkfs.vfat -F 16 /dev/sda1  # FAT16
 	sudo mkfs.vfat -F 16 -s 1 /dev/sda1  # FAT16, 1 sector per cluster
 
-copy:
+copy: all
 	sudo mount /dev/sda1 /mnt/1 -o fat=16
 	sudo rm -rf /mnt/1/*
 	cat file1.txt | sudo tee /mnt/1/file1.txt
 	# for i in `seq 2 50`; do echo "This is file $$i" | sudo tee /mnt/1/file$${i}.txt; done
 	sudo cp ./bin/hello.bin /mnt/1/
 	sudo cp ./bin/cltest.bin /mnt/1/
+	sudo cp ./bin/maze.bin /mnt/1/
 	sudo umount /mnt/1
 	sync
 

@@ -6,6 +6,11 @@
 ;
 
 .scope kbd
+
+_cgetc = getch
+_igetch = igetch
+.export _cgetc, _igetch
+
 .zeropage
 
 CNT:        .res  1

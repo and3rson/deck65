@@ -1,5 +1,5 @@
 #include <stdio.h>
-/* #include <conio.h> */
+#include <conio.h>
 
 // https://cc65.github.io/doc/cc65.html
 /* #pragma code-name ("PROGRAM") */
@@ -8,8 +8,8 @@
 int main();
 
 void foo(char a, char b) {
-    /* gotoxy(10, 2); */
     char x = 0;
+    gotoxy(10, 2);
     while (a < b) {
         puts("a");
         a++;

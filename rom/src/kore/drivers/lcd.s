@@ -7,10 +7,11 @@
 
 .scope lcd
 
-_puts = lcd::printz
+_puts = printz
 .export _puts
-_gotoxy = lcd::gotoxy
 .export _gotoxy
+_clrscr = clrscr
+.export _clrscr
 
 .zeropage
 
@@ -44,6 +45,16 @@ BUFFER_CURRENT = BUFFER + 120
 
 DD_LINE_ADDR: .byte 0, 64, 0, 64
 
+TRIDENT:
+    .byte %00100
+    .byte %10101
+    .byte %10101
+    .byte %11011
+    .byte %11111
+    .byte %10101
+    .byte %11111
+    .byte %00100
+
 ; Initialize LCD
 init:
         pha
@@ -57,6 +68,7 @@ init:
         ; sta P_DD_LINE_ADDR+1
 
         ; Clear screen buffer
+        ldx #0
     @clear:
         lda #' '
         sta BUFFER, X
@@ -123,6 +135,20 @@ init:
         jsr writecmd
         jsr busy
 
+        ; Upload trident character @ ASCII $07 (CGRAM address 56)
+        lda #(%01000000 | 7*8)
+        jsr writecmd
+        jsr busy
+
+        ldx #$0
+    @row:
+        lda TRIDENT, X
+        jsr writedata
+        jsr busy
+        inx
+        cpx #$8
+        bne @row
+
         lda #%00000001  ; Clear screen
         jsr writecmd
         jsr busy
@@ -140,6 +166,24 @@ init:
         pla
 
         rts
+
+; Clear screen
+clrscr:
+        pha
+        phx
+
+        ldx #0
+    @clear:
+        lda #' '
+        sta BUFFER, X
+        inx
+        cpx #160
+        bne @clear
+
+        plx
+        pla
+
+        jmp redraw  ; (jsr, rts)
 
 ; Write nibble with EN toggle
 ;
@@ -695,4 +739,33 @@ crlf:
         pla
 
         rts
+
+; __fastcall__ variants
+_gotoxy:
+        phx
+        phy
+        pha  ; save 2nd arg
+
+        ldy #0
+        lda (sp), Y
+        tax  ; 1nd arg
+        ply  ; 2nd arg
+        phy
+
+        jsr gotoxy
+
+        clc
+        lda sp
+        ina
+        sta sp
+        lda sp+1
+        adc #0
+        sta sp+1
+
+        pla
+        ply
+        plx
+
+        rts
+
 .endscope

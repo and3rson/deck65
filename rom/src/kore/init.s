@@ -37,7 +37,7 @@ init:
         cli
 
         jsr lcd::printfz
-        .asciiz "                 65ad02\n"
+        .byte "               ",$07," 65ad02 ",$07,"\n",0
 
         jsr sdc::init
         bcc @sdc_ok

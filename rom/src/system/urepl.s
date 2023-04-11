@@ -112,9 +112,8 @@ cmd_writemem:
         jsr f_parse_octet
         sta PTR
 
-        inx
-        inx
-        inx
+        lda #<(lcd::BUFFER_PREV+6)
+        ldx #>(lcd::BUFFER_PREV+6)
         jsr f_parse_octet
 
         sta (PTR)
@@ -172,9 +171,35 @@ cmd_run:
         bcs @not_found
 
         lda #<APP_START
-        ldx #>APP_START
+        sta PTR
+        lda #>APP_START
+        sta PTR+1
+    @read:
+
+        ;
+        ; lda fat16::F_CLU
+        ; jsr lcd::printhex
+        ; lda fat16::F_CLU+1
+        ; jsr lcd::printhex
+        lda #'.'
+        jsr lcd::printchar
+        ;
+
+        lda PTR
+        ldx PTR+1
         jsr fat16::read
         bcs @read_failed
+        cmp #1  ; has more data
+        bne @done
+        clc
+        lda PTR+1
+        adc #2
+        sta PTR+1
+        jmp @read
+    @done:
+
+        jsr lcd::printfz
+        .asciiz "!"
 
         jsr APP_START
         jmp @end
@@ -197,7 +222,11 @@ cmd_run:
         jsr lcd::printchar
 
     @end:
-        jmp cmd_done
+        ; TODO: Read result from stack? Is it required? Does the C program return anything?
+        ldx #0
+        ldy #3
+        jsr lcd::gotoxy
+        jmp urepl_main
 
 urepl_main:
         jsr lcd::printfz

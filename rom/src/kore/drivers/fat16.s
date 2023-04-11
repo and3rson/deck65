@@ -368,15 +368,15 @@ open:
 
         rts
 
-; Read currently open file into memory
+; Read current sector of currently open file into memory
 ;
 ; Arguments:
 ;   A - memory low byte
 ;   X - memory high byte
 ; Return:
+;   A - 1 if has more data
 ;   C - set if error
 read:
-        pha
         phx
 
         ; TODO: We are only reading 1 cluster for now.
@@ -420,6 +420,69 @@ read:
         jsr sdc::read_sector  ; sets carry flag on error
         bcs @err
 
+        ; Find next sector
+        ;
+        ; We need to find FAT sector which contains pointer to next data sector
+        ; Each entry in FAT sector consists of 2 bytes:
+        ; CHUNK = FAT_SEC + F_CLU // 256
+        ; This nicely aligns with 8-bit registers, since F_CLU[16:0] // 256 == F_CLU[16:8]
+        ;
+        ; So all we need to do is to seek to sector FAT_SEC + F_CLU[16:8] and then read word at F_CLU[8:0] * 2
+        ;
+        ; 1. PTR = FAT_SEC[16:0] + F_CLU[16:8]
+        clc
+        lda FAT_SEC
+        adc F_CLU+1
+        sta PTR
+        lda FAT_SEC+1
+        adc #0
+        sta PTR+1
+        lda PTR
+        ldx PTR+1
+        jsr sdc::select_sector
+        jsr sdc::read_block_start
+        bcs @err
+        ; 2. F_CLU = word at F_CLU[8:0] * 2
+        ldx F_CLU
+    @skip_pre:
+        cpx #0
+        beq @skipped_pre
+        jsr sdc::read_block_byte
+        jsr sdc::read_block_byte
+        dex
+        jmp @skip_pre
+    @skipped_pre:
+        jsr sdc::read_block_byte
+        pha
+        jsr sdc::read_block_byte
+        pha
+
+        ldx F_CLU
+    @skip_post:
+        inx
+        beq @skipped_post
+        jsr sdc::read_block_byte
+        jsr sdc::read_block_byte
+        jmp @skip_post
+    @skipped_post:
+        jsr sdc::read_block_end
+
+        pla
+        sta F_CLU+1
+        pla
+        sta F_CLU
+
+        lda F_CLU
+        cmp #$FF
+        bne @has_more
+        lda F_CLU+1
+        cmp #$FF
+        bne @has_more
+        lda #0
+        clc
+        jmp @end
+    @has_more:
+        lda #1
         clc
         jmp @end
 
@@ -430,7 +493,6 @@ read:
 
     @end:
         plx
-        pla
 
         rts
 
