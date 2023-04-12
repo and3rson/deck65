@@ -9,6 +9,9 @@ F_PTR: .res 2
 
 .segment "KORE"
 
+_wait16ms = wait16ms
+.export _wait16ms
+
 ; Parse hexadecimal ASCII character into number
 ;
 ; Arguments:

@@ -1,0 +1,4 @@
+clang
+%c -std=c89
+%cpp -std=c++2a
+-I/usr/share/cc65/include

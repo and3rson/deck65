@@ -1,6 +1,6 @@
 CPU := 65c02
 
-all: bin bin/hello.bin bin/cltest.bin bin/maze.bin
+all: bin bin/hello.bin bin/cltest.bin bin/maze.bin bin/snake.bin
 
 bin:
 	mkdir bin
@@ -16,6 +16,10 @@ bin/cltest.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/cltest.c
 bin/maze.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/maze.c
 	# https://cc65.github.io/doc/intro.html#ss1.2
 	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/maze.c ../rom/rom.lib -o ./bin/maze.bin -m maze.map
+
+bin/snake.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/snake.c
+	# https://cc65.github.io/doc/intro.html#ss1.2
+	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/snake.c ../rom/rom.lib -o ./bin/snake.bin -m snake.map
 
 format:
 	# Fill (part of) device with zeroes
@@ -36,9 +40,7 @@ copy: all
 	sudo rm -rf /mnt/1/*
 	cat file1.txt | sudo tee /mnt/1/file1.txt
 	# for i in `seq 2 50`; do echo "This is file $$i" | sudo tee /mnt/1/file$${i}.txt; done
-	sudo cp ./bin/hello.bin /mnt/1/
-	sudo cp ./bin/cltest.bin /mnt/1/
-	sudo cp ./bin/maze.bin /mnt/1/
+	sudo cp ./bin/*.bin /mnt/1/
 	sudo umount /mnt/1
 	sync
 

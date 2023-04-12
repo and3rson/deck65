@@ -223,9 +223,10 @@ cmd_run:
 
     @end:
         ; TODO: Read result from stack? Is it required? Does the C program return anything?
-        ldx #0
-        ldy #3
-        jsr lcd::gotoxy
+        ; jsr lcd::clrscr
+        ; ldx #0
+        ; ldy #3
+        ; jsr lcd::gotoxy
         jmp urepl_main
 
 urepl_main:

@@ -45,7 +45,29 @@ BUFFER_CURRENT = BUFFER + 120
 
 DD_LINE_ADDR: .byte 0, 64, 0, 64
 
-TRIDENT:
+FONT:
+; Not used
+    .res 8
+; Block
+    .byte %11111
+    .byte %11111
+    .byte %11111
+    .byte %11111
+    .byte %11111
+    .byte %11111
+    .byte %11111
+    .byte %11111
+; Not used
+    .res 8
+; Not used
+    .res 8
+; Not used
+    .res 8
+; Not used
+    .res 8
+; Not used
+    .res 8
+; Trident
     .byte %00100
     .byte %10101
     .byte %10101
@@ -54,6 +76,8 @@ TRIDENT:
     .byte %10101
     .byte %11111
     .byte %00100
+
+BLOCK:
 
 ; Initialize LCD
 init:
@@ -135,18 +159,17 @@ init:
         jsr writecmd
         jsr busy
 
-        ; Upload trident character @ ASCII $07 (CGRAM address 56)
-        lda #(%01000000 | 7*8)
+        ; Upload 8 characters of custom font
+        lda #(%01000000)
         jsr writecmd
         jsr busy
-
         ldx #$0
     @row:
-        lda TRIDENT, X
+        lda FONT, X
         jsr writedata
         jsr busy
         inx
-        cpx #$8
+        cpx #64
         bne @row
 
         lda #%00000001  ; Clear screen

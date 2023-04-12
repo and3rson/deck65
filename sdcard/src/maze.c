@@ -8,102 +8,40 @@
 int main();
 
 extern char igetch();
+extern void wait16ms();
+
+/* enum State { */
+/*     HELLO, */
+/*     GAME, */
+/*     DEAD, */
+/* }; */
+
+/* enum State state; */
+
+unsigned char enemies[8];
+unsigned char tick;
 
 int main() {
-    char x = 0, y = 0;
-    char c;
-    char moved;
+    unsigned char x = 0, y = 0;
+    unsigned char i;
+    unsigned char c;
+    unsigned char moved;
+    /* state = HELLO; */
     clrscr();
-
-    if (0) {
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-        gotoxy(1, 2);
-    }
 
     gotoxy(8, 1);
     puts("W/A/S/D - move, Q - quit");
     gotoxy(8, 2);
     puts("     Press any key");
     if (cgetc() == 'q') {
+        puts("\n");
         return 0;
     }
+
+    for (i = 0; i < 8; i++) {
+        enemies[i] = -1;
+    }
+    tick = 0;
 
     clrscr();
     gotoxy(x, y);
@@ -123,11 +61,25 @@ int main() {
             y++;
             moved = 1;
         } else if (c == 'q') {
+        puts("\n");
             return 0;
         }
+        tick++;
+        for (i = 0; i < 8; i++) {
+            if (enemies[i] != 255) {
+                enemies[i]--;
+            }
+        }
+        if (tick == 30) {
+            tick = 0;
+            x++;
+            moved = 1;
+        }
         if (moved) {
+            moved = 0;
             gotoxy(x, y);
         }
+        wait16ms();
     }
-    return 0;
+    /* return 0; */
 }
