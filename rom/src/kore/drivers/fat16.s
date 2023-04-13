@@ -496,4 +496,15 @@ read:
 
         rts
 
+;; Open root directory
+;;
+;opendir:
+
+;; Get next entry in root directory
+;; Stores file info in zeropage.
+;;
+;; Return:
+;;   C - set if no more files
+;readdir:
+
 .endscope

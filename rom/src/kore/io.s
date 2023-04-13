@@ -33,21 +33,23 @@ VIA1_ORNH:  .res  1
 ACIA1_DATA:  .res  1
 ACIA1_STAT:  .res  1
 ACIA1_CMD:   .res  1
-ASIA1_CTRL:  .res  1
+ACIA1_CTRL:  .res  1
 .align 256
 
 .segment "KORE"
 
 .scope via
 
-; Initialize VIA
 init:
         pha
         phx
 
         ; ****************
-        ; VIA - Common
+        ; Initialize VIA
         ; ****************
+
+        ; VIA - Common
+        ;
         ; Don't let T1 toggle PB7, PA, or PB latch
         ; lda VIA1_ACR
         ; and #$7C
@@ -67,9 +69,8 @@ init:
         ; Disable shift register
         stz VIA1_SR
 
-        ; ****************
         ; VIA - Port A
-        ; ****************
+        ;
         ; LCD
         ;   PA7      - RS
         ;   PA6      - R/W
@@ -81,9 +82,8 @@ init:
         lda #$FF
         sta VIA1_DDRA
 
-        ; ****************
         ; VIA - Port B
-        ; ****************
+        ;
         ; PS/2 Keyboard
         ;   CB2 - clock
         ;   PB4 - data
@@ -103,9 +103,59 @@ init:
         lda #$7F
         sta VIA1_IFR
 
+        ; ****************
+        ; Initialize ACIA
+        ; ****************
+
+        ; Soft reset
+        stz ACIA1_STAT
+
+        ; Set modes & functions
+        lda #$0B
+        sta ACIA1_CMD
+
+        ; Set mode
+        lda #$1E  ; 8-N-1, 9600 baud
+        sta ACIA1_CTRL
+
+        ; lda #$12
+        ; jsr acia_write
+        ; lda #$34
+        ; jsr acia_write
+        ; lda #$56
+        ; jsr acia_write
+        ; lda #$78
+        ; jsr acia_write
+        ; lda #$9A
+        ; jsr acia_write
+        ; lda #$BC
+        ; jsr acia_write
+        ; lda #$DE
+        ; jsr acia_write
+        ; lda #$F0
+
         plx
         pla
 
         rts
+
+; Write byte to TX buffer
+;
+; Arguments:
+;   A - byte
+acia_write:
+        pha
+
+    @wait:
+        lda ACIA1_STAT
+        and #$10
+        beq @wait
+
+        pla
+
+        sta ACIA1_DATA
+
+        rts
+
 
 .endscope
