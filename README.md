@@ -95,6 +95,12 @@ LOROM (10xx) || HIROM (111x):
 /EN = NAND(A15, NAND(A14, NAND(A14, A13)))
 ```
 
+# So what can you do with it?
+
+Playing snake, for example:
+
+[![IMAGE ALT TEXT HERE](./img/snake_yt.jpg)](https://www.youtube.com/watch?v=boeysL1Isg4)
+
 # Credits & references
 - [6502.org community](forum.6502.org/) - Limitless help & support
 - https://www.masswerk.at/6502/6502_instruction_set.html
