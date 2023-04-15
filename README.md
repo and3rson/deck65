@@ -99,7 +99,7 @@ LOROM (10xx) || HIROM (111x):
 
 Playing snake, for example:
 
-[![IMAGE ALT TEXT HERE](./img/snake_yt.jpg)](https://www.youtube.com/watch?v=boeysL1Isg4)
+[![Snake on 65C02 SBC](./img/snake_yt.jpg)](https://www.youtube.com/watch?v=boeysL1Isg4)
 
 # Credits & references
 - [6502.org community](forum.6502.org/) - Limitless help & support
