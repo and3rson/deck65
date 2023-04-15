@@ -1,8 +1,6 @@
 # 65ad02
 
-![65c02s SBC](./img/v11.jpg)
-
-![65c02s SBC](./img/v09_3d.jpg)
+![65c02s SBC](./img/v15_final.jpg)
 
 Simple SBC based on W65C02S
 
@@ -16,41 +14,40 @@ Pull with `git pull --recurse-submodules`.
 - RAM: AS6C1008
   > Pin-compatible with AS6C2008 & AS6C4008.
 - ROM: W27C512
-- I/O: VIA W65C22<ins>N</ins>(6TPG)
-  > Note: I'm using NMOS-compatible version (<ins>N</ins> suffix) with open-drain /IRQ line.<br />
+- I/O: VIA W65C22<ins>N</ins>(6TPG-14) & ACIA W65C21<ins>N</ins>(6TPG-14)
+  > Note: I'm using NMOS-compatible versions (<ins>N</ins> suffix) with open-drain /IRQ line.<br />
   > See http://archive.6502.org/datasheets/wdc_w65c22_sep_13_2010.pdf (page 25) for more details.
-- Glue logic: 74HC00, 74HC138
-- 4 MHz oscillator (DIP-14)
+- Glue logic: 74HC00, 74HC138, MAX3232
+- 8 MHz oscillator for 65C02, 1.8432 MHz oscillator for ACIA 6522
   > Using a machine-tooled socket actually allows to connect JCO-8 or JCO-14 oscillators.
 - Traco Power TSR 1-2450 (drop-in replacement for LD7805)
   > I had some issues with it when connecting 8580R5 SID: regulator was simply not powering on<br />
   > and was getting hot. Sticking to an L7805 for now. Not sure if it's a defect or if I'm doing something wrong.
 
 I/O:
-- 2004 LCD 16-pin header (through 6522)
+- 4004 LCD 16-pin header (through 6522)
 - PS/2 keyboard
 - Micro SD Card
-- Pin header for VIA: PB0..PB7, CB0, CB1
+- Pin header for VIA (Port B)
 - Pin headers for address bus, data bus, & CPU control lines
 
 To be added in future versions:
 - 8580R5 SID
-- 6551 ACIA
 
-New V12 schematic:
-![65c02s SBC PCB](./img/v12.png)
+V15 schematic:
+![65c02s SBC PCB](./img/v15_schematic.png)
 
-New V12 PCB:
-![65c02s SBC PCB](./img/v12_routed.png)
+V15 PCB:
+![65c02s SBC PCB](./img/v15_pcb.png)
 
 # ROM
 
 Kernel code currently provides the following features:
 - Simple REPL shell to monitor memory & run programs
-- HD44780-based 2004 LCD (through VIA)
+- HD44780-based 4004 LCD (through VIA)
 - PS/2 keyboard (through VIA)
 - Micro SD Card in SPI mode (through VIA)
-- Basic FAT16 support - listing root folder, finding & reading files
+- Basic FAT16 support - listing root folder, loading/executing programs
 
 # Resources
 
@@ -64,25 +61,35 @@ Kernel code currently provides the following features:
 # Memory map
 
 ```
-+-------+-----+------------------------+
-| RANGE | TYP | Notes                  |
-+-------+-----+------------------------+
-| $0000 | RAM | NAND(A14, A15)         |
-| $BFFF | 48k |                        |
-+-------+-----+------------------------+
-| $C000 | n/a | Reserved for future    |
-| $CFFF | 4k  |                        |
-+-------+-----+------------------------+
-| $D000 | I/O | !RAM && !ROM && A12    |
-|  ...  | 4k  | $D000-$D0FF - LCD      |
-|  ...  |     | $D100-$D1FF - 6522 VIA |
-|  ...  |     | $D200-$D2FF - EEPROM?  |
-|  ...  |     | $D300-$D3FF - EEPROM?  |
-| $DFFF |     | $D400-$D4FF - SID?     |
-+-------+-----+------------------------+
-| $E000 | ROM | !RAM && A13            |
-| $FFFF | 8k  |                        |
-+-------+-----+------------------------+
++--------------+-------+------+------------------------------------------+
+| RANGE        | TYPE  | ADDR | Notes                                    |
++--------------+-------+------+------------------------------------------+
+| $0000..$0FFF | RAM   | 0000 | /EN = A15                                |
+| $1000..$1FFF | RAM   | 0001 |                                          |
+| $2000..$2FFF | RAM   | 0010 |                                          |
+| $3000..$3FFF | RAM   | 0011 |                                          |
+| $4000..$4FFF | RAM   | 0100 |                                          |
+| $5000..$5FFF | RAM   | 0101 |                                          |
+| $6000..$6FFF | RAM   | 0110 |                                          |
+| $7000..$7FFF | RAM   | 0111 |                                          |
++--------------+-------+------+------------------------------------------+
+| $8000..$8FFF | LOROM | 1000 | /EN = NAND(A15, NAND(A14))               |
+| $9000..$9FFF | LOROM | 1001 | (Meged with HIROM)                       |
+| $A000..$AFFF | LOROM | 1010 |                                          |
+| $B000..$BFFF | LOROM | 1011 |                                          |
++--------------+-------+------+------------------------------------------+
+| $C000..$CFFF | N/C   | 1100 | Unused, may add extra '138 with /GA=/A13 |
++--------------+-------+------+------------------------------------------+
+| $D000..$DFFF | I/O   | 1101 | G = A12, /GA = A13, /GB = NAND(A15, A14) |
++--------------+-------+------+------------------------------------------+
+| $E000..$EFFF | HIROM | 1110 | /EN = NAND(/NAND(A15, A14), A13)         |
+| $F000..$FFFF | HIROM | 1111 | (Merged with LOROM)                      |
++--------------+-------+------+------------------------------------------+
+
+LOROM (10xx) || HIROM (111x):
+/EN = A15 && (/A14 || (A14 && A13))
+/EN = NAND(A15, /A14 || /NAND(A14, A13))
+/EN = NAND(A15, NAND(A14, NAND(A14, A13)))
 ```
 
 # Credits & references
