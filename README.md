@@ -10,7 +10,7 @@ Pull with `git pull --recurse-submodules`.
 
 # Components
 
-- CPU: W65C02S(6TPG)
+- CPU: W65C02S(6TPG-14)
 - RAM: AS6C1008
   > Pin-compatible with AS6C2008 & AS6C4008.
 - ROM: W27C512
