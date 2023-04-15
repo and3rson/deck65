@@ -40,7 +40,7 @@ BUFFER_CURRENT = BUFFER + 120
 
 .segment "KORE"
 
-; The code below was tested at 4 MHz, but it should run on any frequency
+; The code below was tested at 4 MHz & 8 MHz, but it should run on any frequency
 ; as long as CLOCK is set to a proper value.
 
 DD_LINE_ADDR: .byte 0, 64, 0, 64
@@ -109,6 +109,15 @@ init:
         ; $4000 - 4.096 ms
         ; $FFFF - ~16.384 ms
 
+        ; vdelay @ 8 MHz:
+        ; $0040 - 8 us
+        ; $0100 - 32 us
+        ; $0200 - 64 us
+        ; $0400 - 128 us
+        ; $2000 - 1.024 ms
+        ; $8000 - 4.096 ms
+        ; $FFFF - ~8.192 ms
+
         ; lda INIT  ; Is LCD already initialized?
         ; bne @postinit
         ; inc
@@ -117,11 +126,11 @@ init:
     @init:
         ; https://www.microchip.com/forums/m/tm.aspx?m=1023133&p=1
         ; ldy #$40  ; 1 s
-        ldy #$10  ; 256ms
+        ldy #$20  ; 256ms
     @longinit:
         lda #$FF
         ldx #$FF
-        jsr vdelay  ; 16.384 ms
+        jsr vdelay  ; 8.192 ms
         dey
         bne @longinit
 
@@ -131,19 +140,19 @@ init:
         lda #%0010
         jsr writenib
         lda #$00
-        ldx #$40
+        ldx #$80
         jsr vdelay  ; 4 ms
 
         lda #%0010
         jsr writenib
         lda #$00
-        ldx #$02
+        ldx #$04
         jsr vdelay  ; 128 us
 
         lda #%0010
         jsr writenib
         lda #$00
-        ldx #$01
+        ldx #$02
         jsr vdelay  ; 64 us
 
     @postinit:
@@ -176,7 +185,7 @@ init:
         jsr writecmd
         jsr busy
         lda #$00
-        ldx #$40
+        ldx #$80
         jsr vdelay  ; 4 ms
 
         ldx #0

@@ -86,8 +86,8 @@ wait8us:
         pha
         phx
 
-        lda #(8 * CYCLES_PER_US)
-        ldx #$00
+        lda #<(8 * CYCLES_PER_US)
+        ldx #>(8 * CYCLES_PER_US)
         jsr vdelay
 
         plx
@@ -101,8 +101,8 @@ wait32us:
         pha
         phx
 
-        lda #(32 * CYCLES_PER_US)
-        ldx #$00
+        lda #<(32 * CYCLES_PER_US)
+        ldx #>(32 * CYCLES_PER_US)
         jsr vdelay
 
         plx
@@ -117,7 +117,7 @@ wait2ms:
         phx
 
         lda #$00
-        ldx #$20
+        ldx #$40
         jsr vdelay
 
         plx
@@ -134,6 +134,9 @@ wait16ms:
         lda #$FF
         ldx #$FF
         jsr vdelay
+        lda #$FF
+        ldx #$FF
+        jsr vdelay
 
         plx
         pla
@@ -145,7 +148,7 @@ wait1s:
         pha
         phx
 
-        ldx #60
+        ldx #120
     @again:
         phx
         lda #$FF
