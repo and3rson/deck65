@@ -54,19 +54,19 @@ Kernel code currently provides the following features:
 - [Kicad files](./kicad) - <https://www.kicad.org/>
 - [DipTrace PCBs](./diptrace) - <https://diptrace.com/>
 - [Circuits](./circuits) (created with [Digital](https://github.com/hneemann/Digital))
-- [ROM sources](./rom) (requires [cc65](https://cc65.github.io/) compiler)
+- [ROM sources](./rom) (written in 6502 Assembly, requires [cc65](https://cc65.github.io/) compiler)
+- [SD Card programs](./sdcard) (written in 6502 C, requires [cc65](https://cc65.github.io/) compiler)
 - [GAL stuff](./gal) (hexadecimal 7-segment decoder, address decoder, etc using GAL16V8/GAL20V8, includes `galasm` as submodule)
 - [Composite video test](./compvid) using ATtiny45 (requires [avra](https://github.com/Ro5bert/avra))
 
 # Memory map
 
-```
 +--------------+-------+------+------------------------------------------+
 | RANGE        | TYPE  | ADDR | Notes                                    |
 +--------------+-------+------+------------------------------------------+
 | $0000..$0FFF | RAM   | 0000 | /EN = A15                                |
-| $1000..$1FFF | RAM   | 0001 |                                          |
-| $2000..$2FFF | RAM   | 0010 |                                          |
+| $1000..$1FFF | RAM   | 0001 | $0000..$1000 - zeropage & video buffer   |
+| $2000..$2FFF | RAM   | 0010 | $1000..$7FFF - programs from SD Card     |
 | $3000..$3FFF | RAM   | 0011 |                                          |
 | $4000..$4FFF | RAM   | 0100 |                                          |
 | $5000..$5FFF | RAM   | 0101 |                                          |
@@ -74,7 +74,7 @@ Kernel code currently provides the following features:
 | $7000..$7FFF | RAM   | 0111 |                                          |
 +--------------+-------+------+------------------------------------------+
 | $8000..$8FFF | LOROM | 1000 | /EN = NAND(A15, NAND(A14))               |
-| $9000..$9FFF | LOROM | 1001 | (Meged with HIROM)                       |
+| $9000..$9FFF | LOROM | 1001 | Contains OS ("MicroREPL")                |
 | $A000..$AFFF | LOROM | 1010 |                                          |
 | $B000..$BFFF | LOROM | 1011 |                                          |
 +--------------+-------+------+------------------------------------------+
@@ -83,9 +83,10 @@ Kernel code currently provides the following features:
 | $D000..$DFFF | I/O   | 1101 | G = A12, /GA = A13, /GB = NAND(A15, A14) |
 +--------------+-------+------+------------------------------------------+
 | $E000..$EFFF | HIROM | 1110 | /EN = NAND(/NAND(A15, A14), A13)         |
-| $F000..$FFFF | HIROM | 1111 | (Merged with LOROM)                      |
+| $F000..$FFFF | HIROM | 1111 | COntains Kernel ("Kore")                 |
 +--------------+-------+------+------------------------------------------+
 
+```
 LOROM (10xx) || HIROM (111x):
 /EN = A15 && (/A14 || (A14 && A13))
 /EN = NAND(A15, /A14 || /NAND(A14, A13))
