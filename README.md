@@ -21,8 +21,6 @@ Pull with `git pull --recurse-submodules`.
 - 8 MHz oscillator for 65C02, 1.8432 MHz oscillator for ACIA 6522
   > Using a machine-tooled socket actually allows to connect JCO-8 or JCO-14 oscillators.
 - Traco Power TSR 1-2450 (drop-in replacement for LD7805)
-  > I had some issues with it when connecting 8580R5 SID: regulator was simply not powering on<br />
-  > and was getting hot. Sticking to an L7805 for now. Not sure if it's a defect or if I'm doing something wrong.
 
 I/O:
 - 4004 LCD 16-pin header (through 6522)
