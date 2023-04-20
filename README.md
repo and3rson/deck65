@@ -107,6 +107,7 @@ Playing snake, for example:
 - https://octopart.componentsearchengine.com/part.php?partID=570717&ref=octopart - Aries 28-526-10 footprint
 - https://github.com/daprice/keyswitches.pretty - MX switches
 - https://components101.com/sites/default/files/component_datasheet/Micro-SD-Card-Module-Datasheet.pdf - MicroSD card module datasheet & dimensions
+- http://static.cactus.io/docs/sensors/temp-humidity/mcp9808/25095A.pdf - MCP9808 I2C temperature sensor
 
 # Links
 - 6502 Primer: http://wilsonminesco.com/6502primer/
