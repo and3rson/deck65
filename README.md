@@ -104,6 +104,7 @@ Playing snake, for example:
 - https://www.masswerk.at/6502/6502_instruction_set.html
 - https://github.com/4x1md/kicad_libraries - Mini-DIN-6 symbol & footprint
 - http://39k.ca/reading-files-from-fat16/
+- https://laughtonelectronics.com/Arcana/KimKlone/Kimklone_opcode_mapping.html - cool illegal NOPs
 - https://octopart.componentsearchengine.com/part.php?partID=570717&ref=octopart - Aries 28-526-10 footprint
 - https://github.com/daprice/keyswitches.pretty - MX switches
 - https://components101.com/sites/default/files/component_datasheet/Micro-SD-Card-Module-Datasheet.pdf - MicroSD card module datasheet & dimensions

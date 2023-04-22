@@ -40,7 +40,8 @@ init:
         jsr wait2ms
 
         lda VIA1_RB
-        ora #((SDC_MOSI | SDC_CS) & ~SDC_SCK)  ; DI=1, CS=1, SCK=0
+        ora #(SDC_MOSI | SDC_CS)  ; DI=1, CS=1
+        and #(SDC_SCK ^ $FF)  ; SCK=0
         sta VIA1_RB
 
         ; Send 74 clock cycles

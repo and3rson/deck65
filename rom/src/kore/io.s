@@ -38,7 +38,7 @@ ACIA1_CTRL:  .res  1
 
 .segment "KORE"
 
-.scope via
+.scope io
 
 init:
         pha
@@ -84,6 +84,9 @@ init:
 
         ; VIA - Port B
         ;
+        ; I2C
+        ;   PB5 - data
+        ;   PB6 - clock
         ; PS/2 Keyboard
         ;   CB2 - clock
         ;   PB4 - data
@@ -92,9 +95,9 @@ init:
         ;   PB1 - MOSI
         ;   PB2 - SCK
         ;   PB3 - CS
-        lda #%00001000  ; Set CS high, all other bits - low
+        lda #%00001000  ; Set CS (SPI) high, all other bits (including SDA/SCL) - low
         sta VIA1_RB
-        lda #%11101110  ; ; PB0 & PB4 - input, PB1..PB3 - outputs
+        lda #%10001110  ; ; PB0+PB4+PB5+PB6 - input, PB1..PB3 - outputs
         sta VIA1_DDRB
 
         ; ****************

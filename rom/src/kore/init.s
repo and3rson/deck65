@@ -28,16 +28,47 @@ init:
         ; https://laughtonelectronics.com/Arcana/KimKlone/Kimklone_opcode_mapping.html
         .byte $C2, $42
 
-        jsr via::init
-
+        jsr io::init
         jsr kbd::init
-
         jsr lcd::init
+        jsr i2c::init
 
         cli
 
         jsr lcd::printfz
         .byte "               ",$07," 65ad02 ",$07,"\n",0
+
+        ; jsr i2c::start
+        ; lda #($68 << 1)  ; %0101010
+        ; jsr i2c::write
+        ; lda #$00
+        ; jsr i2c::write
+        ; lda #$00
+        ; jsr i2c::write
+        ; lda #$00
+        ; jsr i2c::write
+        ; lda #$00
+        ; jsr i2c::write
+        ; ; lda #$DD
+        ; ; jsr i2c::write
+        ; jsr i2c::stop
+
+    ; @next:
+        ; jsr i2c::start
+        ; lda #($68 << 1)  ; %0101010
+        ; jsr i2c::write
+        ; lda #0  ; Register 0
+        ; jsr i2c::write
+
+        ; jsr i2c::start
+        ; lda #(($68 << 1) | 1)  ; %0101010
+        ; jsr i2c::write
+        ; jsr i2c::read_ack
+        ; jsr i2c::read_nack
+        ; jsr i2c::stop
+
+        ; jsr wait1s
+        ; jmp @next
 
         jsr sdc::init
         bcc @sdc_ok

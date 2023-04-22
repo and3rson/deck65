@@ -12,6 +12,8 @@ _puts = printz
 .export _gotoxy
 _clrscr = clrscr
 .export _clrscr
+_printhex = printhex
+.export _printhex
 
 .zeropage
 

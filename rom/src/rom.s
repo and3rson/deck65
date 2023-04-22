@@ -17,6 +17,7 @@
 .include "kore/drivers/ps2kbd.s"
 .include "kore/drivers/sdcard.s"
 .include "kore/drivers/fat16.s"
+.include "kore/drivers/i2c.s"
 
 .include "kore/vdelay.s"
 .include "kore/functions.s"

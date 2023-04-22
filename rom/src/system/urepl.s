@@ -199,7 +199,7 @@ cmd_run:
     @done:
 
         jsr lcd::printfz
-        .asciiz "!"
+        .asciiz "OK\n"
 
         jsr APP_START
         jmp @end
