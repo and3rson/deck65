@@ -2,6 +2,16 @@
 ; Helper functions
 ;
 
+.include "../include/define.inc"
+
+.export f_parse_hex
+.export f_parse_octet
+.export wait8us
+.export wait2ms
+.export wait16ms
+
+.import vdelay
+
 .zeropage
 
 F_BYTE: .res 1
@@ -11,6 +21,7 @@ F_PTR: .res 2
 
 _wait16ms = wait16ms
 .export _wait16ms
+.export wait32us
 
 ; Parse hexadecimal ASCII character into number
 ;

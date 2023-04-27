@@ -2,6 +2,16 @@
 ; Memory-mapped I/O stuff - VIA, SID, etc
 ;
 
+.scope io
+
+.export VIA1_RB
+.export VIA1_RA
+.export VIA1_DDRB
+.export VIA1_DDRA
+.export VIA1_IFR
+
+.export io_init = init
+
 .segment "IO"
 
 ;LCD
@@ -37,8 +47,6 @@ ACIA1_CTRL:  .res  1
 .align 256
 
 .segment "KORE"
-
-.scope io
 
 init:
         pha

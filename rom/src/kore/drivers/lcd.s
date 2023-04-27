@@ -5,15 +5,25 @@
 ; Datasheet: https://www.sparkfun.com/datasheets/LCD/HD44780.pdf
 ;
 
+.importzp sp
+.import wait8us
+.import wait32us
+.import VIA1_DDRA
+.import VIA1_RA
+.import vdelay
+
 .scope lcd
 
-_puts = printz
-.export _puts
+.export _puts = printz
 .export _gotoxy
-_clrscr = clrscr
-.export _clrscr
-_printhex = printhex
-.export _printhex
+.export _clrscr = clrscr
+.export _printhex = printhex
+.export lcd_init = init
+.export lcd_printchar = printchar
+.export lcd_printhex = printhex
+.export lcd_printz = printz
+.export lcd_printfz = printfz
+.export lcd_BUFFER_PREV = BUFFER_PREV
 
 .zeropage
 
@@ -34,7 +44,7 @@ CURSOR_Y:  .res  1
 
 ADDR:  .res 2
 
-.segment "RAM"
+.segment "SYSRAM"
 
 BUFFER:    .res  160
 BUFFER_PREV = BUFFER + 80
