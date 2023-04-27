@@ -9,6 +9,8 @@
 ; Version 10
 ; https://github.com/bbbradsmith/6502vdelay
 
+.segment "KORE"
+
 .export vdelay
 ; delays for X:A cycles, minimum: 29 (includes jsr)
 ;   A = low bits of cycles to delay

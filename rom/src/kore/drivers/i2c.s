@@ -1,17 +1,20 @@
 ;
 ; I2C bus implementation
 
+.import wait8us
+.import VIA1_DDRB
+.import VIA1_RB
+
 .scope i2c
 
 SDA = %00100000
 SCL = %01000000
 
-_i2c_start = start
-.export _i2c_start
-_i2c_stop = stop
-.export _i2c_stop
+.export _i2c_start = start
+.export _i2c_stop = stop
 .export _i2c_write
 .export _i2c_read
+.export i2c_init = init
 
 .zeropage
 

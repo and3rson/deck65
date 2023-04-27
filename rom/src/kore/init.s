@@ -2,7 +2,25 @@
 ; Kernel entrypoint
 ;
 
+.include "../include/define.inc"
+
+.importzp sp
 .import __STACK_START__
+.import lcd_printz
+.import wait16ms
+.importzp fat16_ERR
+.import fat16_init
+.importzp fat16_BOOTSEC
+.import lcd_printchar
+.import lcd_printhex
+.import lcd_printfz
+.importzp sdc_ERR
+.import sdc_init
+.import i2c_init
+.import lcd_init
+.import kbd_init
+.import io_init
+.import urepl_main
 
 .zeropage
 
@@ -11,6 +29,8 @@ DIR: .res 1
 INIT_PTR: .res 2
 
 .segment "KORE"
+
+.export init
 
 ; Kernel entrypoint
 ;
@@ -28,83 +48,83 @@ init:
         ; https://laughtonelectronics.com/Arcana/KimKlone/Kimklone_opcode_mapping.html
         .byte $C2, $42
 
-        jsr io::init
-        jsr kbd::init
-        jsr lcd::init
-        jsr i2c::init
+        jsr io_init
+        jsr kbd_init
+        jsr lcd_init
+        jsr i2c_init
 
         cli
 
-        jsr lcd::printfz
+        jsr lcd_printfz
         .byte "               ",$07," 65ad02 ",$07,"\n",0
 
-        ; jsr i2c::start
+        ; jsr i2c_start
         ; lda #($68 << 1)  ; %0101010
-        ; jsr i2c::write
+        ; jsr i2c_write
         ; lda #$00
-        ; jsr i2c::write
+        ; jsr i2c_write
         ; lda #$00
-        ; jsr i2c::write
+        ; jsr i2c_write
         ; lda #$00
-        ; jsr i2c::write
+        ; jsr i2c_write
         ; lda #$00
-        ; jsr i2c::write
+        ; jsr i2c_write
         ; ; lda #$DD
-        ; ; jsr i2c::write
-        ; jsr i2c::stop
+        ; ; jsr i2c_write
+        ; jsr i2c_stop
 
     ; @next:
-        ; jsr i2c::start
+        ; jsr i2c_start
         ; lda #($68 << 1)  ; %0101010
-        ; jsr i2c::write
+        ; jsr i2c_write
         ; lda #0  ; Register 0
-        ; jsr i2c::write
+        ; jsr i2c_write
 
-        ; jsr i2c::start
+        ; jsr i2c_start
         ; lda #(($68 << 1) | 1)  ; %0101010
-        ; jsr i2c::write
-        ; jsr i2c::read_ack
-        ; jsr i2c::read_nack
-        ; jsr i2c::stop
+        ; jsr i2c_write
+        ; jsr i2c_read_ack
+        ; jsr i2c_read_nack
+        ; jsr i2c_stop
 
         ; jsr wait1s
         ; jmp @next
 
-        jsr sdc::init
+        jsr sdc_init
         bcc @sdc_ok
-        jsr lcd::printfz
+        jsr lcd_printfz
         .asciiz "SD card error: "
-        lda sdc::ERR
-        jsr lcd::printhex
-        acall lcd::printchar, #10
+        lda sdc_ERR
+        jsr lcd_printhex
+        acall lcd_printchar, #10
         jmp @post_init
     @sdc_ok:
 
-        jsr fat16::init
+        jsr fat16_init
         bcc @fat16_ok
-        jsr lcd::printfz
+        jsr lcd_printfz
         .asciiz "FAT16 error: "
-        lda fat16::ERR
-        jsr lcd::printhex
-        acall lcd::printchar, #10
+        lda fat16_ERR
+        jsr lcd_printhex
+        acall lcd_printchar, #10
         jmp @post_init
     @fat16_ok:
 
-        jsr lcd::printfz
+        jsr lcd_printfz
         .asciiz "FAT16 bootsector: "
-        lda fat16::BOOTSEC+1
-        jsr lcd::printhex
-        lda fat16::BOOTSEC
-        jsr lcd::printhex
-        acall lcd::printchar, #10
+        lda fat16_BOOTSEC+1
+        jsr lcd_printhex
+        lda fat16_BOOTSEC
+        jsr lcd_printhex
+        acall lcd_printchar, #10
 
-        ; jsr sdc::read_block_start
+        ; jsr sdc_read_block_start
         ; cmp #0
         ; bne @read_err
         ; print SDC_BUFFER
         ; jmp @after_read
     ; @read_err:
-        ; jsr lcd::printhex
+        ; jsr lcd_printhex
     ; @after_read:
 
     @post_init:
@@ -125,7 +145,7 @@ init:
         cpy #songlen
         bne @copy_byte
 
-        jsr lcd::printfz
+        jsr lcd_printfz
         .asciiz "Initializing...\n"
 
         ; init song
@@ -149,7 +169,7 @@ init:
         ; bne @inc
     ; @dec:
         ; lda #8
-        ; jsr lcd::printchar
+        ; jsr lcd_printchar
         ; dex
         ; bne @done
         ; lda #1
@@ -157,7 +177,7 @@ init:
         ; jmp @done
     ; @inc:
         ; lda #'+'
-        ; jsr lcd::printchar
+        ; jsr lcd_printchar
         ; inx
         ; cpx #19
         ; bne @done
@@ -191,7 +211,7 @@ init:
     songplay = $035E
 
     .byte $AA, $BB
-    .word lcd::printz
+    .word lcd_printz
     foo1: .byte >songstart
     foo2: .byte <songstart
     foo3: .byte >songdata
