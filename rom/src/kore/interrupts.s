@@ -2,6 +2,13 @@
 ; Interrupt routines (mostly for VIA)
 ;
 
+.import kbd_process
+.import VIA1_RB
+.import VIA1_IFR
+
+.export irq
+.export nmi
+
 .segment "KORE"
 
 S_INTERRUPT: .asciiz "INT!\n"
@@ -28,7 +35,7 @@ irq:
         ror
         ror
         and #1
-        jsr kbd::process
+        jsr kbd_process
 
     @end:
         ; Clear all interrupt flags

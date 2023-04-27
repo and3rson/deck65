@@ -6,6 +6,8 @@
 
 .zeropage
 
+.org 0
+
 ; 6510 register area
 .res 3
 ; Reserve for SID music
@@ -29,3 +31,5 @@ tmp2:           .res    1
 tmp3:           .res    1
 tmp4:           .res    1
 regbank:        .res    6
+
+.reloc

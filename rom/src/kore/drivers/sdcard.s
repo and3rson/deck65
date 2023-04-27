@@ -5,7 +5,20 @@
 ; http://elm-chan.org/docs/mmc/mmc_e.html
 ;
 
+.import wait32us
+.import wait2ms
+.import VIA1_RB
+
 .scope sdc
+
+.export sdc_init=init
+.export sdc_select_sector=select_sector
+.export sdc_read_block_start=read_block_start
+.export sdc_read_block_byte=read_block_byte
+.export sdc_read_block_end=read_block_end
+.export sdc_read_sector=read_sector
+.export sdc_SECTOR_DATA=SECTOR_DATA
+.exportzp sdc_ERR=ERR
 
 .zeropage
 
@@ -22,7 +35,7 @@ DEST: .res 2
 
 ERR: .res 1
 
-.segment "RAM"
+.segment "SYSRAM"
 
 SECTOR_DATA: .res 512
 

@@ -8,7 +8,22 @@
 ; http://www.maverick-os.dk/FileSystemFormats/FAT16_FileSystem.html
 ;
 
+.import sdc_read_sector
+.import sdc_select_sector
+.import sdc_read_block_start
+.import sdc_read_block_byte
+.import sdc_read_block_end
+.importzp sdc_ERR
+.import sdc_SECTOR_DATA
+
 .scope fat16
+
+.export fat16_init = init
+.export fat16_open = open
+.export fat16_read = read
+.exportzp fat16_BOOTSEC = BOOTSEC
+.exportzp fat16_F_SIZE = F_SIZE
+.exportzp fat16_ERR = ERR
 
 .zeropage
 
@@ -38,7 +53,7 @@ COUNTER:  .res  1
 SECT:     .res  2
 ERR:      .res  1
 
-.segment "RAM"
+.segment "SYSRAM"
 
 ; BUFFER: .res 512  ; Reserved for reading sectors & parsing them in-memory
 ; START: .res 4096
@@ -65,7 +80,7 @@ init:
 
         lda #0
         ldx #0
-        jsr sdc::read_block_start
+        jsr sdc_read_block_start
         bcc @start_mbr_ok
         lda #$E1
         sta ERR
@@ -75,40 +90,40 @@ init:
         ; Skip to $100
         ldx #0
     @skip100h:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         dex
         bne @skip100h
 
         ; Skip to $1C6
         ldx #$C6
     @skipC6h:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         dex
         bne @skipC6h
 
         ; Read sector number of boot sector (little-endian)
 
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         sta BOOTSEC
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         sta BOOTSEC+1
 
         ; Skip remaining 54 bytes (512-256-200-2)
         ldx #56
     @skip54:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         dex
         bne @skip54
 
         ; Finish reading
-        jsr sdc::read_block_end
+        jsr sdc_read_block_end
 
         ;;;;;;;;;;;;;;;;
         ; Read boot sector
 
         lda BOOTSEC
         ldx BOOTSEC+1
-        jsr sdc::read_block_start
+        jsr sdc_read_block_start
         bcc @start_bootsec_ok
         lda #$E2
         sta ERR
@@ -118,52 +133,52 @@ init:
         ; Skip to $0D
         ldx #$0D
     @skip0Dh:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         dex
         bne @skip0Dh
 
         ; Read filesystem info
-        jsr sdc::read_block_byte  ; $0D
+        jsr sdc_read_block_byte  ; $0D
         sta SEC_PER_CLU
 
-        jsr sdc::read_block_byte  ; $0E
+        jsr sdc_read_block_byte  ; $0E
         sta RES_SEC_COUNT
-        jsr sdc::read_block_byte  ; $0F
+        jsr sdc_read_block_byte  ; $0F
         sta RES_SEC_COUNT+1
 
-        jsr sdc::read_block_byte  ; $10
+        jsr sdc_read_block_byte  ; $10
         sta FAT_COUNT
 
-        jsr sdc::read_block_byte  ; $11
+        jsr sdc_read_block_byte  ; $11
         sta ROOT_DIR_ENTRIES
-        jsr sdc::read_block_byte  ; $12
+        jsr sdc_read_block_byte  ; $12
         sta ROOT_DIR_ENTRIES+1
 
-        jsr sdc::read_block_byte  ; $13..$15
-        jsr sdc::read_block_byte
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte  ; $13..$15
+        jsr sdc_read_block_byte
+        jsr sdc_read_block_byte
 
-        jsr sdc::read_block_byte  ; $16
+        jsr sdc_read_block_byte  ; $16
         sta SEC_PER_FAT
-        jsr sdc::read_block_byte  ; $17
+        jsr sdc_read_block_byte  ; $17
         sta SEC_PER_FAT+1
 
         ; Skip remaining 489 bytes (256+233)
         ldx #0
     @skip256:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         dex
         bne @skip256
         ldx #233
     @skip233:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         dex
         bne @skip233
 
         ; TODO: Check signature (0xAA55)
 
         ; Finish reading
-        jsr sdc::read_block_end
+        jsr sdc_read_block_end
 
         ;;;;;;;;;;;;;;;;
         ; Check if this geometry is supported
@@ -272,25 +287,25 @@ open:
         ; Select sector ROOT_DIR_SEC+COUNTER
         plx
         pla
-        jsr sdc::select_sector
+        jsr sdc_select_sector
 
         ; plx
         ; pla
-        ; ldy #<sdc::SECTOR_DATA
+        ; ldy #<sdc_SECTOR_DATA
         ; phy
-        ; ldy #>sdc::SECTOR_DATA
+        ; ldy #>sdc_SECTOR_DATA
         ; phy
-        lda #<sdc::SECTOR_DATA
-        ldx #>sdc::SECTOR_DATA
-        jsr sdc::read_sector
+        lda #<sdc_SECTOR_DATA
+        ldx #>sdc_SECTOR_DATA
+        jsr sdc_read_sector
         bcc @read_ok
         lda #$E1
         jmp @err
     @read_ok:
         ; Iterate on possible 16 files in this sector
-        lda #<sdc::SECTOR_DATA
+        lda #<sdc_SECTOR_DATA
         sta PTR
-        lda #>sdc::SECTOR_DATA
+        lda #>sdc_SECTOR_DATA
         sta PTR+1
         ldx #16
     @next_file:
@@ -414,10 +429,10 @@ read:
 
         lda SECT
         ldx SECT+1
-        jsr sdc::select_sector
+        jsr sdc_select_sector
         lda PTR
         ldx PTR+1
-        jsr sdc::read_sector  ; sets carry flag on error
+        jsr sdc_read_sector  ; sets carry flag on error
         bcs @err
 
         ; Find next sector
@@ -439,33 +454,33 @@ read:
         sta PTR+1
         lda PTR
         ldx PTR+1
-        jsr sdc::select_sector
-        jsr sdc::read_block_start
+        jsr sdc_select_sector
+        jsr sdc_read_block_start
         bcs @err
         ; 2. F_CLU = word at F_CLU[8:0] * 2
         ldx F_CLU
     @skip_pre:
         cpx #0
         beq @skipped_pre
-        jsr sdc::read_block_byte
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
+        jsr sdc_read_block_byte
         dex
         jmp @skip_pre
     @skipped_pre:
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         pha
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
         pha
 
         ldx F_CLU
     @skip_post:
         inx
         beq @skipped_post
-        jsr sdc::read_block_byte
-        jsr sdc::read_block_byte
+        jsr sdc_read_block_byte
+        jsr sdc_read_block_byte
         jmp @skip_post
     @skipped_post:
-        jsr sdc::read_block_end
+        jsr sdc_read_block_end
 
         pla
         sta F_CLU+1
@@ -487,7 +502,7 @@ read:
         jmp @end
 
     @err:
-        lda sdc::ERR
+        lda sdc_ERR
         sta ERR
         sec
 

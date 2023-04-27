@@ -7,9 +7,10 @@
 
 .scope kbd
 
-_cgetc = getch
-_igetch = igetch
-.export _cgetc, _igetch
+.export _cgetc = getch, _igetch = igetch
+.export kbd_init = init
+.export kbd_process = process
+.export kbd_getch = getch
 
 .zeropage
 

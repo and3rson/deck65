@@ -2,8 +2,10 @@
 #include <conio.h>
 
 // https://cc65.github.io/doc/cc65.html
-/* #pragma code-name ("PROGRAM") */
-/* #pragma rodata-name ("PROGRAM") */
+/* #pragma code-name ("PROG_CODE") */
+/* #pragma rodata-name ("PROG_RODATA") */
+/* #pragma data-name ("PROG_DATA") */
+/* #pragma bss-name ("PROG_BSS") */
 
 // Main function should come first
 int main();

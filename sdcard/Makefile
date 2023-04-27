@@ -10,7 +10,7 @@ bin:
 	mkdir bin
 
 bin/%.bin: src/%.c ../rom/rom.lib
-	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) $< ../rom/rom.lib -o $@
+	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) $< ../rom/rom.lib -o $@ -m $<.map
 
 bin/hello.bin: ../rom/rom.cfg ../rom/rom.lib src/hello.s
 	ca65 --cpu $(CPU) ./src/hello.s
@@ -57,4 +57,4 @@ copy: all
 
 .PHONY: clean
 clean:
-	rm -rf bin src/*.o
+	rm -rf bin src/*.o *.bin *.map *.lst
