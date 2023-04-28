@@ -9,12 +9,16 @@ all: bin bin/hello.bin $(BIN)
 bin:
 	mkdir bin
 
-bin/%.bin: src/%.c ../rom/rom.lib
-	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) $< ../rom/rom.lib -m $<.map -o $@
+bin/%.bin: src/%.c ../rom/api.lib
+	cl65 -c -t none -C rom.cfg --cpu $(CPU) -I ../rom/include/ $< ../rom/api.lib  # -m $<.map
+	ld65 -C rom.cfg $(patsubst %.c,%.o,$<) ../rom/api.lib -o $@
 
-bin/hello.bin: ../rom/rom.cfg ../rom/rom.lib src/hello.s
+bin/hello.bin: rom.cfg ../rom/api.lib src/hello.s
 	ca65 --cpu $(CPU) ./src/hello.s
-	ld65 -C ../rom/rom.cfg ./src/hello.o -o bin/hello.bin ../rom/rom.lib
+	ld65 -C rom.cfg ./src/hello.o -o bin/hello.bin ../rom/api.lib  # -m hello.map
+
+../rom/api.lib:
+	make -C ../rom api.lib
 
 # bin/cltest.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/cltest.c
 # 	# https://cc65.github.io/doc/intro.html#ss1.2
@@ -57,4 +61,4 @@ copy: all
 
 .PHONY: clean
 clean:
-	rm -rf bin src/*.o
+	rm -rf bin src/*.o *.map *.lst *.bin

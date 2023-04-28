@@ -1,10 +1,6 @@
 #include <stdio.h>
 #include <conio.h>
 
-// https://cc65.github.io/doc/cc65.html
-/* #pragma code-name ("PROGRAM") */
-/* #pragma rodata-name ("PROGRAM") */
-
 int main();
 
 typedef unsigned char byte;

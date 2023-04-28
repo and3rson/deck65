@@ -1,17 +1,12 @@
 #include <stdio.h>
 #include <conio.h>
 
-// https://cc65.github.io/doc/cc65.html
-/* #pragma code-name ("PROGRAM") */
-/* #pragma rodata-name ("PROGRAM") */
+#include <api/keyboard.h>
+#include <api/wait.h>
 
 // Main function should come first
 int main();
 
-extern char igetch();
-extern void wait16ms();
-
-typedef unsigned char byte;
 typedef struct {
     byte x;
     byte y;
