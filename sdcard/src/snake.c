@@ -4,6 +4,8 @@
 // https://cc65.github.io/doc/cc65.html
 /* #pragma code-name ("PROGRAM") */
 /* #pragma rodata-name ("PROGRAM") */
+/* #pragma data-name ("PROGRAM") */
+/* #pragma bss-name ("PROGRAM") */
 
 // Main function should come first
 int main();

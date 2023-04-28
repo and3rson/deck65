@@ -4,7 +4,7 @@ ASM_SRC = $(shell find src -name '*.s')
 OBJ = $(foreach x, $(basename $(ASM_SRC)), $(x).s.o) $(foreach x, $(basename $(C_SRC)), $(x).c.o)
 # OBJ = $(patsubst %.c,%.o,$(ASM_SRC)) $(patsubst %.s,%.o,$(C_SRC))
 
-all: rom.bin flash
+all: rom.bin api.lib flash
 # all: rom.bin rom_sim65.bin
 
 # rom.bin: $(SRC) rom.cfg Makefile
@@ -19,8 +19,13 @@ flash:
 
 rom.bin: Makefile rom.cfg $(OBJ)
 	# cl65 -t none -C rom.cfg -o rom.bin -m rom.map $(OBJ)
-	ld65 -C rom.cfg -o rom.bin -m rom.map $(OBJ)
-	ar65 r rom.lib $(OBJ)
+	ld65 -C rom.cfg -o rom.bin -m rom.map $(OBJ) -Ln labels.lst
+	# ar65 r rom.lib $(OBJ)
+
+api.lib:
+	cat labels.lst | sed -E 's/[[:alpha:]]+\s([[:alpha:][:digit:]]+)\s\.(.*)/.export \2 = $$\1/g' > api.s
+	ca65 --cpu $(CPU) api.s -o api.o
+	ar65 r api.lib api.o
 
 %.s.o: %.s
 	ca65 --cpu $(CPU) --feature string_escapes $< -o $@
@@ -35,7 +40,7 @@ rom.bin: Makefile rom.cfg $(OBJ)
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.lst *.map
+	rm -f *.o *.bin *.lst *.map *.lib api.s
 	find . -name '*.o' -exec rm {} \;
 
 .PHONY: run
