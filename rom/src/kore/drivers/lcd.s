@@ -11,6 +11,7 @@
 .import VIA1_DDRA
 .import VIA1_RA
 .import vdelay
+.import popa
 
 .scope lcd
 
@@ -786,29 +787,10 @@ crlf:
 
 ; __fastcall__ variants
 _gotoxy:
-        phx
-        phy
-        pha  ; save 2nd arg
-
-        ldy #0
-        lda (sp), Y
-        tax  ; 1nd arg
-        ply  ; 2nd arg
-        phy
-
+        tay  ; 2nd arg
+        jsr popa
+        tax  ; 1st arg
         jsr gotoxy
-
-        clc
-        lda sp
-        ina
-        sta sp
-        lda sp+1
-        adc #0
-        sta sp+1
-
-        pla
-        ply
-        plx
 
         rts
 

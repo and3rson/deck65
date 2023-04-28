@@ -4,7 +4,7 @@ ASM_SRC = $(shell find src -name '*.s')
 OBJ = $(foreach x, $(basename $(ASM_SRC)), $(x).s.o) $(foreach x, $(basename $(C_SRC)), $(x).c.o)
 # OBJ = $(patsubst %.c,%.o,$(ASM_SRC)) $(patsubst %.s,%.o,$(C_SRC))
 
-all: rom.bin flash
+all: rom.bin api.lib flash
 # all: rom.bin rom_sim65.bin
 
 # rom.bin: $(SRC) rom.cfg Makefile
@@ -18,9 +18,15 @@ flash:
 	minipro -p W27C512@DIP28 -w rom.bin -S
 
 rom.bin: Makefile rom.cfg $(OBJ)
+	mkdir -p gen
 	# cl65 -t none -C rom.cfg -o rom.bin -m rom.map $(OBJ)
-	ld65 -C rom.cfg -o rom.bin -m rom.map $(OBJ)
-	ar65 r rom.lib $(OBJ)
+	ld65 -C rom.cfg -o rom.bin -m rom.map $(OBJ) -Ln gen/labels.lst
+	# ar65 r rom.lib $(OBJ)
+
+api.lib: rom.bin
+	cat gen/labels.lst | sed -E 's/[[:alpha:]]+\s([[:alpha:][:digit:]]+)\s\.(.*)/.export \2 = $$\1/g' > gen/api.s
+	ca65 --cpu $(CPU) gen/api.s -o gen/api.o
+	ar65 r api.lib gen/api.o
 
 %.s.o: %.s
 	ca65 --cpu $(CPU) --feature string_escapes $< -o $@
@@ -35,7 +41,7 @@ rom.bin: Makefile rom.cfg $(OBJ)
 
 .PHONY: clean
 clean:
-	rm -f *.o *.bin *.lst *.map
+	rm -rf *.o *.bin *.lst *.map *.lib gen
 	find . -name '*.o' -exec rm {} \;
 
 .PHONY: run

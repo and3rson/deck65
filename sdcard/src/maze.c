@@ -1,22 +1,10 @@
 #include <stdio.h>
 #include <conio.h>
 
-// https://cc65.github.io/doc/cc65.html
-/* #pragma code-name ("PROGRAM") */
-/* #pragma rodata-name ("PROGRAM") */
+#include <api/keyboard.h>
+#include <api/wait.h>
 
 int main();
-
-extern char igetch();
-extern void wait16ms();
-
-/* enum State { */
-/*     HELLO, */
-/*     GAME, */
-/*     DEAD, */
-/* }; */
-
-/* enum State state; */
 
 unsigned char enemies[8];
 unsigned char tick;

@@ -1,36 +1,27 @@
 #include <stdio.h>
 #include <conio.h>
 
-// https://cc65.github.io/doc/cc65.html
-/* #pragma code-name ("PROGRAM") */
-/* #pragma rodata-name ("PROGRAM") */
+#include <api/i2c.h>
+#include <api/lcd.h>
 
-int main();
+void main();
 
-typedef unsigned char byte;
-
-extern void i2c_start();
-extern void i2c_stop();
-extern byte i2c_write(byte data);
-extern byte i2c_read(byte ack);
-extern void printhex(byte hex);
-
-int main() {
+void main() {
     byte h, m, s;
     puts("Reading time...");
     i2c_start();
     if (i2c_write(0x68 << 1)) {
         puts(" err: send addr\n");
-        return 0;
+        return;
     }
     if (i2c_write(0x00)) {
         puts(" err: send reg\n");
-        return 0;
+        return;
     }
     i2c_start();
     if (i2c_write((0x68 << 1) | 1)) {
         puts(" err: send addr\n");
-        return 0;
+        return;
     }
     puts("\nTime: ");
     s = i2c_read(1);
@@ -44,5 +35,5 @@ int main() {
     puts(":");
     printhex(s);
     puts("\n");
-    return 0;
+    return;
 }
