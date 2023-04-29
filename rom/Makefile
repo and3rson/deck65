@@ -1,6 +1,6 @@
 CPU := 65c02
 ASM_SRC = $(shell find src -name '*.s')
-# C_SRC = $(shell find src -name '*.c')
+C_SRC = $(shell find src -name '*.c')
 OBJ = $(foreach x, $(basename $(ASM_SRC)), $(x).s.o) $(foreach x, $(basename $(C_SRC)), $(x).c.o)
 # OBJ = $(patsubst %.c,%.o,$(ASM_SRC)) $(patsubst %.s,%.o,$(C_SRC))
 
@@ -31,9 +31,9 @@ api.lib: rom.bin
 %.s.o: %.s
 	ca65 --cpu $(CPU) --feature string_escapes $< -o $@
 
-# %.c.o: %.c
-# 	cl65 -t none -c --cpu $(CPU) $<
-# 	mv $(patsubst %.c.o,%.o,$@) $@
+%.c.o: %.c
+	cl65 -t none -c --cpu $(CPU) -I ./include $<
+	mv $(patsubst %.c.o,%.o,$@) $@
 
 # rom_sim65.bin: src/*.s rom.cfg Makefile
 # 	true

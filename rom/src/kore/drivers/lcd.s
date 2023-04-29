@@ -16,9 +16,11 @@
 .scope lcd
 
 .export _puts = printz
+.export _cputc = printchar
 .export _gotoxy
 .export _clrscr = clrscr
 .export _printhex = printhex
+.export _printword = printword
 .export lcd_init = init
 .export lcd_printchar = printchar
 .export lcd_printhex = printhex
@@ -741,6 +743,22 @@ printhex:
         pla
 
         rts
+
+
+; Print hexadecimal representation (16-bit)
+;
+; Arguments:
+;   A:X - value
+printword:
+        pha
+
+        txa
+        jsr printhex
+        pla
+        jsr printhex
+
+        rts
+
 
 ; Print binary representation
 ;
