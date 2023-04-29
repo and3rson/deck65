@@ -133,7 +133,7 @@ byte fat16_init() {
  *
  * returns: 0 on success
  */
-byte fat16_open(char* filename) {
+byte fat16_open(const char* filename) {
     byte err, k;
     word ii, sec = root_dir_sec;
     fat_entry_t* entry;
