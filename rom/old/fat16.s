@@ -163,13 +163,13 @@ init:
         jsr sdc_read_block_byte  ; $17
         sta SEC_PER_FAT+1
 
-        ; Skip remaining 489 bytes (256+233)
+        ; Skip remaining 488 bytes (256+232)
         ldx #0
     @skip256:
         jsr sdc_read_block_byte
         dex
         bne @skip256
-        ldx #233
+        ldx #232
     @skip233:
         jsr sdc_read_block_byte
         dex

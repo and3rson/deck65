@@ -3,3 +3,4 @@
 *.lst
 *.map
 *.lib
+.ccls-cache

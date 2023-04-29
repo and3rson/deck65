@@ -8,9 +8,9 @@
 .import __STACK_START__
 .import lcd_printz
 .import wait16ms
-.importzp fat16_ERR
-.import fat16_init
-.importzp fat16_BOOTSEC
+; .importzp fat16_ERR
+; .import fat16_init
+; .importzp fat16_BOOTSEC
 .import lcd_printchar
 .import lcd_printhex
 .import lcd_printfz
@@ -20,7 +20,7 @@
 .import lcd_init
 .import kbd_init
 .import io_init
-.import urepl_main
+.import _urepl_main
 
 .zeropage
 
@@ -52,6 +52,7 @@ init:
         jsr kbd_init
         jsr lcd_init
         jsr i2c_init
+        jsr sdc_init
 
         cli
 
@@ -90,33 +91,39 @@ init:
         ; jsr wait1s
         ; jmp @next
 
-        jsr sdc_init
-        bcc @sdc_ok
-        jsr lcd_printfz
-        .asciiz "SD card error: "
-        lda sdc_ERR
-        jsr lcd_printhex
-        acall lcd_printchar, #10
-        jmp @post_init
-    @sdc_ok:
 
-        jsr fat16_init
-        bcc @fat16_ok
-        jsr lcd_printfz
-        .asciiz "FAT16 error: "
-        lda fat16_ERR
-        jsr lcd_printhex
-        acall lcd_printchar, #10
-        jmp @post_init
-    @fat16_ok:
 
-        jsr lcd_printfz
-        .asciiz "FAT16 bootsector: "
-        lda fat16_BOOTSEC+1
-        jsr lcd_printhex
-        lda fat16_BOOTSEC
-        jsr lcd_printhex
-        acall lcd_printchar, #10
+        ;;;;;;;;;;
+        ; jsr sdc_init
+        ; bcc @sdc_ok
+        ; jsr lcd_printfz
+        ; .asciiz "SD card error: "
+        ; lda sdc_ERR
+        ; jsr lcd_printhex
+        ; acall lcd_printchar, #10
+        ; jmp @post_init
+    ; @sdc_ok:
+
+        ; jsr fat16_init
+        ; bcc @fat16_ok
+        ; jsr lcd_printfz
+        ; .asciiz "FAT16 error: "
+        ; lda fat16_ERR
+        ; jsr lcd_printhex
+        ; acall lcd_printchar, #10
+        ; jmp @post_init
+    ; @fat16_ok:
+
+        ; jsr lcd_printfz
+        ; .asciiz "FAT16 bootsector: "
+        ; lda fat16_BOOTSEC+1
+        ; jsr lcd_printhex
+        ; lda fat16_BOOTSEC
+        ; jsr lcd_printhex
+        ; acall lcd_printchar, #10
+        ;;;;;;;;;;
+
+
 
         ; jsr sdc_read_block_start
         ; cmp #0
@@ -131,7 +138,7 @@ init:
 
         ; print S_BAR19
 
-        jmp urepl_main
+        jmp _urepl_main
 
         ; load song into RAM
         ldy #0

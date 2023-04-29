@@ -12,11 +12,13 @@
 .scope sdc
 
 .export sdc_init=init
-.export sdc_select_sector=select_sector
-.export sdc_read_block_start=read_block_start
-.export sdc_read_block_byte=read_block_byte
-.export sdc_read_block_end=read_block_end
-.export sdc_read_sector=read_sector
+.export _sdc_select_sector=select_sector
+.export _sdc_read_sector=read_sector
+.export _sdc_read_block_start=read_block_start
+.export _sdc_read_block_byte=read_block_byte
+.export _sdc_read_block_word=read_block_word
+.export _sdc_read_block_end=read_block_end
+; .export sdc_read_sector=read_sector
 .export sdc_SECTOR_DATA=SECTOR_DATA
 .exportzp sdc_ERR=ERR
 
@@ -27,6 +29,8 @@ SDC_MISO  =  $1  ; Slave's DO
 SDC_MOSI  =  $2  ; Slave's DI
 SDC_SCK   =  $4
 SDC_CS    =  $8
+
+; TODO: Remove underscores
 
 SDC_HEADER = %01000000
 
@@ -68,54 +72,54 @@ init:
         jsr enable
 
         ; CMD0 - init
-        jsr _send_cmd0
-        jsr _wait_byte
+        jsr send_cmd0
+        jsr wait_byte
         cmp #$01
         bne @readiness_timeout
-        jsr _read_byte  ; read tail
+        jsr read_byte  ; read tail
 
         ; CMD8 - send voltage
-        jsr _send_voltage_check
-        jsr _wait_byte  ; read header
-        jsr _skip_byte4  ; 32 bits
-        jsr _skip_byte  ; read tail
+        jsr send_voltage_check
+        jsr wait_byte  ; read header
+        jsr skip_byte4  ; 32 bits
+        jsr skip_byte  ; read tail
         cmp #$01
         bne @voltage_failed
         ; Read 32-bit voltage response
 
         ; CMD58 (7A) - send OCR
-        jsr _send_ocr
-        jsr _wait_byte  ; read header
-        jsr _skip_byte4  ; 32 bits
-        jsr _skip_byte  ; read tail
+        jsr send_ocr
+        jsr wait_byte  ; read header
+        jsr skip_byte4  ; 32 bits
+        jsr skip_byte  ; read tail
         cmp #$01
         bne @ocr_failed
 
         ; CMD55 - send app cmd
-        jsr _send_app
-        jsr _wait_byte  ; read header
-        jsr _skip_byte  ; read tail
+        jsr send_app
+        jsr wait_byte  ; read header
+        jsr skip_byte  ; read tail
         cmp #$01
         bne @app_failed
 
         ; CMD41 - send app op cond
-        jsr _send_op_cond
-        jsr _wait_byte  ; read header
-        jsr _skip_byte  ; read tail
+        jsr send_op_cond
+        jsr wait_byte  ; read header
+        jsr skip_byte  ; read tail
         cmp #$01  ; initialization in progress?
         bne @op_cond_failed
 
         ldx #$FF  ; 256 attempts
     @wait_init:
         ; CMD55 - send app cmd
-        jsr _send_app
-        jsr _wait_byte  ; read header
-        jsr _skip_byte  ; read tail
+        jsr send_app
+        jsr wait_byte  ; read header
+        jsr skip_byte  ; read tail
 
         ; CMD41 - send app op cond
-        jsr _send_op_cond
-        jsr _wait_byte  ; read header
-        jsr _skip_byte  ; read tail
+        jsr send_op_cond
+        jsr wait_byte  ; read header
+        jsr skip_byte  ; read tail
         cmp #$00  ; initialization finished?
         beq @wait_ok
 
@@ -127,10 +131,10 @@ init:
 
     @wait_ok:
         ; CMD58 (7A) - send OCR
-        jsr _send_ocr
-        jsr _wait_byte  ; read header
-        jsr _skip_byte4  ; 32 bits
-        jsr _skip_byte  ; read tail
+        jsr send_ocr
+        jsr wait_byte  ; read header
+        jsr skip_byte4  ; 32 bits
+        jsr skip_byte  ; read tail
         ; Bit 30 of OCR should now contain 1 (the card is a high-capacity card known as SDHC/SDXC)
 
         lda #0
@@ -246,15 +250,11 @@ select_sector:
 ;   A - destination low byte
 ;   X - destination high byte
 ; Return:
-;   C - set if error
+;   A - error code, 0 if no error
 
 ; Start reading block
 ; NOTE: Reading blocks only up to number 65535 is supported (16-bit LBA).
 read_sector:
-        pha
-        phx
-        phy
-
         jsr enable
 
         sta DEST
@@ -263,7 +263,8 @@ read_sector:
         lda SELECTED_SEC
         ldx SELECTED_SEC+1
         jsr read_block_start
-        bcs @err
+        cmp #0
+        bne @end  ; error
 
         ldy #0
     @next1:
@@ -283,17 +284,10 @@ read_sector:
 
         jsr read_block_end
 
-        clc
+        lda #0
         jmp @end
 
-    @err:
-        sec
-
     @end:
-        ply
-        plx
-        pla
-
         jmp disable  ; (jsr, rts)
 
 ; Start reading of block
@@ -302,47 +296,49 @@ read_sector:
 ;   A - low byte
 ;   X - high byte
 ; Return:
-;   C - set if error
+;   A - error code, 0 if no error
 read_block_start:
-        pha
-        phx
-
         jsr enable
 
-        jsr _send_read_single_block
-        jsr _wait_byte
+        jsr send_read_single_block
+        jsr wait_byte
         cmp #0  ; ok?
         beq @header_ok
-        lda #$E1
-        jmp @err
+        lda #$A1
+        jmp @end
     @header_ok:
 
-        jsr _wait_byte  ; Wait for data token
+        jsr wait_byte  ; Wait for data token
         cmp #$FE
         beq @token_ok  ; error
-        lda #$E2
-        jmp @err
+        lda #$A2
+        jmp @end
     @token_ok:
 
         ; ok
-        clc
+        lda #0
         jmp @end
 
-    @err:
-        sta ERR
-        sec
-
     @end:
-        plx
-        pla
-
         rts
 
 ; Read next byte from block
 ;
 ; Return:
 ;   A - byte
-read_block_byte = _read_byte
+read_block_byte = read_byte
+
+; Read next word from block (little-endian)
+;
+; Return:
+;   A:X - word
+read_block_word:
+        jsr read_byte
+        pha
+        jsr read_byte
+        tax
+        pla
+        rts
 
 ; Finish block reading
 ; Must be called only after all data was read.
@@ -350,11 +346,11 @@ read_block_end:
         pha
 
         ; Read checksum
-        jsr _skip_byte
-        jsr _skip_byte
+        jsr skip_byte
+        jsr skip_byte
 
         lda #$FF  ; Is this needed? https://electronics.stackexchange.com/a/375423/273764
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
@@ -378,9 +374,9 @@ _set_blocklen:
         pha
         phx
 
-        jsr _send_set_blocklen
-        jsr _wait_byte  ; read header
-        jsr _skip_byte  ; read tail
+        jsr send_set_blocklen
+        jsr wait_byte  ; read header
+        jsr skip_byte  ; read tail
         cmp #$00
         bne @err
 
@@ -399,126 +395,126 @@ _set_blocklen:
         rts
 
 ; CMD17 (51)
-_send_read_single_block:
+send_read_single_block:
         pha
 
         pha  ; low byte
         phx  ; high byte
 
         lda #(17 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         ; TODO
         lda #0
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
         pla
-        jsr _write_byte  ; high byte
+        jsr write_byte  ; high byte
         pla
-        jsr _write_byte  ; low byte
+        jsr write_byte  ; low byte
         lda #$3B  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
         rts
 
 ; CMD0 - Init
-_send_cmd0:
+send_cmd0:
         pha
 
         lda #(0 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         lda #0  ; arguments
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
         lda #$95  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
         rts
 
 ; CMD8
-_send_voltage_check:
+send_voltage_check:
         pha
 
         lda #(8 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         lda #0  ; arguments
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
         lda #1
-        jsr _write_byte
+        jsr write_byte
         lda #$AA
-        jsr _write_byte
+        jsr write_byte
         lda #$87  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
         rts
 
 ; CMD58 (7A)
-_send_ocr:
+send_ocr:
         pha
 
         lda #(58 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         lda #0  ; arguments
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
         lda #%01110101  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
         rts
 
 ; CMD55
-_send_app:
+send_app:
         pha
 
         lda #(55 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         lda #0  ; arguments
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
         ; lda #%11111111  ; CRC & stop bit
         lda #$55  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
         rts
 
 ; CMD41
-_send_op_cond:
+send_op_cond:
         pha
 
         lda #(41 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         lda #%01000000  ; arguments
-        jsr _write_byte
+        jsr write_byte
         lda #0
-        jsr _write_byte
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
+        jsr write_byte
         ; lda #%11111111  ; CRC & stop bit
         lda #$77  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         pla
 
         rts
 
 ; CMD16
-_send_set_blocklen:
+send_set_blocklen:
         pha
         phx
 
@@ -526,16 +522,16 @@ _send_set_blocklen:
         phx  ; high byte
 
         lda #(16 | SDC_HEADER)
-        jsr _write_byte
+        jsr write_byte
         lda #0  ; arguments
-        jsr _write_byte
-        jsr _write_byte
+        jsr write_byte
+        jsr write_byte
         pla  ; high byte
-        jsr _write_byte
+        jsr write_byte
         pla  ; low byte
-        jsr _write_byte
+        jsr write_byte
         lda #$81  ; CRC & stop bit
-        jsr _write_byte
+        jsr write_byte
 
         plx
         pla
@@ -546,7 +542,7 @@ _send_set_blocklen:
 ;
 ; Arguments:
 ;   A - byte
-_write_byte:
+write_byte:
         pha
         phx
         phy
@@ -593,7 +589,7 @@ _write_byte:
 ;
 ; Return:
 ;   A - byte
-_read_byte:
+read_byte:
         phx
         phy
 
@@ -630,23 +626,23 @@ _read_byte:
         rts
 
 ; Read & disregard 1 byte
-_skip_byte:
+skip_byte:
         pha
 
-        jsr _read_byte
+        jsr read_byte
 
         pla
 
         rts
 
 ; Read & disregard 4 bytes
-_skip_byte4:
+skip_byte4:
         pha
 
-        jsr _read_byte
-        jsr _read_byte
-        jsr _read_byte
-        jsr _read_byte
+        jsr read_byte
+        jsr read_byte
+        jsr read_byte
+        jsr read_byte
 
         pla
 
@@ -656,12 +652,12 @@ _skip_byte4:
 ;
 ; Return:
 ;   A - received byte or $FF if no data was read (MISO stayed high & timed out)
-_wait_byte:
+wait_byte:
         phx
 
         ldx #$FF  ; 255 attempts
     @again:
-        jsr _read_byte
+        jsr read_byte
         cmp #$FF  ; is busy?
         bne @end  ; no, return data
         jsr wait32us

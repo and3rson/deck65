@@ -76,8 +76,9 @@ def list(device):
         data_sec = ceil(root_dir_sec + root_dir_entries * 32 / 512)
         print('Data sector:', data_sec)
 
-        # Read fourth file
-        entry = entries[3]
+        # Read SNAKE file
+        entry = next(iter(entry for entry in entries if entry.filename.startswith(b'SNAKE')))
+        # entry = entries[3]
         # Get sector chain
         # first_sector = entry.first_cluster * 2
         current_cluster = entry.first_cluster
