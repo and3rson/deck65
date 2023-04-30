@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <conio.h>
 
-int main();
+int main(int argc, char **argv);
 
 void foo(char a, char b) {
     char x = 0;
@@ -16,7 +16,7 @@ void foo(char a, char b) {
     puts(" done\n");
 }
 
-int main() {
+int main(int argc, char **argv) {
     puts("Hello from C!\n");
     foo(2, 5);
     return 0;

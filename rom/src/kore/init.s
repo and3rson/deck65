@@ -5,6 +5,7 @@
 .include "../include/define.inc"
 
 .importzp sp
+.import init_jmpvec
 .import __STACK_START__
 .import lcd_printz
 .import wait16ms
@@ -42,6 +43,8 @@ init:
         sta sp
         lda #>(__STACK_START__)
         sta sp+1
+
+        jsr init_jmpvec
 
         ; Illegal nop test
         ; Can be used for banking

@@ -5,7 +5,7 @@
 #include <api/wait.h>
 
 // Main function should come first
-int main();
+int main(int argc, char **argv);
 
 typedef struct {
     byte x;
@@ -202,7 +202,7 @@ byte game_over() {
     }
 }
 
-int main() {
+int main(int argc, char **argv) {
     if (!hello()) {
         return 0;
     }
