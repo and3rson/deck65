@@ -4,12 +4,12 @@
 #include <api/keyboard.h>
 #include <api/wait.h>
 
-int main();
+int main(int argc, char **argv);
 
 unsigned char enemies[8];
 unsigned char tick;
 
-int main() {
+int main(int argc, char **argv) {
     unsigned char x = 0, y = 0;
     unsigned char i;
     unsigned char c;
