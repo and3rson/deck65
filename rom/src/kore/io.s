@@ -2,8 +2,6 @@
 ; Memory-mapped I/O stuff - VIA, SID, etc
 ;
 
-.scope io
-
 .export VIA1_RB
 .export VIA1_RA
 .export VIA1_DDRB
@@ -167,6 +165,3 @@ acia_write:
         sta ACIA1_DATA
 
         rts
-
-
-.endscope

@@ -9,8 +9,6 @@
 .import wait2ms
 .import VIA1_RB
 
-.scope sdc
-
 .export sdc_init=init
 .export _sdc_select_sector=select_sector
 .export _sdc_read_sector=read_sector
@@ -669,5 +667,3 @@ wait_byte:
         plx
 
         rts
-
-.endscope
