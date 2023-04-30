@@ -40,8 +40,8 @@ byte hello() {
     clrscr();
     gotoxy(8, 0);
     puts("         SNAKE          ");
-    gotoxy(8, 1);
-    puts("W/A/S/D - move, Q - quit");
+    gotoxy(6, 1);
+    puts("Cursor keys - move, Q - quit");
     gotoxy(8, 2);
     puts("     Press any key");
     if (cgetc() == 'q') {
@@ -90,25 +90,25 @@ byte game() {
     while (1) {
         c = igetch();
         moved = 0;
-        if (c == 'a') {
+        if (c == KC_LEFT) {
             if (body[head].y != body[body[head].next].y) {
                 dirX = -1;
                 dirY = 0;
             }
         }
-        if (c == 'd') {
+        if (c == KC_RIGHT) {
             if (body[head].y != body[body[head].next].y) {
                 dirX = 1;
                 dirY = 0;
             }
         }
-        if (c == 'w') {
+        if (c == KC_UP) {
             if (body[head].x != body[body[head].next].x) {
                 dirY = -1;
                 dirX = 0;
             }
         }
-        if (c == 's') {
+        if (c == KC_DOWN) {
             if (body[head].x != body[body[head].next].x) {
                 dirY = 1;
                 dirX = 0;

@@ -13,8 +13,6 @@
 .import vdelay
 .import popa
 
-.scope lcd
-
 .export _puts = printz
 .export _cputc = printchar
 .export _gotoxy
@@ -811,5 +809,3 @@ _gotoxy:
         jsr gotoxy
 
         rts
-
-.endscope

@@ -5,8 +5,6 @@
 .import VIA1_DDRB
 .import VIA1_RB
 
-.scope i2c
-
 SDA = %00100000
 SCL = %01000000
 
@@ -227,5 +225,3 @@ _i2c_read:
         jsr read_nack
     @end:
         rts
-
-.endscope

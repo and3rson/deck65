@@ -5,12 +5,15 @@
 ; http://www.burtonsys.com/ps2_chapweske.htm
 ;
 
-.scope kbd
-
 .export _cgetc = getch, _igetch = igetch
 .export kbd_init = init
 .export kbd_process = process
-.export kbd_getch = getch
+
+; TODO: Export them properly
+KC_UP = 1
+KC_DOWN = 2
+KC_LEFT = 3
+KC_RIGHT = 4
 
 .zeropage
 
@@ -23,7 +26,7 @@ FLAG_BREAK  =  $1
 FLAG_EXT    =  $2
 FLAG_SHIFT  =  $4
 
-CHR: .res 1
+CHRS: .res 8  ; Buffer for 8 keys
 
 SCA_EXT     =  $E0
 SCA_BREAK   =  $F0
@@ -33,6 +36,7 @@ SCA_RSHIFT  =  $59
 .segment "KORE"
 
 ; Map stolen from Ben Eater :)
+; Using set 2 - https://wiki.osdev.org/PS/2_Keyboard
 KEYMAP:
     .byte "????????????? `?" ; 00-0F
     .byte "?????q1???zsaw2?" ; 10-1F
@@ -67,13 +71,34 @@ KEYMAP_SHIFTED:
     .byte "????????????????" ; D0-DF
     .byte "????????????????" ; E0-EF
     .byte "????????????????" ; F0-FF
+KEYMAP_EXT:
+    .byte "................" ; 00-0F
+    .byte "................" ; 10-1F
+    .byte "................" ; 20-2F
+    .byte "................" ; 30-3F
+    ; Cursor keys in set 1:
+    ; .byte "........",KC_UP,"..",KC_LEFT,".",KC_RIGHT,".." ; 40-4F
+    ; .byte KC_DOWN,"..............." ; 50-5F
+    ; Cursor keys in set 2:
+    .byte "................" ; 40-4F
+    .byte "................" ; 50-5F
+    .byte "...........",KC_LEFT,"...." ; 60-6F
+    .byte "..",KC_DOWN,".",KC_RIGHT,KC_UP,".........." ; 70-7F
+    .byte "................" ; 80-8F
+    .byte "................" ; 90-9F
+    .byte "................" ; A0-AF
+    .byte "................" ; B0-BF
+    .byte "................" ; C0-CF
+    .byte "................" ; D0-DF
+    .byte "................" ; E0-EF
+    .byte "................" ; F0-FF
 
 init:
         stz CNT
         stz SCA
         stz RDY
         stz FLAGS
-        stz CHR
+        ; stz CHR
 
         rts
 
@@ -136,6 +161,9 @@ process:
         and #FLAG_BREAK  ; Is break flag set?
         bne @end
         tya
+        and #FLAG_EXT  ; Is ext flag set?
+        bne @ext
+        tya
         and #FLAG_SHIFT  ; Is shift flag set?
         bne @shifted
 
@@ -145,9 +173,24 @@ process:
     @shifted:
         ; Convert scancode into shifted character
         lda KEYMAP_SHIFTED, X
+        jmp @print
+    @ext:
+        lda KEYMAP_EXT, X
     @print:
-        sta CHR
-        lda #1
+        ; Shift queue
+        ldx CHRS+2
+        stx CHRS+3
+        ldx CHRS+1
+        stx CHRS+2
+        ldx CHRS
+        stx CHRS+1
+        sta CHRS
+
+        ; Increase RDY pointer
+        lda RDY
+        cmp #4
+        beq @end  ; Keyboard buffer is full
+        ina
         sta RDY
         jmp @end
 
@@ -173,15 +216,22 @@ process:
 ; Return:
 ;   A - character ASCII code
 getch:
+        phy
+
     @again:
         lda RDY
         beq @again  ; Keyboard register not ready yet
 
         ; Keyboard register is ready
         sei
-        stz RDY  ; Clear readiness flag
-        lda CHR  ; Read register
+        ; stz RDY  ; Clear readiness flag
+        ldy RDY
+        dey
+        sty RDY
+        lda CHRS, Y  ; Read register
         cli
+
+        ply
 
         rts
 
@@ -191,6 +241,8 @@ getch:
 ; Return:
 ;   A - character ASCII code
 igetch:
+        phy
+
         sei
 
         lda RDY
@@ -200,13 +252,16 @@ igetch:
 
     @read:
         ; Keyboard register is ready
-        stz RDY  ; Clear readiness flag
-        lda CHR  ; Read register
+        ; stz RDY  ; Clear readiness flag
+        ldy RDY
+        dey
+        sty RDY
+        lda CHRS, Y  ; Read register
 
     @end:
         cli
 
+        ply
+
         rts
 
-
-.endscope
