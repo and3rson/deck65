@@ -25,30 +25,20 @@ word root_dir_sec;
 word root_dir_sec_count;
 word data_sec;
 
-typedef struct {
-    char filename[8];
-    char ext[3];
-    byte attr;
-    byte _res_nt;
-    byte creation;
-    word creation_time;
-    word creation_date;
-    word last_access_date;
-    word _res_fat32;
-    word write_time;
-    word write_date;
-    word first_cluster;
-    dword size;
-} fat_entry_t;
-
 union sector {
     fat_entry_t entries[16];
     byte data[512];
     word wdata[256];
 } sector;
 
+// File stuff
 fat_entry_t fd;
 word cluster;
+
+// Dir stuff
+word dir_offset;
+word dir_sec;
+fat_entry_t dd;
 
 byte fat16_init() {
     byte err, i;
@@ -202,4 +192,51 @@ byte fat16_read(byte* dest) {
         return 1;
     }
     return 0;
+}
+
+byte fat16_opendir() {
+    // TODO: Open non-root dirs
+    /* byte err; */
+    dir_offset = 0;
+    dir_sec = root_dir_sec;
+    /* sdc_select_sector(dir_sec); */
+    /* if ((err = sdc_read_sector(sector.data))) { */
+    /*     return err; */
+    /* } */
+    /* dir_iter = 0; */
+    return 0;
+}
+
+byte fat16_readdir() {
+    byte err;
+    while (1) {
+        if (dir_offset == 0) {
+            sdc_select_sector(dir_sec);
+            if ((err = sdc_read_sector(sector.data))) {
+                return 2;
+            }
+        }
+        memcpy(&dd, &sector.entries[dir_offset], sizeof(fat_entry_t));
+        if (++dir_offset == 16) {
+            dir_offset = 0;
+            dir_sec++;
+        }
+        if (dd.attr == 0x0F) {
+            // LFN entry, skip
+            continue;
+        }
+        if ((unsigned char) dd.filename[0] == 0xE5) {
+            // Deleted file
+            return 1;
+        }
+        if (!dd.filename[0]) {
+            // End of directory
+            return 1;
+        }
+        return 0;
+    }
+}
+
+fat_entry_t* fat16_direntry() {
+    return &dd;
 }

@@ -14,7 +14,7 @@ int set_time(char **argv) {
     byte i, v;
     puts("Setting time...");
     i2c_start();
-    if (i2c_write(0x68 << 1)) {
+    if (i2c_addr(0x68, I2C_WRITE)) {
         puts(" err: send addr\n");
         i2c_stop();
         return 1;
@@ -41,7 +41,7 @@ int read_time() {
     byte h, m, s;
     puts("Reading time...");
     i2c_start();
-    if (i2c_write(0x68 << 1)) {
+    if (i2c_addr(0x68, I2C_WRITE)) {
         puts(" err: send addr\n");
         i2c_stop();
         return 1;
@@ -52,7 +52,7 @@ int read_time() {
         return 1;
     }
     i2c_start();
-    if (i2c_write((0x68 << 1) | 1)) {
+    if (i2c_addr(0x68, I2C_READ)) {
         puts(" err: send addr\n");
         i2c_stop();
         return 1;

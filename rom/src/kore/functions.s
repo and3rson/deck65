@@ -6,6 +6,7 @@
 
 .export f_parse_hex
 .export f_parse_octet
+.export wait16us
 .export wait8us
 .export wait2ms
 .export wait16ms
@@ -99,6 +100,21 @@ wait8us:
 
         lda #<(8 * CYCLES_PER_US)
         ldx #>(8 * CYCLES_PER_US)
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
+
+
+; Wait ~16 us
+wait16us:
+        pha
+        phx
+
+        lda #<(16 * CYCLES_PER_US)
+        ldx #>(16 * CYCLES_PER_US)
         jsr vdelay
 
         plx

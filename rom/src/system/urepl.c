@@ -18,6 +18,7 @@ void urepl_main() {
     char c;
     char err;
     byte *dest;
+    int exitcode;
 
     buffPos = 0;
 
@@ -43,7 +44,12 @@ void urepl_main() {
             buff[buffPos] = 0;
             cputc(0xA);
             if (strlen(buff)) {
-                system(buff);
+                exitcode = system(buff);
+                if (exitcode) {
+                    puts("Program exit code: ");
+                    printhex(exitcode);
+                    cputc('\n');
+                }
                 /* puts(buff); */
                 /* cputc(0xA); */
             }
