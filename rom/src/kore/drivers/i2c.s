@@ -4,12 +4,14 @@
 .import wait8us
 .import VIA1_DDRB
 .import VIA1_RB
+.import popa
 
 SDA = %00100000
 SCL = %01000000
 
 .export _i2c_start = start
 .export _i2c_stop = stop
+.export _i2c_addr
 .export _i2c_write
 .export _i2c_read
 .export i2c_init = init
@@ -207,6 +209,14 @@ _read_bit:
         rts
 
 ; __fastcall__ variants
+
+; byte _i2c_addr(byte addr, byte r_w)
+_i2c_addr:
+        ror
+        jsr popa
+        rol
+        jmp _i2c_write  ; (jsr, rts)
+
 
 ; byte _i2c_write(byte data)
 _i2c_write:

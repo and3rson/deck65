@@ -15,6 +15,9 @@ const byte *_STARTUP__ = (byte *)START;
 extern byte fat16_open(const char *filename);
 extern byte fat16_read(byte *dest);
 
+// Built-ins
+extern int cmd_ls(int argc, char **argv);
+
 #pragma bss-name(push, "ARGS")
 byte argc;
 char *argv[16];
@@ -88,7 +91,10 @@ int system(const char *s) {
         return 2;
     }
 
-    // TODO: pass cmdline args somehow
+    // Built-ins
+    if (!strcmp(argv[0], "ls")) {
+        return cmd_ls(argc, argv);
+    }
 
     if ((err = fat16_open(argv[0]))) {
         puts("FAT16 open file error: ");
