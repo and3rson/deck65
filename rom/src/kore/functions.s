@@ -5,7 +5,9 @@
 .include "../include/define.inc"
 
 .export f_parse_hex
+.export _f_parse_hex = f_parse_hex
 .export f_parse_octet
+.export _f_parse_octet = f_parse_octet
 .export wait2us
 .export wait8us
 .export wait16us
