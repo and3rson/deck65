@@ -17,6 +17,7 @@ extern byte fat16_read(byte *dest);
 
 // Built-ins
 extern int cmd_ls(int argc, char **argv);
+extern int cmd_peekpoke(int argc, char **argv);
 
 #pragma bss-name(push, "ARGS")
 byte argc;
@@ -94,6 +95,9 @@ int system(const char *s) {
     // Built-ins
     if (!strcmp(argv[0], "ls")) {
         return cmd_ls(argc, argv);
+    }
+    if (!strcmp(argv[0], "?")) {
+        return cmd_peekpoke(argc, argv);
     }
 
     if ((err = fat16_open(argv[0]))) {

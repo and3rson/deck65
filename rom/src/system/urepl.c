@@ -18,7 +18,7 @@ void urepl_main() {
     char c;
     char err;
     byte *dest;
-    int exitcode;
+    int exitcode = 0;
 
     buffPos = 0;
 
@@ -45,16 +45,22 @@ void urepl_main() {
             cputc(0xA);
             if (strlen(buff)) {
                 exitcode = system(buff);
-                if (exitcode) {
-                    puts("Program exit code: ");
-                    printhex(exitcode);
-                    cputc('\n');
-                }
+                /* if (exitcode) { */
+                /*     puts("Program exit code: "); */
+                /*     printhex(exitcode); */
+                /*     cputc('\n'); */
+                /* } */
                 /* puts(buff); */
                 /* cputc(0xA); */
             }
             buffPos = 0;
-            puts("$>");
+            if (!exitcode) {
+                puts("$>");
+            } else {
+                printhex(exitcode);
+                cputc('!');
+                cputc('>');
+            }
         } else {
             // TODO: Limit max length
             buff[buffPos++] = c;

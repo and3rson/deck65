@@ -4,16 +4,6 @@
   <attributes/>
   <visualElements>
     <visualElement>
-      <elementName>74273.dig</elementName>
-      <elementAttributes>
-        <entry>
-          <string>shapeType</string>
-          <shapeType>SIMPLE</shapeType>
-        </entry>
-      </elementAttributes>
-      <pos x="820" y="400"/>
-    </visualElement>
-    <visualElement>
       <elementName>Out</elementName>
       <elementAttributes>
         <entry>
@@ -35,25 +25,7 @@
           <string>Ф2</string>
         </entry>
       </elementAttributes>
-      <pos x="600" y="340"/>
-    </visualElement>
-    <visualElement>
-      <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>small</string>
-          <boolean>true</boolean>
-        </entry>
-        <entry>
-          <string>Label</string>
-          <string>/RES</string>
-        </entry>
-        <entry>
-          <string>InDefault</string>
-          <value v="1" z="false"/>
-        </entry>
-      </elementAttributes>
-      <pos x="600" y="420"/>
+      <pos x="440" y="400"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -163,7 +135,7 @@
           <boolean>true</boolean>
         </entry>
       </elementAttributes>
-      <pos x="680" y="340"/>
+      <pos x="580" y="400"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -174,19 +146,19 @@
         </entry>
         <entry>
           <string>Label</string>
-          <string>/EN</string>
+          <string>~EN</string>
         </entry>
         <entry>
           <string>InDefault</string>
           <value v="1" z="false"/>
         </entry>
       </elementAttributes>
-      <pos x="600" y="380"/>
+      <pos x="440" y="440"/>
     </visualElement>
     <visualElement>
       <elementName>Not</elementName>
       <elementAttributes/>
-      <pos x="620" y="380"/>
+      <pos x="500" y="440"/>
     </visualElement>
     <visualElement>
       <elementName>Out</elementName>
@@ -258,6 +230,74 @@
       </elementAttributes>
       <pos x="980" y="540"/>
     </visualElement>
+    <visualElement>
+      <elementName>In</elementName>
+      <elementAttributes>
+        <entry>
+          <string>small</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>~ACCESS</string>
+        </entry>
+        <entry>
+          <string>InDefault</string>
+          <value v="1" z="false"/>
+        </entry>
+      </elementAttributes>
+      <pos x="720" y="300"/>
+    </visualElement>
+    <visualElement>
+      <elementName>74573.dig</elementName>
+      <elementAttributes>
+        <entry>
+          <string>shapeType</string>
+          <shapeType>SIMPLE</shapeType>
+        </entry>
+      </elementAttributes>
+      <pos x="820" y="400"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Rectangle</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>Asserted for 0x1000..0x7FFF (A14 | A13 | A12 == 1)</string>
+        </entry>
+        <entry>
+          <string>RectHeight</string>
+          <int>2</int>
+        </entry>
+        <entry>
+          <string>RectWidth</string>
+          <int>8</int>
+        </entry>
+      </elementAttributes>
+      <pos x="580" y="280"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Rectangle</elementName>
+      <elementAttributes>
+        <entry>
+          <string>RectBottom</string>
+          <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Label</string>
+          <string>Bank register select</string>
+        </entry>
+        <entry>
+          <string>RectHeight</string>
+          <int>2</int>
+        </entry>
+        <entry>
+          <string>RectWidth</string>
+          <int>5</int>
+        </entry>
+      </elementAttributes>
+      <pos x="360" y="420"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -269,20 +309,16 @@
       <p2 x="980" y="480"/>
     </wire>
     <wire>
-      <p1 x="600" y="420"/>
-      <p2 x="820" y="420"/>
-    </wire>
-    <wire>
       <p1 x="920" y="420"/>
       <p2 x="980" y="420"/>
     </wire>
     <wire>
-      <p1 x="740" y="580"/>
-      <p2 x="820" y="580"/>
+      <p1 x="680" y="420"/>
+      <p2 x="820" y="420"/>
     </wire>
     <wire>
-      <p1 x="780" y="360"/>
-      <p2 x="800" y="360"/>
+      <p1 x="740" y="580"/>
+      <p2 x="820" y="580"/>
     </wire>
     <wire>
       <p1 x="740" y="520"/>
@@ -293,10 +329,6 @@
       <p2 x="980" y="520"/>
     </wire>
     <wire>
-      <p1 x="800" y="620"/>
-      <p2 x="820" y="620"/>
-    </wire>
-    <wire>
       <p1 x="740" y="460"/>
       <p2 x="820" y="460"/>
     </wire>
@@ -305,20 +337,28 @@
       <p2 x="980" y="460"/>
     </wire>
     <wire>
+      <p1 x="800" y="620"/>
+      <p2 x="820" y="620"/>
+    </wire>
+    <wire>
+      <p1 x="720" y="300"/>
+      <p2 x="780" y="300"/>
+    </wire>
+    <wire>
+      <p1 x="440" y="400"/>
+      <p2 x="580" y="400"/>
+    </wire>
+    <wire>
       <p1 x="920" y="400"/>
       <p2 x="980" y="400"/>
     </wire>
     <wire>
-      <p1 x="800" y="400"/>
+      <p1 x="780" y="400"/>
       <p2 x="820" y="400"/>
     </wire>
     <wire>
       <p1 x="740" y="560"/>
       <p2 x="820" y="560"/>
-    </wire>
-    <wire>
-      <p1 x="600" y="340"/>
-      <p2 x="680" y="340"/>
     </wire>
     <wire>
       <p1 x="740" y="500"/>
@@ -329,6 +369,10 @@
       <p2 x="980" y="500"/>
     </wire>
     <wire>
+      <p1 x="440" y="440"/>
+      <p2 x="500" y="440"/>
+    </wire>
+    <wire>
       <p1 x="740" y="440"/>
       <p2 x="820" y="440"/>
     </wire>
@@ -337,16 +381,12 @@
       <p2 x="980" y="440"/>
     </wire>
     <wire>
+      <p1 x="540" y="440"/>
+      <p2 x="580" y="440"/>
+    </wire>
+    <wire>
       <p1 x="800" y="600"/>
       <p2 x="820" y="600"/>
-    </wire>
-    <wire>
-      <p1 x="660" y="380"/>
-      <p2 x="680" y="380"/>
-    </wire>
-    <wire>
-      <p1 x="600" y="380"/>
-      <p2 x="620" y="380"/>
     </wire>
     <wire>
       <p1 x="740" y="540"/>
@@ -357,8 +397,8 @@
       <p2 x="980" y="540"/>
     </wire>
     <wire>
-      <p1 x="800" y="360"/>
-      <p2 x="800" y="400"/>
+      <p1 x="780" y="300"/>
+      <p2 x="780" y="400"/>
     </wire>
   </wires>
   <measurementOrdering/>
