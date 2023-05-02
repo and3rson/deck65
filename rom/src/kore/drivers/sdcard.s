@@ -5,6 +5,7 @@
 ; http://elm-chan.org/docs/mmc/mmc_e.html
 ;
 
+.import wait8us
 .import wait32us
 .import wait2ms
 .import VIA1_RB
@@ -36,6 +37,7 @@ SELECTED_SEC: .res 2
 DEST: .res 2
 
 ERR: .res 1
+BYTE: .res 1
 
 .segment "SYSRAM"
 
@@ -204,7 +206,8 @@ enable:
         sta VIA1_RB
 
         ; Wait for CS to settle
-        jsr wait32us
+        ; jsr wait32us
+        jsr wait8us
 
         plx
         pla
@@ -589,12 +592,10 @@ write_byte:
 ;   A - byte
 read_byte:
         phx
-        phy
 
-        lda #0
         ldx #8
-    @read_bit:
         lda VIA1_RB
+    @read_bit:
         ; Pulse clock
         eor #SDC_SCK
         sta VIA1_RB
@@ -603,9 +604,7 @@ read_byte:
 
         lda VIA1_RB
         ror
-        tya
-        rol
-        tay
+        rol BYTE
 
         lda VIA1_RB
         eor #SDC_SCK
@@ -616,9 +615,8 @@ read_byte:
         dex
         bne @read_bit
 
-        tya
+        lda BYTE
 
-        ply
         plx
 
         rts
@@ -658,7 +656,8 @@ wait_byte:
         jsr read_byte
         cmp #$FF  ; is busy?
         bne @end  ; no, return data
-        jsr wait32us
+        ; jsr wait32us
+        jsr wait8us
         dex
         bne @again  ; try again
         ; Max attempts reached, return $FF

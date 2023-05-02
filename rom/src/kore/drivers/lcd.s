@@ -6,8 +6,8 @@
 ;
 
 .importzp sp
+.import wait2us
 .import wait8us
-.import wait32us
 .import VIA1_DDRA
 .import VIA1_RA
 .import vdelay
@@ -247,22 +247,26 @@ writenib:
         ; Assert RS
         and #RS
         sta VIA1_RA
-        jsr wait8us
+        ; jsr wait8us
+        jsr wait2us
         txa
 
         ; Assert data
         sta VIA1_RA
-        jsr wait32us
+        ; jsr wait32us
+        jsr wait8us
 
         ; Assert EN
         eor ENFLAG
         sta VIA1_RA
-        jsr wait8us
+        ; jsr wait8us
+        jsr wait2us
 
         ; Release EN
         eor ENFLAG
         sta VIA1_RA
-        jsr wait8us
+        ; jsr wait8us
+        jsr wait2us
 
         plx
         pla
@@ -335,16 +339,19 @@ read_clock:
     @next:
         lda #RW  ; RS=0, RW=1, EN=0
         sta VIA1_RA
-        jsr wait8us
+        ; jsr wait8us
+        jsr wait2us
         eor ENFLAG  ; Assert EN
         sta VIA1_RA
-        jsr wait8us
+        ; jsr wait8us
+        jsr wait2us
         lda VIA1_RA  ; read nibble
         and #$0F
         sta MEM - 1, X
         lda #RW  ; RS=0, RW=1, EN
         sta VIA1_RA
-        jsr wait8us
+        ; jsr wait8us
+        jsr wait2us
         dex
         bne @next
 
