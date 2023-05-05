@@ -4,11 +4,6 @@
 #include <api/types.h>
 #include <api/lcd.h>
 
-int main(int argc, char **argv);
-
-/* extern byte argc; */
-/* extern char *argv[16]; */
-
 int main(int argc, char **argv) {
     char i;
     puts("Arg count: ");

@@ -14,6 +14,8 @@ SCL = %01000000
 .export _i2c_addr
 .export _i2c_write
 .export _i2c_read
+.export _i2c_writereg
+.export _i2c_readreg
 .export i2c_init = init
 
 .zeropage
@@ -234,4 +236,54 @@ _i2c_read:
     @nack:
         jsr read_nack
     @end:
+        rts
+
+; byte _i2c_writereg(byte addr, byte reg)
+_i2c_writereg:
+        pha           ; Save reg
+        jsr popa      ; Load addr
+        asl           ; Addr (write)
+
+        ; Send address (write)
+        jsr write
+        bcs @end      ; Error
+
+        ; Send register
+        pla           ; Load reg
+        jsr write
+        bcs @end      ; Error
+
+    @end:
+        lda #0
+        adc #0
+        rts
+
+; byte _i2c_readreg(byte addr, byte reg)
+_i2c_readreg:
+        pha           ; Save reg
+        jsr popa      ; Load addr
+        asl           ; Addr (write)
+        tax           ; Save addr
+
+        ; Send address (write)
+        jsr write
+        bcs @end      ; Error
+
+        ; Send register
+        pla           ; Load reg
+        jsr write
+        bcs @end      ; Error
+
+        ; Restart
+        jsr start
+
+        ; Send address (write)
+        txa           ; Load addr
+        ora #1        ; Read mode
+        jsr write
+        bcs @end      ; Error
+
+    @end:
+        lda #0
+        adc #0
         rts

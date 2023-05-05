@@ -5,29 +5,21 @@
 #include <api/i2c.h>
 #include <api/lcd.h>
 
-/* extern byte argc; */
-/* extern char *argv[16]; */
-
 int main(int argc, char **argv);
 
 int set_time(char **argv) {
     byte i, v;
     puts("Setting time...");
     i2c_start();
-    if (i2c_addr(0x68, I2C_WRITE)) {
-        puts(" err: send addr\n");
+    if (i2c_writereg(0x68, 0x00)) {
+        puts(" err: start write reg\n");
         i2c_stop();
-        return 1;
-    }
-    if (i2c_write(0x00)) {
-        puts(" err: send reg\n");
-        i2c_stop();
-        return 1;
+        return 0;
     }
     for (i = 0; i < 3; i++) {
         v = atoi(argv[3 - i]);
         if (i2c_write(v)) {
-            puts(" err: send reg\n");
+            puts(" err: write reg\n");
             i2c_stop();
             return 0;
         }
@@ -41,21 +33,10 @@ int read_time() {
     byte h, m, s;
     puts("Reading time...");
     i2c_start();
-    if (i2c_addr(0x68, I2C_WRITE)) {
-        puts(" err: send addr\n");
+    if (i2c_readreg(0x68, 0x00)) {
+        puts(" err: start read reg\n");
         i2c_stop();
-        return 1;
-    }
-    if (i2c_write(0x00)) {
-        puts(" err: send reg\n");
-        i2c_stop();
-        return 1;
-    }
-    i2c_start();
-    if (i2c_addr(0x68, I2C_READ)) {
-        puts(" err: send addr\n");
-        i2c_stop();
-        return 1;
+        return 0;
     }
     puts(" ");
     s = i2c_read(1);
