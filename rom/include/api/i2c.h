@@ -11,5 +11,7 @@ extern void i2c_stop();
 extern byte i2c_addr(byte addr, byte r_w);
 extern byte i2c_write(byte data);
 extern byte i2c_read(byte ack);
+extern byte i2c_writereg(byte addr, byte reg);
+extern byte i2c_readreg(byte addr, byte reg);
 
 #endif

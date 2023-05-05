@@ -14,7 +14,8 @@ int main(int argc, char **argv) {
             if (!first) {
                 puts(", ");
             }
-            printhex(addr >> 1);
+            puts("0x");
+            printhex(addr);
             first = 0;
         }
         i2c_stop();
