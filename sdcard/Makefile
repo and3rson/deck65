@@ -4,7 +4,7 @@ SRC = $(wildcard src/*.c)
 BIN = $(patsubst src/%.c, bin/%.bin, $(SRC))
 
 # all: bin bin/hello.bin bin/cltest.bin bin/maze.bin bin/snake.bin bin/time.bin
-all: bin bin/hello.bin $(BIN)
+all: bin bin/hello.bin bin/iotest.bin $(BIN)
 
 bin:
 	mkdir bin
@@ -16,6 +16,10 @@ bin/%.bin: src/%.c ../rom/api.lib
 bin/hello.bin: rom.cfg ../rom/api.lib src/hello.s
 	ca65 --cpu $(CPU) ./src/hello.s
 	ld65 -C rom.cfg ./src/hello.o -o bin/hello.bin ../rom/api.lib  # -m hello.map
+
+bin/iotest.bin: rom.cfg ../rom/api.lib src/iotest.s
+	ca65 --cpu $(CPU) ./src/iotest.s
+	ld65 -C rom.cfg ./src/iotest.o -o bin/iotest.bin ../rom/api.lib  # -m iotest.map
 
 ../rom/api.lib:
 	make -C ../rom api.lib

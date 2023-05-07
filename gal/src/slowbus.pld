@@ -1,0 +1,30 @@
+GAL20V8
+Slowbus
+
+CLK   NC   /SLOW NC   NC   NC   NC   NC   NC   NC   NC   GND
+/OE   NC   PHO   Q2   Q1   Q0   NC   NC   NC   NC   NC   VCC
+
+; GAL16V8
+; Slowbus
+; CLK   NC   /SLOW NC   NC   NC   NC   NC   NC   GND
+; /OE   NC   PHO   Q2   Q1   Q0   NC   NC   NC   VCC
+
+; If /SLOW is asserted, this works as 3-bit counter: [PHO (MSB), Q1, Q0]
+
+; Q0 (LSB)
+Q0.R = SLOW * /Q0
+; Q1
+Q1.R = SLOW * /Q1 * Q0 + SLOW * Q1 * /Q0
+; Q2 (used for debugging only)
+Q2.R = SLOW * /Q2 * Q1 * Q0 + SLOW * Q2 * /Q1 + SLOW * Q2 * /Q0
+; Output clock
+PHO.R =
+    ; Fast mode
+    /SLOW * /PHO
+    ; Slow mode (PHO as Q2)
+  +  SLOW * /PHO *  Q1 * Q0
+  +  SLOW *  PHO * /Q1
+  +  SLOW *  PHO * /Q0
+
+DESCRIPTION
+PHO = CLK / 8 if /SLOW is asserted or CLK / 2 otherwise
