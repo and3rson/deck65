@@ -4,7 +4,7 @@ C_SRC = $(shell find src -name '*.c')
 OBJ = $(foreach x, $(basename $(ASM_SRC)), $(x).s.o) $(foreach x, $(basename $(C_SRC)), $(x).c.o)
 # OBJ = $(patsubst %.c,%.o,$(ASM_SRC)) $(patsubst %.s,%.o,$(C_SRC))
 
-all: rom.bin api.lib flash
+all: rom.bin api.lib program
 # all: rom.bin rom_sim65.bin
 
 # rom.bin: $(SRC) rom.cfg Makefile
@@ -14,7 +14,7 @@ all: rom.bin api.lib flash
 # 	# ld65 -C rom.cfg -o rom.bin -m rom.map ./rom.o
 # 	ar65 r rom.lib rom.o ./src/kore/drivers/sdcard2.o
 
-flash:
+program:
 	minipro -p W27C512@DIP28 -w rom.bin -S
 
 rom.bin: Makefile rom.cfg $(OBJ)

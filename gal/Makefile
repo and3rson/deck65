@@ -18,3 +18,10 @@ clean:
 	rm -f bin/*
 	rm -f src/*.jed src/*.fus src/*.chp src/*.pin src/*.hex
 	make -C ./galasm/src clean
+
+.PHONY: program
+program: src/$(PROGRAM).jed
+ifndef PROGRAM
+	$(error PROGRAM is required)
+endif
+	minipro -p GAL20V8B -w ./src/$(PROGRAM).jed -z
