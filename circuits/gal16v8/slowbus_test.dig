@@ -9,7 +9,7 @@
           <entry>
             <string>Fuses</string>
             <romFile>
-              <romFile>/home/anderson/src/m6502/gal/src/slowbus.hex</romFile>
+              <romFile>/home/anderson/src/m6502/gal/src/slowbus16.hex</romFile>
               <bigEndian>false</bigEndian>
             </romFile>
           </entry>
@@ -25,7 +25,16 @@
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>~SLOW</string>
+        </entry>
+        <entry>
+          <string>InDefault</string>
+          <value v="1" z="false"/>
+        </entry>
+      </elementAttributes>
       <pos x="300" y="100"/>
     </visualElement>
     <visualElement>
@@ -54,16 +63,7 @@
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
-      <elementAttributes>
-        <entry>
-          <string>Label</string>
-          <string>~SLOW</string>
-        </entry>
-        <entry>
-          <string>InDefault</string>
-          <value v="1" z="false"/>
-        </entry>
-      </elementAttributes>
+      <elementAttributes/>
       <pos x="300" y="140"/>
     </visualElement>
     <visualElement>
@@ -81,10 +81,10 @@
       <elementAttributes>
         <entry>
           <string>Label</string>
-          <string>PHO</string>
+          <string>PHV</string>
         </entry>
       </elementAttributes>
-      <pos x="560" y="340"/>
+      <pos x="660" y="380"/>
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
@@ -124,7 +124,7 @@
           <string>Q2</string>
         </entry>
       </elementAttributes>
-      <pos x="560" y="260"/>
+      <pos x="560" y="300"/>
     </visualElement>
     <visualElement>
       <elementName>LED</elementName>
@@ -134,7 +134,7 @@
           <string>Q1</string>
         </entry>
       </elementAttributes>
-      <pos x="560" y="220"/>
+      <pos x="560" y="260"/>
     </visualElement>
     <visualElement>
       <elementName>LED</elementName>
@@ -144,14 +144,14 @@
           <string>Q0</string>
         </entry>
       </elementAttributes>
-      <pos x="560" y="180"/>
+      <pos x="560" y="220"/>
     </visualElement>
     <visualElement>
       <elementName>Text</elementName>
       <elementAttributes>
         <entry>
           <string>textFontSize</string>
-          <int>17</int>
+          <int>20</int>
         </entry>
         <entry>
           <string>Description</string>
@@ -159,91 +159,115 @@
 =CLK/8 if /SLOW = 0</string>
         </entry>
       </elementAttributes>
-      <pos x="680" y="320"/>
+      <pos x="760" y="360"/>
     </visualElement>
     <visualElement>
-      <elementName>Data</elementName>
+      <elementName>Clock</elementName>
       <elementAttributes>
         <entry>
-          <string>maxStepCount</string>
+          <string>Frequency</string>
           <int>60</int>
         </entry>
+        <entry>
+          <string>runRealTime</string>
+          <boolean>true</boolean>
+        </entry>
       </elementAttributes>
-      <pos x="-380" y="480"/>
+      <pos x="340" y="420"/>
+    </visualElement>
+    <visualElement>
+      <elementName>LED</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>PHI2</string>
+        </entry>
+      </elementAttributes>
+      <pos x="660" y="340"/>
+    </visualElement>
+    <visualElement>
+      <elementName>Text</elementName>
+      <elementAttributes>
+        <entry>
+          <string>textFontSize</string>
+          <int>20</int>
+        </entry>
+        <entry>
+          <string>Description</string>
+          <string>=CLK/2</string>
+        </entry>
+      </elementAttributes>
+      <pos x="760" y="320"/>
     </visualElement>
   </visualElements>
   <wires>
-    <wire>
-      <p1 x="500" y="260"/>
-      <p2 x="560" y="220"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="220"/>
-      <p2 x="560" y="180"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="300"/>
-      <p2 x="560" y="260"/>
-    </wire>
-    <wire>
-      <p1 x="140" y="420"/>
-      <p2 x="360" y="420"/>
-    </wire>
-    <wire>
-      <p1 x="500" y="420"/>
-      <p2 x="560" y="420"/>
-    </wire>
-    <wire>
-      <p1 x="300" y="100"/>
-      <p2 x="360" y="100"/>
-    </wire>
     <wire>
       <p1 x="300" y="260"/>
       <p2 x="360" y="260"/>
     </wire>
     <wire>
-      <p1 x="500" y="340"/>
-      <p2 x="560" y="340"/>
-    </wire>
-    <wire>
-      <p1 x="300" y="340"/>
-      <p2 x="360" y="340"/>
+      <p1 x="500" y="260"/>
+      <p2 x="560" y="260"/>
     </wire>
     <wire>
       <p1 x="300" y="180"/>
       <p2 x="360" y="180"/>
     </wire>
     <wire>
-      <p1 x="340" y="380"/>
-      <p2 x="360" y="380"/>
+      <p1 x="500" y="420"/>
+      <p2 x="560" y="420"/>
     </wire>
     <wire>
-      <p1 x="300" y="220"/>
-      <p2 x="360" y="220"/>
+      <p1 x="340" y="420"/>
+      <p2 x="360" y="420"/>
     </wire>
     <wire>
-      <p1 x="100" y="60"/>
-      <p2 x="140" y="60"/>
+      <p1 x="300" y="100"/>
+      <p2 x="360" y="100"/>
     </wire>
     <wire>
-      <p1 x="500" y="60"/>
-      <p2 x="560" y="60"/>
+      <p1 x="300" y="340"/>
+      <p2 x="360" y="340"/>
     </wire>
     <wire>
-      <p1 x="140" y="60"/>
-      <p2 x="360" y="60"/>
+      <p1 x="500" y="340"/>
+      <p2 x="660" y="340"/>
+    </wire>
+    <wire>
+      <p1 x="500" y="300"/>
+      <p2 x="560" y="300"/>
     </wire>
     <wire>
       <p1 x="300" y="300"/>
       <p2 x="360" y="300"/>
     </wire>
     <wire>
-      <p1 x="300" y="140"/>
-      <p2 x="360" y="140"/>
+      <p1 x="500" y="220"/>
+      <p2 x="560" y="220"/>
     </wire>
     <wire>
-      <p1 x="140" y="60"/>
-      <p2 x="140" y="420"/>
+      <p1 x="300" y="220"/>
+      <p2 x="360" y="220"/>
+    </wire>
+    <wire>
+      <p1 x="500" y="380"/>
+      <p2 x="660" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="340" y="380"/>
+      <p2 x="360" y="380"/>
+    </wire>
+    <wire>
+      <p1 x="100" y="60"/>
+      <p2 x="360" y="60"/>
+    </wire>
+    <wire>
+      <p1 x="500" y="60"/>
+      <p2 x="560" y="60"/>
+    </wire>
+    <wire>
+      <p1 x="300" y="140"/>
+      <p2 x="360" y="140"/>
     </wire>
   </wires>
   <measurementOrdering/>
