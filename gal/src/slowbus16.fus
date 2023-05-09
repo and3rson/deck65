@@ -1,19 +1,19 @@
 
 
-Pin 19 = NC           XOR = 0   AC1 = 0
-  0  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-  1  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-  2  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 19 = RD           XOR = 1   AC1 = 1
+  0  ---- ---- ---- ---- ---- ---- ---- ----
+  1  ---- ---- ---- ---- ---- ---- ---- ---x
+  2  ---- ---- ---- ---- ---- ---- -x-- --x-
   3  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   4  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   5  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   6  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
   7  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 18 = NC           XOR = 0   AC1 = 0
-  8  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
-  9  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
- 10  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 18 = WD           XOR = 1   AC1 = 1
+  8  ---- ---- ---- ---- ---- ---- ---- ----
+  9  ---- ---- ---- ---- ---- ---- ---- ---x
+ 10  ---- ---- ---- ---- ---- ---- x--- --x-
  11  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  12  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  13  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -31,7 +31,7 @@ Pin 17 = NC           XOR = 0   AC1 = 0
  23  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
 Pin 16 = Q0           XOR = 1   AC1 = 0
- 24  -x-- ---- ---- ---x ---- ---- ---- ----
+ 24  ---- x--- ---- ---x ---- ---- ---- ----
  25  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  26  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  27  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -41,8 +41,8 @@ Pin 16 = Q0           XOR = 1   AC1 = 0
  31  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
 Pin 15 = Q1           XOR = 1   AC1 = 0
- 32  -x-- ---- ---- --x- ---x ---- ---- ----
- 33  -x-- ---- ---- ---x --x- ---- ---- ----
+ 32  -x-- x--- ---- --x- ---x ---- ---- ----
+ 33  -x-- x--- ---- ---x --x- ---- ---- ----
  34  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  35  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  36  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -51,18 +51,18 @@ Pin 15 = Q1           XOR = 1   AC1 = 0
  39  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
 Pin 14 = Q2           XOR = 1   AC1 = 0
- 40  -x-- ---- ---- --x- --x- ---x ---- ----
- 41  -x-- ---- ---- ---- ---x --x- ---- ----
- 42  -x-- ---- ---- ---x ---- --x- ---- ----
+ 40  -x-- x--- ---- --x- --x- ---x ---- ----
+ 41  -x-- x--- ---- ---- ---x --x- ---- ----
+ 42  -x-- x--- ---- ---x ---- --x- ---- ----
  43  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  44  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  45  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  46  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  47  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 13 = PHI2         XOR = 1   AC1 = 0
- 48  ---- ---- ---- ---- ---- ---- ---x ----
- 49  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
+Pin 13 = PHI2         XOR = 1   AC1 = 1
+ 48  ---- ---- ---- ---- ---- ---- ---- ----
+ 49  ---- x--- ---- --x- ---- ---- ---- ----
  50  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  51  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  52  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
@@ -70,11 +70,11 @@ Pin 13 = PHI2         XOR = 1   AC1 = 0
  54  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  55  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
 
-Pin 12 = PHV          XOR = 1   AC1 = 0
- 56  x--- ---- ---- ---- ---- ---- ---- ---x
- 57  -x-- ---- ---- --x- --x- ---- ---- ---x
- 58  -x-- ---- ---- ---- ---x ---- ---- --x-
- 59  -x-- ---- ---- ---x ---- ---- ---- --x-
+Pin 12 = PHV          XOR = 1   AC1 = 1
+ 56  ---- ---- ---- ---- ---- ---- ---- ----
+ 57  x--- x--- ---- --x- ---- ---- ---- ----
+ 58  -x-- x--- ---- ---- ---- --x- ---- ----
+ 59  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  60  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  61  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx
  62  xxxx xxxx xxxx xxxx xxxx xxxx xxxx xxxx

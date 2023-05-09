@@ -63,7 +63,16 @@
     </visualElement>
     <visualElement>
       <elementName>In</elementName>
-      <elementAttributes/>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>R~W</string>
+        </entry>
+        <entry>
+          <string>InDefault</string>
+          <value v="1" z="false"/>
+        </entry>
+      </elementAttributes>
       <pos x="300" y="140"/>
     </visualElement>
     <visualElement>
@@ -165,12 +174,12 @@
       <elementName>Clock</elementName>
       <elementAttributes>
         <entry>
-          <string>Frequency</string>
-          <int>60</int>
-        </entry>
-        <entry>
           <string>runRealTime</string>
           <boolean>true</boolean>
+        </entry>
+        <entry>
+          <string>Frequency</string>
+          <int>300</int>
         </entry>
       </elementAttributes>
       <pos x="340" y="420"/>
@@ -199,6 +208,26 @@
       </elementAttributes>
       <pos x="760" y="320"/>
     </visualElement>
+    <visualElement>
+      <elementName>LED</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>~RD</string>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="180"/>
+    </visualElement>
+    <visualElement>
+      <elementName>LED</elementName>
+      <elementAttributes>
+        <entry>
+          <string>Label</string>
+          <string>~WD</string>
+        </entry>
+      </elementAttributes>
+      <pos x="560" y="140"/>
+    </visualElement>
   </visualElements>
   <wires>
     <wire>
@@ -212,6 +241,10 @@
     <wire>
       <p1 x="300" y="180"/>
       <p2 x="360" y="180"/>
+    </wire>
+    <wire>
+      <p1 x="500" y="180"/>
+      <p2 x="560" y="180"/>
     </wire>
     <wire>
       <p1 x="500" y="420"/>
@@ -268,6 +301,10 @@
     <wire>
       <p1 x="300" y="140"/>
       <p2 x="360" y="140"/>
+    </wire>
+    <wire>
+      <p1 x="500" y="140"/>
+      <p2 x="560" y="140"/>
     </wire>
   </wires>
   <measurementOrdering/>

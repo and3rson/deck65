@@ -7,21 +7,21 @@
                           |                 |
                        NC |  2           23 | NC
                           |                 |
-                    /SLOW |  3           22 | NC
+                    /SLOW |  3           22 | RD
                           |                 |
-                       NC |  4           21 | NC
+                     /RST |  4           21 | WD
                           |                 |
                        NC |  5           20 | NC
                           |                 |
-                       NC |  6           19 | NC
+                       NC |  6           19 | Q0
                           |                 |
-                       NC |  7           18 | Q0
+                       NC |  7           18 | Q1
                           |                 |
-                       NC |  8           17 | Q1
+                       NC |  8           17 | Q2
                           |                 |
-                       NC |  9           16 | Q2
+                       RW |  9           16 | PHI2
                           |                 |
-                       NC | 10           15 | PHO
+                       NC | 10           15 | PHV
                           |                 |
                        NC | 11           14 | NC
                           |                 |

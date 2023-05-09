@@ -4,12 +4,12 @@
 -----------------------------
    1   | CLK      | Clock
    2   | /SLOW    | Input
-   3   | NC       | Input
+   3   | /RST     | Input
    4   | NC       | Input
    5   | NC       | Input
    6   | NC       | Input
    7   | NC       | Input
-   8   | NC       | Input
+   8   | RW       | Input
    9   | NC       | Input
   10   | GND      | GND
   11   | /OE      | /OE
@@ -19,7 +19,7 @@
   15   | Q1       | Output
   16   | Q0       | Output
   17   | NC       | NC
-  18   | NC       | NC
-  19   | NC       | NC
+  18   | WD       | Output
+  19   | RD       | Output
   20   | VCC      | VCC
 
