@@ -1,0 +1,29 @@
+
+
+ Pin # | Name     | Pin Type
+-----------------------------
+   1   | CLK      | Clock/Input
+   2   | NC       | Input
+   3   | /SLOW    | Input
+   4   | /RST     | Input
+   5   | A15      | Input
+   6   | A14      | Input
+   7   | A13      | Input
+   8   | A12      | Input
+   9   | RW       | Input
+  10   | NC       | Input
+  11   | NC       | Input
+  12   | GND      | GND
+  13   | /OE      | Input
+  14   | PHV      | Output
+  15   | PH2      | Output
+  16   | Q2       | Output
+  17   | Q1       | Output
+  18   | Q0       | Output
+  19   | /WD      | Output
+  20   | /RD      | Output
+  21   | /ROM     | Output
+  22   | /IO      | Output
+  23   | /RAM     | Output
+  24   | VCC      | VCC
+

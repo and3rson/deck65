@@ -1,3 +1,6 @@
 [submodule "gal/galasm"]
 	path = gal/galasm
 	url = https://github.com/daveho/GALasm
+[submodule "gal/xgpro-logic"]
+	path = gal/xgpro-logic
+	url = https://github.com/evolutional/xgpro-logic

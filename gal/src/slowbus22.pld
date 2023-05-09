@@ -1,0 +1,50 @@
+GAL22V10
+Slowbus
+
+CLK   NC   /SLOW /RST   A15   A14   A13   A12   RW    NC    NC    GND
+/OE   PHV   PH2   Q2    Q1    Q0   /WD   /RD   /ROM  /IO   /RAM   VCC
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+; Address decoder, bus underclocking, R/W qualifier
+; If /SLOW is asserted, this works as 3-bit counter: [PHV (MSB), Q1, Q0]
+;
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+; Bus underclocking
+;
+Q0.R =   /RST  * /Q0
+
+Q1.R =   /RST  *  SLOW  * /Q1  *  Q0
+       + /RST  *  SLOW  *  Q1  * /Q0
+
+Q2.R =   /RST  *  SLOW  * /Q2  *  Q1 * Q0
+       + /RST  *  SLOW  *  Q2  * /Q1
+       + /RST  *  SLOW  *  Q2  * /Q0
+
+PHV =
+    ; Fast mode (PHV=Q0)
+         /SLOW  *  Q0
+    ; Slow mode (PHV=Q2)
+       +  SLOW  *  Q2
+
+PH2 =     Q0
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+; R/W qualifier
+;
+WD =      PHV  * /RW
+RD =      PHV  *  RW
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;
+; Address decoder
+;
+RAM =    /A15
+ROM =     A15  * /A14  +  A15  *  A14  *  A13
+IO =      A15  *  A14  * /A13  *  A12
+
+DESCRIPTION
+PHV = CLK / 16 if /SLOW is asserted or CLK / 2 otherwise
+PH2 = CLK / 2

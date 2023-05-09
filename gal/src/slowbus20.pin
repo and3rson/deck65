@@ -6,10 +6,10 @@
    2   | NC       | Input
    3   | /SLOW    | Input
    4   | /RST     | Input
-   5   | NC       | Input
-   6   | NC       | Input
-   7   | NC       | Input
-   8   | NC       | Input
+   5   | A15      | Input
+   6   | A14      | Input
+   7   | A13      | Input
+   8   | A12      | Input
    9   | RW       | Input
   10   | NC       | Input
   11   | NC       | Input
@@ -17,13 +17,13 @@
   13   | /OE      | /OE
   14   | NC       | Input
   15   | PHV      | Output
-  16   | PHI2     | Output
-  17   | Q2       | Output
-  18   | Q1       | Output
-  19   | Q0       | Output
-  20   | NC       | NC
-  21   | WD       | Output
-  22   | RD       | Output
+  16   | Q2       | Output
+  17   | Q1       | Output
+  18   | PHI2     | Output
+  19   | /WD      | Output
+  20   | /RD      | Output
+  21   | /ROM     | Output
+  22   | /IO      | Output
   23   | NC       | Input
   24   | VCC      | VCC
 
