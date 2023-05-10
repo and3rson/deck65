@@ -9,7 +9,7 @@ xgpro-logic/xgpro-logic:
 	cd xgpro-logic && go mod tidy && (go get || true) && go build -o xgpro-logic cmd/xgpro-logic.app/main.go
 
 src/%.jed: src/%.pld bin/galasm
-	bin/galasm -v $<
+	bin/galasm -c -p -f -v $<
 
 src/%.hex: src/%.jed
 	./src/jedec2hex.py -i $< -o $@
