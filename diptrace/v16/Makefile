@@ -7,3 +7,7 @@ v16.zip: $(SOURCES)
 .PHONY: clean
 clean:
 	rm *.gbr *.drl v16.zip
+
+.PHONY: view
+view:
+	gerbview $(SOURCES)
