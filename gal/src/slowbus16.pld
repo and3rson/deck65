@@ -1,5 +1,5 @@
 GAL16V8
-Slowbus
+Addr
 
 CLK  /SLOW /RST   A15   A14   A13   A12   RW    NC    GND
 /OE   PHV   Q2    Q1    PHI2 /WD   /RD   /ROM  /IO    VCC
