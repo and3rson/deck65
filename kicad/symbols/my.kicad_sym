@@ -12,13 +12,11 @@
     (property "Datasheet" "" (at 0 0 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (symbol "ESP-01_0_1"
+    (symbol "ESP-01_1_1"
       (rectangle (start -2.54 0) (end 12.7 -12.7)
         (stroke (width 0) (type default))
-        (fill (type none))
+        (fill (type background))
       )
-    )
-    (symbol "ESP-01_1_1"
       (pin input line (at -5.08 -3.81 0) (length 2.54)
         (name "RX" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))

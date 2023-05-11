@@ -444,7 +444,7 @@
         "microvia_drill": 0.1,
         "name": "Ground",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgb(0, 0, 128)",
+        "schematic_color": "rgb(0, 0, 194)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -461,7 +461,7 @@
         "microvia_drill": 0.1,
         "name": "Power",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgb(128, 0, 0)",
+        "schematic_color": "rgb(132, 0, 0)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -478,7 +478,7 @@
         "microvia_drill": 0.1,
         "name": "Power_Unreg",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
-        "schematic_color": "rgba(0, 0, 0, 0.000)",
+        "schematic_color": "rgb(0, 132, 0)",
         "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
@@ -498,6 +498,10 @@
       {
         "netclass": "Power",
         "pattern": "+5V"
+      },
+      {
+        "netclass": "Power_Unreg",
+        "pattern": "+5VA"
       }
     ]
   },
