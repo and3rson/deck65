@@ -1,6 +1,6 @@
-# 65ad02
+# Deck65
 
-![65c02s SBC](./img/v15_final.jpg)
+![Deck65 SBC](./img/v15_final.jpg)
 
 Simple SBC based on W65C02S
 

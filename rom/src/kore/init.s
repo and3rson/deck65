@@ -60,7 +60,7 @@ init:
         cli
 
         jsr lcd_printfz
-        .byte "               ",$07," 65ad02 ",$07,"\n",0
+        .byte "               ",$07," Deck65 ",$07,"\n",0
 
         ; jsr i2c_start
         ; lda #($68 << 1)  ; %0101010
