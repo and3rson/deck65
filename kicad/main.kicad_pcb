@@ -4687,7 +4687,7 @@
   (gr_text "~{WD}" (at 145.255 -36.035 90) (layer "F.SilkS") (tstamp 3794c75a-8461-4aca-8889-6e884b3dd7e2)
     (effects (font (size 1 1) (thickness 0.15)) (justify right bottom))
   )
-  (gr_text "m6502 SBC" (at 132.555 -18.89) (layer "F.SilkS") (tstamp 3a6b00e0-7299-4c09-903d-4e563a95a42c)
+  (gr_text "65ad02 SBC" (at 132.555 -18.89) (layer "F.SilkS") (tstamp 3a6b00e0-7299-4c09-903d-4e563a95a42c)
     (effects (font (size 2.54 2.54) (thickness 0.3)) (justify left))
   )
   (gr_text "~{IRQ}" (at 150.335 -36.035 90) (layer "F.SilkS") (tstamp 5a1b28c8-eff5-4258-a2d8-7af1227fc798)
