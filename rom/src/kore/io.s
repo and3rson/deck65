@@ -7,6 +7,8 @@
 .export VIA1_DDRB
 .export VIA1_DDRA
 .export VIA1_IFR
+.export LCD1_DATA
+.export LCD1_CMD
 
 .export io_init = init
 
@@ -42,6 +44,11 @@ ACIA1_DATA:  .res  1
 ACIA1_STAT:  .res  1
 ACIA1_CMD:   .res  1
 ACIA1_CTRL:  .res  1
+.align 256
+
+; 240x64 LCD (T6963C)
+LCD1_DATA: .res 1
+LCD1_CMD: .res 1
 .align 256
 
 .segment "KORE"

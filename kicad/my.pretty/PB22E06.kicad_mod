@@ -5,7 +5,7 @@
       (effects (font (size 1 1) (thickness 0.1)))
     (tstamp 78cc09c4-b11e-41ee-99a6-312676da4928)
   )
-  (fp_text value "PB22E06" (at 2.54 -3.175 unlocked) (layer "F.Fab")
+  (fp_text value "PB22E06 / KLS7-P5.8X5.8" (at 2.54 -3.175 unlocked) (layer "F.Fab")
       (effects (font (size 1 1) (thickness 0.15)))
     (tstamp 623ccd74-0204-4404-853b-fa92ece6f053)
   )

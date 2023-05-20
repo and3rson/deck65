@@ -6,7 +6,7 @@ CLK  /SLOW /RST   A15   A14   A13   A12   RW    NC    GND
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
 ; Address decoder, bus underclocking, R/W qualifier
-; If /SLOW is asserted, this works as 3-bit counter: [PHV (MSB), Q1, PHI2 (LSB)]
+; If /SLOW is asserted, this works as 2-bit counter: [Q2, Q1]
 ;
 
 
@@ -46,5 +46,5 @@ ROM =     A15  * /A14  +  A15  *  A14  *  A13
 IO =      A15  *  A14  * /A13  *  A12
 
 DESCRIPTION
-PHV = CLK / 16 if /SLOW is asserted or CLK / 2 otherwise
+PHV = CLK / 8 if /SLOW is asserted or CLK / 2 otherwise
 PHI2 = CLK / 2

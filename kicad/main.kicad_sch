@@ -7330,7 +7330,7 @@
     (effects (font (size 2.54 2.54) (thickness 0.508) bold) (justify left bottom))
     (uuid 8cd5a717-e6b5-4eb0-bf45-def9660b2a25)
   )
-  (text "8 256B blocks (C000-C7FF)" (at 116.205 211.455 0)
+  (text "8 256B blocks (D000-D7FF)" (at 116.205 211.455 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 9490e3dd-5708-44bb-9303-b9d70b59ec1b)
   )
