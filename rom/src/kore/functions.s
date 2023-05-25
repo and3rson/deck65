@@ -23,8 +23,8 @@ F_PTR: .res 2
 
 .segment "KORE"
 
-_wait16ms = wait16ms
-.export _wait16ms
+.export _wait1ms = wait1ms
+.export _wait16ms = wait16ms
 .export wait32us
 
 ; Parse hexadecimal ASCII character into number
@@ -155,6 +155,20 @@ wait32us:
 
         rts
 
+
+; Wait ~1 ms
+wait1ms:
+        pha
+        phx
+
+        lda #$00
+        ldx #$20
+        jsr vdelay
+
+        plx
+        pla
+
+        rts
 
 ; Wait ~2 ms
 wait2ms:

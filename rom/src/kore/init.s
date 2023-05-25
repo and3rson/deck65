@@ -4,6 +4,9 @@
 
 .include "../include/define.inc"
 
+.export init
+.export getps, _getps = getps
+
 .importzp sp
 .import init_jmpvec
 .import __STACK_START__
@@ -21,6 +24,9 @@
 .import lcd_init
 .import kbd_init
 .import io_init
+.import uart_init
+.import acia_write
+.import acia_read
 .import _urepl_main
 
 .zeropage
@@ -31,7 +37,10 @@ INIT_PTR: .res 2
 
 .segment "KORE"
 
-.export init
+getps:
+        php
+        pla
+        rts
 
 ; Kernel entrypoint
 ;
@@ -52,6 +61,7 @@ init:
         .byte $C2, $42
 
         jsr io_init
+        jsr uart_init
         jsr kbd_init
         jsr lcd_init
         jsr i2c_init
@@ -60,9 +70,29 @@ init:
         cli
 
         jsr lcd_printfz
-        .byte "               ",$20," Deck65 ",$20,"\n",0
+        .asciiz "                 Deck65  \n"
         jsr lcd_printfz
-        .byte "           ",$20," by Andrew Dunai ",$20,"\n",0
+        .asciiz "             by Andrew Dunai  \n"
+
+        ; jsr lcd_printfz
+        ; .asciiz "Writing AT cmd...\n"
+        ; lda #'A'
+        ; jsr acia_write
+        ; lda #'T'
+        ; jsr acia_write
+        ; lda #13
+        ; jsr acia_write
+        ; lda #10
+        ; jsr acia_write
+
+        ; jsr lcd_printfz
+        ; .asciiz "Writing byte...\n"
+        ; jsr acia_read
+        ; jsr lcd_printhex
+        ; jsr lcd_printfz
+        ; .asciiz "Writing byte...\n"
+        ; jsr acia_read
+        ; jsr lcd_printhex
 
         ; jsr i2c_start
         ; lda #($68 << 1)  ; %0101010

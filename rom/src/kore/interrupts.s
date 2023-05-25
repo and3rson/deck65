@@ -2,9 +2,14 @@
 ; Interrupt routines (mostly for VIA)
 ;
 
+.import lcd_printfz
 .import kbd_process
+.import uart_process
+.import VIA1_RA
 .import VIA1_RB
 .import VIA1_IFR
+.import ACIA1_DATA
+.import ACIA1_STAT
 
 .export irq
 .export nmi
@@ -23,10 +28,21 @@ irq:
         ; ; lda VIA1_IFR
         ; lda VIA1_T1CL
 
+        ; Notify about ISR start
+        lda #$80
+        sta VIA1_RA
+
+        ; ****************
+        ; Check VIA interrupts
+        ; ****************
         lda VIA1_IFR
+        ; Clear all interrupt flags
+        ldx #$7F
+        stx VIA1_IFR
+
         and #%00001000  ; Is CB2? (PS/2 keyboard)
         ; and #%00000001  ; Is CA2? (PS/2 keyboard)
-        beq @end
+        beq @via_end
         lda VIA1_RB
         ; rol
         ; rol
@@ -36,19 +52,29 @@ irq:
         ror
         and #1
         jsr kbd_process
+    @via_end:
 
-    @end:
-        ; Clear all interrupt flags
-        lda #$7F
-        sta VIA1_IFR
+        ; ****************
+        ; Check ACIA interrupts
+        ; ****************
+        lda ACIA1_STAT
+        rol
+        bcc @acia_end
+        lda ACIA1_DATA
+        jsr uart_process
+    @acia_end:
+
+        stz VIA1_RA
 
         plx
         pla
         rti
 
 nmi:
-        pha
-        lda #$33
-        lda #$44
-        pla
+        jsr lcd_printfz
+        .asciiz "NMI!"
+        ; pha
+        ; lda #$33
+        ; lda #$44
+        ; pla
         rti

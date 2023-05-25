@@ -9,8 +9,17 @@
 .export VIA1_IFR
 .export LCD1_DATA
 .export LCD1_CMD
+.export ACIA1_DATA
+.export ACIA1_STAT
+.export acia_write
 
 .export io_init = init
+; .export acia_write
+; .export _acia_write = acia_write
+; .export acia_read
+; .export _acia_read = acia_read
+; .export acia_iread
+; .export _acia_iread = acia_iread
 
 .segment "IO"
 
@@ -39,7 +48,6 @@ VIA1_ORNH:  .res  1
 .align 256
 
 ; ACIA
-
 ACIA1_DATA:  .res  1
 ACIA1_STAT:  .res  1
 ACIA1_CMD:   .res  1
@@ -84,13 +92,10 @@ init:
 
         ; VIA - Port A
         ;
-        ; LCD
-        ;   PA7      - RS
-        ;   PA6      - R/W
-        ;   PA5      - EN2
-        ;   PA4      - EN1
-        ;   PA3..PA0 - data
-        lda #%01000000
+        ; Misc
+        ;   PA7      - high during ISR
+        ;   PA6..PA0 - output
+        lda #%00000000
         sta VIA1_RA
         lda #$FF
         sta VIA1_DDRA
@@ -127,7 +132,8 @@ init:
         stz ACIA1_STAT
 
         ; Set modes & functions
-        lda #$0B
+        ; lda #$0B  ; no parity, no echo, no Tx interrupt, no Rx interrupt, enable Tx/Rx
+        lda #$09  ; no parity, no echo, no Tx interrupt, enable Rx interrupt, enable Tx/Rx
         sta ACIA1_CMD
 
         ; Set mode
@@ -172,3 +178,35 @@ acia_write:
         sta ACIA1_DATA
 
         rts
+
+;; Read byte from RX buffer
+;;
+;; Return:
+;;   A - byte
+;acia_read:
+;        lda ACIA1_STAT
+;        and #$08
+;        beq acia_read
+
+;        lda ACIA1_DATA
+
+;        rts
+
+
+;; Read byte from RX buffer (non-blocking)
+;;
+;; Return:
+;;   A - byte, 0 if not ready
+;acia_iread:
+;        lda ACIA1_STAT
+;        and #$08
+;        beq @empty
+
+;        lda ACIA1_DATA
+;        jmp @end
+
+;    @empty:
+;        lda #0
+
+;    @end:
+;        rts

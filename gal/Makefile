@@ -33,3 +33,10 @@ ifndef PROGRAM
 	$(error PROGRAM is required)
 endif
 	minipro -p GAL20V8B -w ./src/$(PROGRAM).jed -z
+
+.PHONY: program
+program-atf16v8b: src/$(PROGRAM).jed
+ifndef PROGRAM
+	$(error PROGRAM is required)
+endif
+	minipro -p ATF16V8B -w ./src/$(PROGRAM).jed -z

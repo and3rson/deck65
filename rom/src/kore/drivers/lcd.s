@@ -19,10 +19,14 @@
 .zeropage
 
 PRINT_PTR: .res 2
-GOTO_TMP: .res 1
+GOTO_TMP: .res 2
 ADDR: .res 2
 CX: .res 1
 CY: .res 1
+
+.segment "SYSRAM"
+
+BUFFER: .res 40
 
 .segment "KORE"
 
@@ -38,21 +42,21 @@ init:
         jsr init_device
         jsr clrscr
 
-        ldx #0
-        ldy #0
-        jsr gotoxy
+        ; ldx #0
+        ; ldy #0
+        ; jsr gotoxy
 
-        lda #<STR
-        ldx #>STR
-        jsr printz
+        ; lda #<STR
+        ; ldx #>STR
+        ; jsr printz
 
-        ldx #15
-        ldy #5
-        jsr gotoxy
+        ; ldx #15
+        ; ldy #5
+        ; jsr gotoxy
 
-        lda #<STR2
-        ldx #>STR2
-        jsr printz
+        ; lda #<STR2
+        ; ldx #>STR2
+        ; jsr printz
 
         ldx #0
         ldy #0
@@ -134,7 +138,7 @@ clrscr:
         ; 64 iterations
         bne @again2
 
-        jsr cmd_autowrite_off
+        jsr cmd_auto_reset
 
         plx
         pla
@@ -143,11 +147,12 @@ clrscr:
 
 gotoxy:
         pha
-        phy
         phx
+        phy
 
         stx CX
         sty CY
+        stz GOTO_TMP+1
 
         ; txa
         ; jsr lcd_printhex
@@ -175,13 +180,19 @@ gotoxy:
         asl      ; A = Y * 32
 
         clc
-        adc GOTO_TMP  ; A = Y * 40
-        adc CX   ; A = Y * 40 + X
+
+        adc GOTO_TMP  ; A = Y * 40, possible overflow
         sta GOTO_TMP
-        lda #0
+        lda GOTO_TMP+1
         adc #0
-        tax      ; High byte
-        lda GOTO_TMP  ; Low byte
+        sta GOTO_TMP+1
+
+        lda GOTO_TMP
+        adc CX   ; A = Y * 40 + X, possible overflow
+        sta GOTO_TMP
+        lda GOTO_TMP+1
+        adc #0
+        sta GOTO_TMP+1
 
         ; pha
         ; phx
@@ -194,13 +205,21 @@ gotoxy:
         ; Set address pointer (text home address)
         ; lda #$00
         ; ldx #$00
+        lda GOTO_TMP
+        ldx GOTO_TMP+1
         jsr writedata2
         lda #$24
         jsr writecmd
 
-        plx
+        ; Set cursor pos
+        lda CX
+        ldx CY
+        jsr cmd_set_cursor_pos
+
         ply
+        plx
         pla
+
         rts
 
 ; Print zero-terminated string that follows jsr which calls this function
@@ -239,9 +258,14 @@ printfz:
 ; Arguments:
 ;   A - character code
 printchar:
+        pha
+
         ; Is CR/LF?
         cmp #10
         beq @crlf  ; Yes
+        ; Is backspace?
+        cmp #8
+        beq @backspace  ; Yes
         ; code = ASCII - $20 (page 26)
         sec
         sbc #$20
@@ -249,21 +273,26 @@ printchar:
     ; If character:
     @character:
         jsr cmd_write_data_increment_adp
-        jmp @end
-    ; If CR/LF:
-    @crlf:
         phx
         phy
-        ldx 0
-        stx CX
+        ldx CX
+        inx
         ldy CY
-        iny
-        sty CY
         jsr gotoxy
         ply
         plx
+        jmp @end
+    ; If CR/LF:
+    @crlf:
+        jsr print_crlf
+        jmp @end
+    ; If backspace:
+    @backspace:
+        jsr print_backspace
 
     @end:
+        pla
+
         rts
 
 ; Print hexadecimal representation (4-bit)
@@ -348,54 +377,187 @@ _gotoxy:
 ; Return:
 ;   A - number of characters printed (i. e. string length)
 printz:
+        phx
         phy
 
         sta PRINT_PTR
         stx PRINT_PTR+1
 
-        jsr cmd_autowrite_on
-
         ldy #0
     @print:
         lda (PRINT_PTR), Y
         beq @end
-        ; Is CR/LF?
-        cmp #10
-        beq @crlf  ; Yes
-        ; code = ASCII - $20 (page 26)
-        sec
-        sbc #$20
+        jsr printchar
+        iny
+        jmp @print
 
-    ; If character:
-    @character:
-        jsr autowrite
-        iny
-        jmp @print
-    ; If CR/LF:
-    @crlf:
-        ; Pause autowrite
-        jsr cmd_autowrite_off
-        ; Go to next line
-        phx
-        phy
-        ldx 0
-        stx CX
-        ldy CY
-        iny
-        sty CY
-        jsr gotoxy
-        ply
-        plx
-        ; Resume autowrite
-        jsr cmd_autowrite_on
-        iny
-        jmp @print
+        ; jsr cmd_autowrite_on
+
+        ; ldy #0
+    ; @print:
+        ; lda (PRINT_PTR), Y
+        ; beq @end
+        ; ; Is CR/LF?
+        ; cmp #10
+        ; beq @crlf  ; Yes
+        ; ; Is backspace?
+        ; cmp #8
+        ; beq @backspace  ; Yes
+        ; ; code = ASCII - $20 (page 26)
+        ; sec
+        ; sbc #$20
+
+    ; ; If character:
+    ; @character:
+        ; jsr autowrite
+        ; iny
+        ; jmp @print
+    ; ; If CR/LF:
+    ; @crlf:
+        ; ; Pause autowrite
+        ; jsr cmd_auto_reset
+        ; ; Go to next line
+        ; jsr print_crlf
+        ; ; Resume autowrite
+        ; jsr cmd_autowrite_on
+        ; iny
+        ; jmp @print
+    ; @backspace:
+        ; jsr cmd_auto_reset
+        ; jsr print_backspace
+        ; jsr cmd_autowrite_on
+        ; iny
+        ; jmp @print
+
+    ; @end:
+        ; jsr cmd_auto_reset
+
+        ; tya
+
+        ; ; Move cursor
+        ; pha
+        ; clc
+        ; adc CX
+        ; tax
+        ; ldy CY
+        ; jsr gotoxy
+        ; pla
 
     @end:
-        jsr cmd_autowrite_off
-
         tya
         ply
+        plx
+
+        rts
+
+print_crlf:
+        phx
+        phy
+
+        ldx #0
+        ldy CY
+        iny
+        cpy #8
+        beq @overflow
+        jsr gotoxy
+        jmp @end
+
+    @overflow:
+        jsr scroll_up
+
+        ldx #0
+        ldy #7
+        jsr gotoxy
+
+    @end:
+        ply
+        plx
+
+        rts
+
+scroll_up:
+        pha
+        phx
+        phy
+
+        ldy #1
+    @copy_row:
+        ; Go to row
+        ldx #0
+        jsr gotoxy
+
+        ; Read row into buffer
+        jsr cmd_autoread_on
+        ldx #0
+    @read_byte:
+        jsr autoread
+        sta BUFFER, X
+        inx
+        cpx #40
+        bne @read_byte
+        jsr cmd_auto_reset
+
+        ; Read row from buffer
+        dey
+        ldx #0
+        jsr gotoxy
+        jsr cmd_autowrite_on
+    @write_byte:
+        lda BUFFER, X
+        jsr autowrite
+        inx
+        cpx #40
+        bne @write_byte
+        jsr cmd_auto_reset
+        iny
+
+        iny
+        cpy #8
+        bne @copy_row
+
+        ; Clear last row
+        ldx #0
+        ldy #7
+        jsr gotoxy
+        jsr cmd_autowrite_on
+        ldx #0
+        lda #0  ; whitespace - $20
+    @write_empty:
+        jsr autowrite
+        inx
+        cpx #40
+        bne @write_empty
+        jsr cmd_auto_reset
+
+        ; Go to last line start
+        ldx #0
+        ldy #7
+        jsr gotoxy
+
+        ply
+        plx
+        pla
+
+        rts
+
+print_backspace:
+        pha
+        phx
+        phy
+
+        ldx CX
+        dex
+        stx CX
+        ldy CY
+        jsr gotoxy
+
+        lda #0  ; whitespace - $20
+        jsr cmd_write_data_nonvariable_adp
+
+        ply
+        plx
+        pla
+
         rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;
@@ -429,6 +591,20 @@ autowritebusy:
 
         rts
 
+; Wait for bit 2 of status flag
+autoreadbusy:
+        pha
+
+    @wait:
+        lda LCD1_CMD
+        and #4
+        cmp #4
+        bne @wait
+
+        pla
+
+        rts
+
 ; Write A to data register
 writedata:
         jsr busy
@@ -456,6 +632,13 @@ writecmd:
 autowrite:
         jsr autowritebusy
         sta LCD1_DATA
+
+        rts
+
+; Read character while in auto data read mode
+autoread:
+        jsr autoreadbusy
+        lda LCD1_DATA
 
         rts
 
@@ -522,11 +705,20 @@ cmd_set_addr_pointer:
         pla
         rts
 
-; Set address pointer (text home address)
+; Print character
 cmd_write_data_increment_adp:
         pha
         jsr writedata
         lda #$C0
+        jsr writecmd
+        pla
+        rts
+
+; Print character
+cmd_write_data_nonvariable_adp:
+        pha
+        jsr writedata
+        lda #$C4
         jsr writecmd
         pla
         rts
@@ -542,8 +734,19 @@ cmd_autowrite_on:
         pla
         rts
 
+; Enable auto-read mode
+cmd_autoread_on:
+        pha
+
+        ; Auto data write on
+        lda #$B1
+        jsr writecmd
+
+        pla
+        rts
+
 ; Disable auto-write mode
-cmd_autowrite_off:
+cmd_auto_reset:
         pha
 
         ; Auto data write off

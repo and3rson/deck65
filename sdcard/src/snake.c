@@ -38,11 +38,11 @@ byte rand() {
 
 byte hello() {
     clrscr();
-    gotoxy(8, 0);
-    puts("         SNAKE          ");
-    gotoxy(6, 1);
-    puts("Cursor keys - move, Q - quit");
     gotoxy(8, 2);
+    puts("         SNAKE          ");
+    gotoxy(6, 3);
+    puts("Cursor keys - move, Q - quit");
+    gotoxy(8, 4);
     puts("     Press any key");
     if (cgetc() == 'q') {
         puts("\n");
@@ -128,10 +128,10 @@ byte game() {
             } else if (newX == 0xFF) {
                 newX = 39;
             }
-            if (newY == 4) {
+            if (newY == 8) {
                 newY = 0;
             } else if (newY == 0xFF) {
-                newY = 3;
+                newY = 7;
             }
             if (newX == foodX && newY == foodY) {
                 // Found food
@@ -146,7 +146,7 @@ byte game() {
                 puts("\x01");
                 gotoxy(body[head].x, body[head].y);
                 foodX = rand() % 40;
-                foodY = rand() % 4;
+                foodY = rand() % 8;
                 // Draw new food
                 gotoxy(foodX, foodY);
                 puts("*");
@@ -186,9 +186,9 @@ byte game() {
 byte game_over() {
     byte c;
     clrscr();
-    gotoxy(15, 1);
+    gotoxy(15, 3);
     puts(" GAME OVER ");
-    gotoxy(10, 2);
+    gotoxy(10, 4);
     puts(" R - retry, Q - quit ");
     while(1) {
         c = cgetc();

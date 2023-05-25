@@ -5,7 +5,8 @@
 .feature string_escapes
 
 ; CLOCK = 4096000
-CLOCK = 8192000
+; CLOCK = 8192000
+CLOCK = 8000000
 CYCLES_PER_US = CLOCK / 1000000
 
 .macro acall addr, _a

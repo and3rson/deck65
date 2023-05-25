@@ -1,25 +1,23 @@
 CPU := 65c02
 
-SRC = $(wildcard src/*.c)
-BIN = $(patsubst src/%.c, bin/%.bin, $(SRC))
+C_SRC = $(wildcard src/*.c)
+C_BIN = $(patsubst src/%.c, bin/%.cb, $(C_SRC))
+ASM_SRC = $(wildcard src/*.s)
+ASM_BIN = $(patsubst src/%.s, bin/%.ab, $(ASM_SRC))
 
 # all: bin bin/hello.bin bin/cltest.bin bin/maze.bin bin/snake.bin bin/time.bin
-all: bin bin/hello.bin bin/iotest.bin $(BIN)
+all: bin $(C_BIN) $(ASM_BIN)
 
 bin:
 	mkdir bin
 
-bin/%.bin: src/%.c ../rom/api.lib
+bin/%.ab: src/%.s ../rom/api.lib
+	ca65 --cpu $(CPU) $<
+	ld65 -C rom.cfg $(patsubst %.s,%.o,$<) -o $@ ../rom/api.lib  # -m hello.map
+
+bin/%.cb: src/%.c ../rom/api.lib
 	cl65 -c -t none -C rom.cfg --cpu $(CPU) -I ../rom/include/ $< ../rom/api.lib  # -m $<.map
 	ld65 -C rom.cfg $(patsubst %.c,%.o,$<) ../rom/api.lib -o $@
-
-bin/hello.bin: rom.cfg ../rom/api.lib src/hello.s
-	ca65 --cpu $(CPU) ./src/hello.s
-	ld65 -C rom.cfg ./src/hello.o -o bin/hello.bin ../rom/api.lib  # -m hello.map
-
-bin/iotest.bin: rom.cfg ../rom/api.lib src/iotest.s
-	ca65 --cpu $(CPU) ./src/iotest.s
-	ld65 -C rom.cfg ./src/iotest.o -o bin/iotest.bin ../rom/api.lib  # -m iotest.map
 
 ../rom/api.lib:
 	make -C ../rom api.lib
@@ -59,10 +57,10 @@ copy: all
 	sudo rm -rf /mnt/1/*
 	cat file1.txt | sudo tee /mnt/1/file1.txt
 	# for i in `seq 2 50`; do echo "This is file $$i" | sudo tee /mnt/1/file$${i}.txt; done
-	sudo cp ./bin/*.bin /mnt/1/
+	sudo cp ./bin/*.{ab,cb} /mnt/1/
 	sudo umount /mnt/1
 	sync
 
 .PHONY: clean
 clean:
-	rm -rf bin src/*.o *.map *.lst *.bin
+	rm -rf bin src/*.o *.map *.lst *.bin *.ab *.cb
