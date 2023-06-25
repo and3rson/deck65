@@ -273,14 +273,24 @@ printchar:
     ; If character:
     @character:
         jsr cmd_write_data_increment_adp
+
         phx
         phy
+
         ldx CX
         inx
+        cpx #40
+        bne @move_cursor
+        jsr print_crlf
+        jmp @no_move_cursor
+    @move_cursor:
         ldy CY
         jsr gotoxy
+
+    @no_move_cursor:
         ply
         plx
+
         jmp @end
     ; If CR/LF:
     @crlf:

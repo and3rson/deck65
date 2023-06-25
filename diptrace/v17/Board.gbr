@@ -1,0 +1,17 @@
+%TF.GenerationSoftware,Novarm,DipTrace,4.3.0.4*%
+%TF.CreationDate,2023-05-29T14:58:26+01:00*%
+%FSLAX26Y26*%
+%MOIN*%
+%TF.FileFunction,Profile*%
+%TF.Part,Single*%
+%ADD10C,0.004724*%
+G75*
+G01*
+%LPD*%
+X393700Y4293700D2*
+D10*
+X8193700D1*
+Y393700D1*
+X393700D1*
+Y4293700D1*
+M02*

@@ -9,9 +9,6 @@
 char buff[40];
 byte buffPos;
 
-short a;
-short b;
-
 extern byte fat16_init();
 
 void urepl_main() {

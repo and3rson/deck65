@@ -109,6 +109,7 @@ Playing snake, for example:
 - https://github.com/daprice/keyswitches.pretty - MX switches
 - https://components101.com/sites/default/files/component_datasheet/Micro-SD-Card-Module-Datasheet.pdf - MicroSD card module datasheet & dimensions
 - http://static.cactus.io/docs/sensors/temp-humidity/mcp9808/25095A.pdf - MCP9808 I2C temperature sensor
+- https://ww1.microchip.com/downloads/aemDocuments/documents/MPD/ProductDocuments/DataSheets/24AA512-24LC512-24FC512-512K-Bit-I2C-Serial-EEPROM-20001754Q.pdf
 
 # Links
 - 6502 Primer: http://wilsonminesco.com/6502primer/

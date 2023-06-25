@@ -66,6 +66,11 @@ int system(const char *s) {
     byte *dest = (byte *)START;
     byte arglen;
     byte dot_count = 0;
+    byte sectors;
+
+    puts("CMD: ");
+    puts(s);
+    cputc('\n');
 
     end = start + strlen(s);
 
@@ -118,9 +123,30 @@ int system(const char *s) {
         dot_count++;
         dest += 512;
     }
+    sectors = dot_count;
     while (dot_count--) {
         cputc(0x08);
     }
+
+    puts("Read sectors: ");
+    printhex(sectors);
+    cputc('\n');
+    printhex(((byte*)(START))[0]);
+    cputc(' ');
+    printhex(((byte*)(START))[1]);
+    cputc(' ');
+    printhex(((byte*)(START))[2]);
+    cputc(' ');
+    printhex(((byte*)(START))[3]);
+    cputc(' ');
+    printhex(((byte*)(START))[4]);
+    cputc(' ');
+    printhex(((byte*)(START))[5]);
+    cputc(' ');
+    printhex(((byte*)(START))[6]);
+    cputc(' ');
+    printhex(((byte*)(START))[7]);
+    cputc('\n');
 
     /* __asm__("jsr %w", START); */
     // main() is __cdecl__ and cannot be __fastcall__

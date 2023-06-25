@@ -144,6 +144,21 @@ byte fat16_open(const char* filename) {
             // LFN entry, skip
             continue;
         }
+        /* cputc(entry->filename[0]); */
+        /* cputc(entry->filename[1]); */
+        /* cputc(entry->filename[2]); */
+        /* cputc(entry->filename[3]); */
+        /* cputc(entry->filename[4]); */
+        /* cputc(entry->filename[5]); */
+        /* cputc(entry->filename[6]); */
+        /* cputc(entry->filename[7]); */
+        /* cputc(' '); */
+        /* puts(filename); */
+        /* printhex(filename[0]); */
+        /* printhex(filename[1]); */
+        /* printhex(strlen(filename)); */
+        /* printhex(strnicmp(filename, entry->filename, strlen(filename))); */
+        /* cputc('\n'); */
         /* for (i = 0; i < 8; i++) { */
         /*     cputc(entry->filename[i]); */
         /* } */
