@@ -3,6 +3,7 @@
 
 #include <api/keyboard.h>
 #include <api/wait.h>
+#include <api/lcd.h>
 
 // Main function should come first
 int main(int argc, char **argv);
@@ -15,7 +16,7 @@ typedef struct {
 } Part;
 byte foodX, foodY;
 byte dirX, dirY;
-Part body[160];
+Part body[160]; // Well, we probably need more for 40x16 display...
 byte bodyLength;
 byte head, tail;
 byte tick;
@@ -38,11 +39,11 @@ byte rand() {
 
 byte hello() {
     clrscr();
-    gotoxy(8, 2);
+    gotoxy(8, LCD_ROWS / 2 - 1);
     puts("         SNAKE          ");
-    gotoxy(6, 3);
+    gotoxy(6, LCD_ROWS / 2);
     puts("Cursor keys - move, Q - quit");
-    gotoxy(8, 4);
+    gotoxy(8, LCD_ROWS / 2 + 1);
     puts("     Press any key");
     if (cgetc() == 'q') {
         puts("\n");
@@ -128,10 +129,10 @@ byte game() {
             } else if (newX == 0xFF) {
                 newX = 39;
             }
-            if (newY == 8) {
+            if (newY == LCD_ROWS) {
                 newY = 0;
             } else if (newY == 0xFF) {
-                newY = 7;
+                newY = LCD_ROWS - 1;
             }
             if (newX == foodX && newY == foodY) {
                 // Found food
@@ -146,7 +147,7 @@ byte game() {
                 puts("\x01");
                 gotoxy(body[head].x, body[head].y);
                 foodX = rand() % 40;
-                foodY = rand() % 8;
+                foodY = rand() % LCD_ROWS;
                 // Draw new food
                 gotoxy(foodX, foodY);
                 puts("*");

@@ -1,6 +1,7 @@
 .include "../../include/define.inc"
 
 .import LCD1_DATA, LCD1_CMD, popa
+.export LCD_ROWS, _LCD_ROWS = LCD_ROWS
 
 .export lcd_init = init
 .export lcd_printchar = printchar
@@ -16,6 +17,8 @@
 
 ; .export lcd_BUFFER_PREV = BUFFER_PREV
 
+ROWS = 16
+
 .zeropage
 
 PRINT_PTR: .res 2
@@ -29,6 +32,8 @@ CY: .res 1
 BUFFER: .res 40
 
 .segment "KORE"
+
+LCD_ROWS: .byte ROWS
 
 ; Datasheet:
 ; https://www.sparkfun.com/datasheets/LCD/Monochrome/Datasheet-T6963C.pdf
@@ -116,6 +121,7 @@ init_device:
 clrscr:
         pha
         phx
+        phy
 
         ldx #0
         ldy #0
@@ -124,22 +130,19 @@ clrscr:
         jsr cmd_autowrite_on
 
         lda #0
-        ldx #0
-    @again:
-        jsr autowrite
-        inx
-        ; 256 iterations
-        bne @again
-
-        ldx #64
-    @again2:
+        ldy #ROWS
+    @again_row:
+        ldx #40
+    @again_char:
         jsr autowrite
         dex
-        ; 64 iterations
-        bne @again2
+        bne @again_char
+        dey
+        bne @again_row
 
         jsr cmd_auto_reset
 
+        ply
         plx
         pla
 
@@ -170,29 +173,64 @@ gotoxy:
 
         ; Pointer = Y * 40 + X
 
-        lda CY   ; Y
-        asl
-        asl
-        asl      ; A = Y * 8
-        sta GOTO_TMP
+        ; Old algorithm (8 rows)
+        ;
+        ; lda CY   ; Y
+        ; asl
+        ; asl
+        ; asl      ; A = Y * 8
+        ; sta GOTO_TMP
 
-        asl
-        asl      ; A = Y * 32
+        ; asl
+        ; asl      ; A = Y * 32
 
+        ; clc
+
+        ; adc GOTO_TMP  ; A = Y * 40, possible overflow
+        ; sta GOTO_TMP
+        ; lda GOTO_TMP+1
+        ; adc #0
+        ; sta GOTO_TMP+1
+
+        ; lda GOTO_TMP
+        ; adc CX   ; A = Y * 40 + X, possible overflow
+        ; sta GOTO_TMP
+        ; lda GOTO_TMP+1
+        ; adc #0
+        ; sta GOTO_TMP+1
+        ;
+        ; Old algorithm end
+
+        ; New algorithm (16 rows)
+        ;
         clc
+        lda CY
+        asl
+        asl
+        asl            ; A = Y * 8
+        sta GOTO_TMP   ; Save Y * 8
+        asl
+        asl            ; A = Y * 32, possible overflow
+        pha            ; Push U * 32
 
-        adc GOTO_TMP  ; A = Y * 40, possible overflow
-        sta GOTO_TMP
+        lda #0
+        adc #0
+        sta GOTO_TMP+1 ; Carry high
+        pla            ; pull Y*8
+        adc GOTO_TMP
+        sta GOTO_TMP   ; GOTO_TMP = Y * 8 + Y * 32, possible overflow
         lda GOTO_TMP+1
         adc #0
-        sta GOTO_TMP+1
+        sta GOTO_TMP+1 ; Carry high
 
         lda GOTO_TMP
-        adc CX   ; A = Y * 40 + X, possible overflow
+        adc CX         ; A = Y * 40 + X, possible overflow
         sta GOTO_TMP
         lda GOTO_TMP+1
         adc #0
         sta GOTO_TMP+1
+        ;
+        ; New algorithm end
 
         ; pha
         ; phx
@@ -467,7 +505,7 @@ print_crlf:
         ldx #0
         ldy CY
         iny
-        cpy #8
+        cpy #ROWS
         beq @overflow
         jsr gotoxy
         jmp @end
@@ -476,7 +514,7 @@ print_crlf:
         jsr scroll_up
 
         ldx #0
-        ldy #7
+        ldy #ROWS-1
         jsr gotoxy
 
     @end:
@@ -522,12 +560,12 @@ scroll_up:
         iny
 
         iny
-        cpy #8
+        cpy #ROWS
         bne @copy_row
 
         ; Clear last row
         ldx #0
-        ldy #7
+        ldy #ROWS-1
         jsr gotoxy
         jsr cmd_autowrite_on
         ldx #0
@@ -541,7 +579,7 @@ scroll_up:
 
         ; Go to last line start
         ldx #0
-        ldy #7
+        ldy #ROWS-1
         jsr gotoxy
 
         ply

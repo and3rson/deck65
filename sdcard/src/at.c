@@ -184,7 +184,7 @@ int main(int argc, char **argv) {
                     printhex(c);
                     cputc('\n');
                     if (flags.cmd == DO && c == OPT_NEGOTIATE_ABOUT_WINDOW_SIZE) {
-                        // Send NAWS (40x8 display)
+                        // Send NAWS (40xLCD_ROWS display)
                         uart_write(IAC);
                         wait1ms();
                         uart_write(SB);
@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
                         wait1ms();
                         uart_write(0);
                         wait1ms();
-                        uart_write(8);
+                        uart_write(LCD_ROWS);
                         wait1ms();
                         uart_write(IAC);
                         wait1ms();
