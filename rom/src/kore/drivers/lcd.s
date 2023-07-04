@@ -1,7 +1,6 @@
 .include "../../include/define.inc"
 
 .import LCD1_DATA, LCD1_CMD, popa
-.export LCD_ROWS, _LCD_ROWS = LCD_ROWS
 
 .export lcd_init = init
 .export lcd_printchar = printchar
@@ -14,6 +13,8 @@
 .export _clrscr = clrscr
 .export _printhex = printhex
 .export _printword = printword
+.export _tgi_getmaxx
+.export _tgi_getmaxy
 
 ; .export lcd_BUFFER_PREV = BUFFER_PREV
 
@@ -33,7 +34,20 @@ BUFFER: .res 40
 
 .segment "KORE"
 
-LCD_ROWS: .byte ROWS
+CHAR_DATA:
+    ; $80 - solid block
+    .byte $FF, $FF, $FF, $FF, $FF, $FF, $FF, $FF
+    ; $81 - trident
+    .byte %00100
+    .byte %10101
+    .byte %10101
+    .byte %11011
+    .byte %11111
+    .byte %10101
+    .byte %11111
+    .byte %00100
+
+CHAR_DATA_LEN = * - CHAR_DATA
 
 ; Datasheet:
 ; https://www.sparkfun.com/datasheets/LCD/Monochrome/Datasheet-T6963C.pdf
@@ -108,6 +122,22 @@ init_device:
         lda #$00  ; Col (X)
         ldx #$00  ; Row (Y)
         jsr cmd_set_cursor_pos
+
+        ; Write custom characters to CGRAM
+        lda #$00
+        ldx #$14
+        jsr cmd_set_addr_pointer
+        jsr cmd_autowrite_on
+        ldx #0
+    @char_data:
+        cpx #CHAR_DATA_LEN
+        beq @char_data_done
+        lda CHAR_DATA, X
+        jsr autowrite
+        inx
+        jmp @char_data
+    @char_data_done:
+        jsr cmd_auto_reset
 
         lda #$00
         ldx #$00
@@ -304,12 +334,16 @@ printchar:
         ; Is backspace?
         cmp #8
         beq @backspace  ; Yes
-        ; code = ASCII - $20 (page 26)
+        ; Is custom character?
+        cmp #$80
+        bcs @character
+        ; code = ASCII - $20 (page 26), but only for <$80
         sec
         sbc #$20
 
     ; If character:
     @character:
+        clc  ; Clearing from possible cmp above... Is this necessary? I'm too tired to decide for now.
         jsr cmd_write_data_increment_adp
 
         phx
@@ -606,6 +640,18 @@ print_backspace:
         plx
         pla
 
+        rts
+
+; unsigned __fastcall__ _tgi_getmaxx(void)
+_tgi_getmaxx:
+        lda #39
+        ldx #0
+        rts
+
+; unsigned __fastcall__ _tgi_getmaxy(void)
+_tgi_getmaxy:
+        lda #ROWS-1
+        ldx #0
         rts
 
 ;;;;;;;;;;;;;;;;;;;;;;;;

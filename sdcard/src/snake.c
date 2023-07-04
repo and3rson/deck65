@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <conio.h>
+#include <tgi.h>
 
 #include <api/keyboard.h>
 #include <api/wait.h>
-#include <api/lcd.h>
 
 // Main function should come first
 int main(int argc, char **argv);
@@ -20,6 +20,7 @@ Part body[160]; // Well, we probably need more for 40x16 display...
 byte bodyLength;
 byte head, tail;
 byte tick;
+byte screenW, screenH;
 
 char s[2];
 
@@ -39,11 +40,11 @@ byte rand() {
 
 byte hello() {
     clrscr();
-    gotoxy(8, LCD_ROWS / 2 - 1);
+    gotoxy(8, screenH / 2 - 1);
     puts("         SNAKE          ");
-    gotoxy(6, LCD_ROWS / 2);
+    gotoxy(6, screenH / 2);
     puts("Cursor keys - move, Q - quit");
-    gotoxy(8, LCD_ROWS / 2 + 1);
+    gotoxy(8, screenH / 2 + 1);
     puts("     Press any key");
     if (cgetc() == 'q') {
         puts("\n");
@@ -84,7 +85,7 @@ byte game() {
     clrscr();
     for (i = 0; i < bodyLength; i++) {
         gotoxy(body[i].x, body[i].y);
-        puts("\x01");
+        puts("\x80");
     }
     gotoxy(foodX, foodY);
     puts("*");
@@ -124,15 +125,15 @@ byte game() {
             // Move
             newX = body[head].x + dirX;
             newY = body[head].y + dirY;
-            if (newX == 40) {
+            if (newX == screenW) {
                 newX = 0;
             } else if (newX == 0xFF) {
-                newX = 39;
+                newX = screenW - 1;
             }
-            if (newY == LCD_ROWS) {
+            if (newY == screenH) {
                 newY = 0;
             } else if (newY == 0xFF) {
-                newY = LCD_ROWS - 1;
+                newY = screenH - 1;
             }
             if (newX == foodX && newY == foodY) {
                 // Found food
@@ -144,10 +145,10 @@ byte game() {
                 body[head].prev = newHead;
                 head = newHead;
                 gotoxy(body[head].x, body[head].y);
-                puts("\x01");
+                puts("\x80");
                 gotoxy(body[head].x, body[head].y);
-                foodX = rand() % 40;
-                foodY = rand() % LCD_ROWS;
+                foodX = rand() % screenW;
+                foodY = rand() % screenH;
                 // Draw new food
                 gotoxy(foodX, foodY);
                 puts("*");
@@ -174,7 +175,7 @@ byte game() {
                 gotoxy(body[newHead].x, body[newHead].y);
                 /* s[0] = '0' + newHead; */
                 /* puts(s); */
-                puts("\x01");
+                puts("\x80");
                 gotoxy(body[newHead].x, body[newHead].y);
                 head = newHead;
                 tail = newTail;
@@ -204,6 +205,8 @@ byte game_over() {
 }
 
 int main(int argc, char **argv) {
+    screenW = tgi_getmaxx() + 1;
+    screenH = tgi_getmaxy() + 1;
     if (!hello()) {
         return 0;
     }

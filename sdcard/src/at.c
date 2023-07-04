@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <conio.h>
+#include <tgi.h>
 
 #include <api/system.h>
 #include <api/uart.h>
@@ -193,11 +194,11 @@ int main(int argc, char **argv) {
                         wait1ms();
                         uart_write(0);
                         wait1ms();
-                        uart_write(40);
+                        uart_write(tgi_getmaxx() + 1);
                         wait1ms();
                         uart_write(0);
                         wait1ms();
-                        uart_write(LCD_ROWS);
+                        uart_write(tgi_getmaxy() + 1);
                         wait1ms();
                         uart_write(IAC);
                         wait1ms();

@@ -70,9 +70,9 @@ init:
         cli
 
         jsr lcd_printfz
-        .asciiz "                 Deck65  \n"
+        .byte "               ",$81," Deck65 ",$81,"\n",0
         jsr lcd_printfz
-        .asciiz "             by Andrew Dunai  \n"
+        .byte "             by Andrew Dunai  \n",0
 
         ; jsr lcd_printfz
         ; .asciiz "Writing AT cmd...\n"

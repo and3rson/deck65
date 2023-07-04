@@ -5,6 +5,5 @@
 
 extern void printhex(byte hex);
 extern void printword(word hex);
-extern byte LCD_ROWS;
 
 #endif

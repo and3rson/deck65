@@ -3,6 +3,8 @@
 
 #include "./types.h"
 
+// TODO: Use serial.h instead?
+
 /* extern void acia_write(byte b); */
 /* extern byte acia_read(); */
 /* extern byte acia_iread(); */
