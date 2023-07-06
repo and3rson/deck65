@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <conio.h>
 #include <tgi.h>
+#include <stdlib.h>
+#include <string.h>
 
 #include <api/system.h>
 #include <api/uart.h>
@@ -32,6 +34,9 @@ struct flags_t {
     byte cmd;
     byte escseq;
 } flags;
+
+char escseq_buf[64];
+byte escseq_len;
 
 /* byte buf[256]; */
 /* byte bufsize; */
@@ -97,6 +102,8 @@ void print(byte c) {
 int main(int argc, char **argv) {
     byte c;
     byte ret;
+    byte x, y;
+    char *token;
 
     flags.esc = 0;
     flags.echo = 0;
@@ -226,17 +233,42 @@ int main(int argc, char **argv) {
             if (c == 0x1B) {
                 // Received ESC
                 flags.escseq = 1;
+                escseq_len = 0;
                 continue;
             }
             if (flags.escseq) {
                 // In escape, parse code
                 if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
                     // End of escape sequence reached
+                    escseq_buf[escseq_len] = 0;
+                    if (c == 'H' || c == 'f') {
+                        // Move cursor
+                        if (escseq_len > 1) {
+                            token = strtok(escseq_buf + 1, ";");
+                            y = atoi(token) - 1;
+                            token = strtok(NULL, ";");
+                            x = atoi(token) - 1;
+                            gotoxy(x, y);
+                            /* printhex(x); */
+                            /* cputc(','); */
+                            /* printhex(y); */
+                            /* cputc(';'); */
+                            /* while (token != NULL) { */
+                            /*     atoi(token); */
+                            /*     token = strtok(NULL, ";"); */
+                            /* } */
+                        } else {
+                            gotoxy(0, 0);
+                        }
+                    }
                     flags.escseq = 0;
+                } else {
+                    escseq_buf[escseq_len++] = c;
                 }
                 continue;
             }
-            if (c != 13) {
+            if (c != 0) {
+                // telehack.com sends these periodically
                 print(c);
             }
         }

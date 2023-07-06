@@ -1,42 +1,26 @@
 CPU := 65c02
 
-C_SRC = $(wildcard src/*.c)
-C_BIN = $(patsubst src/%.c, bin/%.cb, $(C_SRC))
-ASM_SRC = $(wildcard src/*.s)
-ASM_BIN = $(patsubst src/%.s, bin/%.ab, $(ASM_SRC))
+SRC = $(wildcard src/*.[cs])
+BIN = $(filter %.bin, $(patsubst src/%.s, bin/%.bin, $(SRC)), $(patsubst src/%.c, bin/%.bin, $(SRC)))
 
-# all: bin bin/hello.bin bin/cltest.bin bin/maze.bin bin/snake.bin bin/time.bin
-all: bin $(C_BIN) $(ASM_BIN)
+all: bin $(BIN)
 
 bin:
 	mkdir bin
 
-bin/%.ab: src/%.s ../rom/api.lib
+# Compile ASM programs
+src/%.o: src/%.s ../rom/api.lib
 	ca65 --cpu $(CPU) $<
-	ld65 -C rom.cfg $(patsubst %.s,%.o,$<) -o $@ ../rom/api.lib  # -m hello.map
 
-bin/%.cb: src/%.c ../rom/api.lib
+# Compile C programs
+src/%.o: src/%.c ../rom/api.lib
 	cl65 -c -t none -C rom.cfg --cpu $(CPU) -I ../rom/include/ $< ../rom/api.lib  # -m $<.map
-	ld65 -C rom.cfg $(patsubst %.c,%.o,$<) ../rom/api.lib -o $@
+
+bin/%.bin: src/%.o
+	ld65 -C rom.cfg $(patsubst %.s,%.o,$<) -o $@ ../rom/api.lib  # -m hello.map
 
 ../rom/api.lib:
 	make -C ../rom api.lib
-
-# bin/cltest.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/cltest.c
-# 	# https://cc65.github.io/doc/intro.html#ss1.2
-# 	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/cltest.c ../rom/rom.lib -o ./bin/cltest.bin -m cltest.map
-
-# bin/maze.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/maze.c
-# 	# https://cc65.github.io/doc/intro.html#ss1.2
-# 	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/maze.c ../rom/rom.lib -o ./bin/maze.bin -m maze.map
-
-# bin/snake.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/snake.c
-# 	# https://cc65.github.io/doc/intro.html#ss1.2
-# 	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/snake.c ../rom/rom.lib -o ./bin/snake.bin -m snake.map
-
-# bin/time.bin: Makefile ../rom/rom.cfg ../rom/rom.lib src/time.c
-# 	# https://cc65.github.io/doc/intro.html#ss1.2
-# 	cl65 -t none -C ../rom/rom.cfg --cpu $(CPU) ./src/time.c ../rom/rom.lib -o ./bin/time.bin -m time.map
 
 format:
 	# Fill (part of) device with zeroes
@@ -57,10 +41,10 @@ copy: all
 	sudo rm -rf /mnt/1/*
 	cat file1.txt | sudo tee /mnt/1/file1.txt
 	# for i in `seq 2 50`; do echo "This is file $$i" | sudo tee /mnt/1/file$${i}.txt; done
-	sudo cp ./bin/*.{ab,cb} /mnt/1/
+	sudo cp ./bin/*.bin /mnt/1/
 	sudo umount /mnt/1
 	sync
 
 .PHONY: clean
 clean:
-	rm -rf bin src/*.o *.map *.lst *.bin *.ab *.cb
+	rm -rf bin src/*.o *.map *.lst *.bin

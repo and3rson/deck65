@@ -116,7 +116,8 @@ init_device:
         jsr writecmd
 
         ; Set cursor pattern
-        lda #$A0  ; 1-line cursor (page 11)
+        ; lda #$A0  ; 1-line cursor (page 11)
+        lda #$A7  ; 8-line cursor (page 11)
         jsr writecmd
 
         lda #$00  ; Col (X)
@@ -328,12 +329,15 @@ printfz:
 printchar:
         pha
 
-        ; Is CR/LF?
+        ; Is LF?
         cmp #10
-        beq @crlf  ; Yes
+        beq @lf  ; Yes
         ; Is backspace?
         cmp #8
         beq @backspace  ; Yes
+        ; Is CR?
+        cmp #13
+        beq @cr
         ; Is custom character?
         cmp #$80
         bcs @character
@@ -364,9 +368,19 @@ printchar:
         plx
 
         jmp @end
-    ; If CR/LF:
-    @crlf:
+    ; If LF:
+    @lf:
         jsr print_crlf
+        jmp @end
+    ; If CR:
+    @cr:
+        phx
+        phy
+        ldx #0
+        ldy CY
+        jsr gotoxy
+        ply
+        plx
         jmp @end
     ; If backspace:
     @backspace:
