@@ -5,4 +5,5 @@
   (lib (name "ds1813")(type "KiCad")(uri "${KIPRJMOD}/symbols/ds1813.kicad_sym")(options "")(descr ""))
   (lib (name "Custom_Symbols_Library")(type "Legacy")(uri "${KIPRJMOD}/symbols/Custom_Symbols/Custom_Symbols_Library.lib")(options "")(descr ""))
   (lib (name "my")(type "KiCad")(uri "${KIPRJMOD}/symbols/my.kicad_sym")(options "")(descr ""))
+  (lib (name "74hc00_small")(type "KiCad")(uri "${KIPRJMOD}/symbols/74hc00_small.kicad_sym")(options "")(descr ""))
 )
