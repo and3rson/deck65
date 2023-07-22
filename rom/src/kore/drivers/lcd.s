@@ -58,28 +58,18 @@ CHAR_DATA_LEN = * - CHAR_DATA
 ; High-level functions
 
 init:
+        phx
+        phy
+
         jsr init_device
         jsr clrscr
-
-        ; ldx #0
-        ; ldy #0
-        ; jsr gotoxy
-
-        ; lda #<STR
-        ; ldx #>STR
-        ; jsr printz
-
-        ; ldx #15
-        ; ldy #5
-        ; jsr gotoxy
-
-        ; lda #<STR2
-        ; ldx #>STR2
-        ; jsr printz
 
         ldx #0
         ldy #0
         jsr gotoxy
+
+        ply
+        plx
 
         rts
 

@@ -10,6 +10,8 @@ _main:
 
         lda #0
         sta GOTO_TMP+1
+        phx
+        plx
 
         clc
         lda CY
