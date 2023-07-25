@@ -26,6 +26,7 @@ Pull with `git pull --recurse-submodules`.
 I/O:
 - 4004 LCD 16-pin header (through 6522)
 - PS/2 keyboard
+- Telnet client through ESP-01
 - Micro SD Card
 - Pin header for VIA (Port B)
 - Pin headers for address bus, data bus, & CPU control lines
