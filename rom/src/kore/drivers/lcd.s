@@ -1,3 +1,4 @@
+; LCD support for the T6963C controller (tested with 240x64 and 240x128)
 .include "../../include/define.inc"
 
 .import LCD1_DATA, LCD1_CMD, popa
@@ -18,7 +19,10 @@
 
 ; .export lcd_BUFFER_PREV = BUFFER_PREV
 
-ROWS = 16
+; 240x64
+ROWS = 8
+; 240x128
+; ROWS = 16
 
 .zeropage
 
@@ -341,20 +345,21 @@ printchar:
         jsr cmd_write_data_increment_adp
 
         phx
-        phy
 
-        ldx CX
-        inx
-        cpx #40
+        lda CX
+        inc
+        cmp #40
         bne @move_cursor
         jsr print_crlf
         jmp @no_move_cursor
     @move_cursor:
-        ldy CY
-        jsr gotoxy
+        ; ldy CY
+        ; jsr gotoxy
+        sta CX
+        ldx CY
+        jsr cmd_set_cursor_pos
 
     @no_move_cursor:
-        ply
         plx
 
         jmp @end
