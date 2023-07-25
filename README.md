@@ -1,6 +1,6 @@
 # Deck65
 
-![Deck65 SBC](./img/v15_final.jpg)
+![Deck65 SBC](./img/v17_sbc_lcd.jpg)
 
 Simple SBC based on W65C02S
 
@@ -32,11 +32,11 @@ I/O:
 To be added in future versions:
 - 8580R5 SID
 
-V15 schematic:
-![65c02s SBC PCB](./img/v15_schematic.png)
+V17 schematic:
+![65c02s SBC PCB](./img/v17_schematic.jpg)
 
-V15 PCB:
-![65c02s SBC PCB](./img/v15_pcb.png)
+V17 PCB:
+![65c02s SBC PCB](./img/v17c_routed.png)
 
 # ROM
 
