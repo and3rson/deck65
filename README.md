@@ -1,6 +1,7 @@
 # Deck65
 
 ![Deck65 SBC](./img/v17_sbc_lcd.jpg)
+![Deck65 SBC](./img/v16_gal_and_t6963c.jpg)
 
 Simple SBC based on W65C02S
 
