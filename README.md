@@ -30,6 +30,7 @@ I/O:
 - Micro SD Card
 - Pin header for VIA (Port B)
 - Pin headers for address bus, data bus, & CPU control lines
+- I2C bus
 
 To be added in future versions:
 - 8580R5 SID
@@ -44,9 +45,10 @@ V17 PCB:
 
 Kernel code currently provides the following features:
 - Simple REPL shell to monitor memory & run programs
-- HD44780-based 4004 LCD (through VIA)
+- 128x64 LCD (through VIA)
 - PS/2 keyboard (through VIA)
 - Micro SD Card in SPI mode (through VIA)
+- I2C & SPI support
 - Basic FAT16 support - listing root folder, loading/executing programs
 
 # Resources
