@@ -3,9 +3,9 @@
     "GenerationSoftware": {
       "Vendor": "KiCad",
       "Application": "Pcbnew",
-      "Version": "7.0.4"
+      "Version": "7.0.6"
     },
-    "CreationDate": "2023-07-28T17:06:01+03:00"
+    "CreationDate": "2023-07-28T20:51:14+03:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
@@ -32,8 +32,13 @@
   ],
   "FilesAttributes": [
     {
-      "Path": "main-TopSilk.gbr",
-      "FileFunction": "Legend,Top",
+      "Path": "main-Board.gbr",
+      "FileFunction": "Profile",
+      "FilePolarity": "Positive"
+    },
+    {
+      "Path": "main-F_Fab.gbr",
+      "FileFunction": "AssemblyDrawing,Top",
       "FilePolarity": "Positive"
     }
   ],
