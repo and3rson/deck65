@@ -1,3 +1,4 @@
+; nice65: ignore
 ; vdelay
 ;
 ; Authors:
