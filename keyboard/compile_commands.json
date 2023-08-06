@@ -1,0 +1,164 @@
+[
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/CDC.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/CDC.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/CDC.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/CDC.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/HardwareSerial.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/HardwareSerial.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/HardwareSerial0.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial0.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial0.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/HardwareSerial0.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/HardwareSerial1.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial1.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial1.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/HardwareSerial1.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/HardwareSerial2.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial2.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial2.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/HardwareSerial2.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/HardwareSerial3.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial3.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/HardwareSerial3.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/HardwareSerial3.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/IPAddress.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/IPAddress.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/IPAddress.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/IPAddress.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/PluggableUSB.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/PluggableUSB.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/PluggableUSB.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/PluggableUSB.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/Print.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/Print.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/Print.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/Print.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/Stream.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/Stream.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/Stream.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/Stream.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/Tone.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/Tone.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/Tone.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/Tone.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/USBCore.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/USBCore.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/USBCore.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/USBCore.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/WInterrupts.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/WInterrupts.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/WInterrupts.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/WInterrupts.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/WMath.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/WMath.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/WMath.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/WMath.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/WString.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/WString.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/WString.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/WString.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/abi.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/abi.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/abi.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/abi.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/hooks.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/hooks.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/hooks.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/hooks.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/main.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/main.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/main.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/main.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/new.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/new.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/new.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/new.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/wiring.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/wiring_analog.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_analog.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_analog.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring_analog.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/wiring_digital.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_digital.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_digital.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring_digital.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-g++ -o .pio/build/ATmega328P/FrameworkArduino/wiring_extras.cpp.o -c -fno-exceptions -fno-threadsafe-statics -fpermissive -std=gnu++17 -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_extras.cpp",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_extras.cpp",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring_extras.cpp.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -mmcu=atmega328p -x assembler-with-cpp -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard -c -o .pio/build/ATmega328P/FrameworkArduino/wiring_pulse.S.o /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_pulse.S",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_pulse.S",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring_pulse.S.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/wiring_pulse.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_pulse.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_pulse.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring_pulse.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/FrameworkArduino/wiring_shift.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard /home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_shift.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore/wiring_shift.c",
+        "output": ".pio/build/ATmega328P/FrameworkArduino/wiring_shift.c.o"
+    },
+    {
+        "command": "/home/anderson/.platformio/packages/toolchain-atmelavr/bin/avr-gcc -o .pio/build/ATmega328P/src/main.c.o -c -std=gnu11 -fno-fat-lto-objects -mmcu=atmega328p -Os -Wall -ffunction-sections -fdata-sections -flto -DPLATFORMIO=60109 -DARDUINO_AVR_ATmega328P -DF_CPU=16000000L -DARDUINO_ARCH_AVR -DARDUINO=10808 -Iinclude -Isrc -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/cores/MiniCore -I/home/anderson/.platformio/packages/framework-arduino-avr-minicore/variants/standard src/main.c",
+        "directory": "/home/anderson/src/m6502/keyboard",
+        "file": "src/main.c",
+        "output": ".pio/build/ATmega328P/src/main.c.o"
+    }
+]
