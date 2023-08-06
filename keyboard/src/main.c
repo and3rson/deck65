@@ -46,6 +46,7 @@ void setup() {
     for (int i = 0; i < 48; i++) {
         keyStates[i] = false;
     }
+    // TODO: Send BAT packet?
 }
 
 void loop() {
