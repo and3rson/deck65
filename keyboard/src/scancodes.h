@@ -1,3 +1,4 @@
+#define _____       0x00
 #define SC_ESC      0x76
 #define SC_1        0x16
 #define SC_2        0x1E
@@ -68,16 +69,18 @@
 #define SC_F10      0x09
 #define SC_NUMLK    0x77
 #define SC_SCRLK    0x7E
-#define SC_HOME     0x6C
 #define SC_NM_MINUS 0x7B
 #define SC_NM_PLUS  0x79
 
-#define SC_EXT_UP     0x75
-#define SC_EXT_PGUP   0x7D
-#define SC_EXT_LEFT   0x6B
-#define SC_EXT_RIGHT  0x74
-#define SC_EXT_END    0x69
-#define SC_EXT_DOWN   0x72
-#define SC_EXT_PGDOWN 0x7A
-#define SC_EXT_INS    0x70
-#define SC_EXT_DEL    0x71
+#define EC_UP    0x75
+#define EC_PGUP  0x7D
+#define EC_LEFT  0x6B
+#define EC_RIGHT 0x74
+#define EC_HOME  0x6C
+#define EC_END   0x69
+#define EC_DOWN  0x72
+#define EC_PGDN  0x7A
+#define EC_INS   0x70
+#define EC_DEL   0x71
+
+#define CC_LYR1 0xC1
