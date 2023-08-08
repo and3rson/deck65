@@ -72,15 +72,16 @@
 #define SC_NM_MINUS 0x7B
 #define SC_NM_PLUS  0x79
 
-#define EC_UP    0x75
-#define EC_PGUP  0x7D
-#define EC_LEFT  0x6B
-#define EC_RIGHT 0x74
-#define EC_HOME  0x6C
-#define EC_END   0x69
-#define EC_DOWN  0x72
-#define EC_PGDN  0x7A
-#define EC_INS   0x70
-#define EC_DEL   0x71
+#define EC_UP    0xE075
+#define EC_PGUP  0xE07D
+#define EC_LEFT  0xE06B
+#define EC_RIGHT 0xE074
+#define EC_HOME  0xE06C
+#define EC_END   0xE069
+#define EC_DOWN  0xE072
+#define EC_PGDN  0xE07A
+#define EC_INS   0xE070
+#define EC_DEL   0xE071
 
 #define CC_LYR1 0xC1
+#define CC_LYR2 0xC2
