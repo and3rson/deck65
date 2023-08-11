@@ -23,41 +23,52 @@
 
 .segment "IO"
 
-;LCD
+; LCD
 ; _OLD_LCD0:     .res  1
 ; _OLD_LCD1:     .res  1
 ; _OLD_LCD_BAD:  .res  254
 
+; $D000-$D0FF
+; RAM banking register
+BANK:       .res  1
+.align 256
+
+; $D100-$D1FF
 ; VIA
-VIA1_RB:    .res  1
-VIA1_RA:    .res  1
-VIA1_DDRB:  .res  1
-VIA1_DDRA:  .res  1
-VIA1_T1CL:  .res  1
-VIA1_T1CH:  .res  1
-VIA1_T1LL:  .res  1
-VIA1_T1LH:  .res  1
-VIA1_T2CL:  .res  1
-VIA1_T2CH:  .res  1
-VIA1_SR:    .res  1
-VIA1_ACR:   .res  1
-VIA1_PCR:   .res  1
-VIA1_IFR:   .res  1
-VIA1_IER:   .res  1
-VIA1_ORNH:  .res  1
+VIA1_RB:   .res 1
+VIA1_RA:   .res 1
+VIA1_DDRB: .res 1
+VIA1_DDRA: .res 1
+VIA1_T1CL: .res 1
+VIA1_T1CH: .res 1
+VIA1_T1LL: .res 1
+VIA1_T1LH: .res 1
+VIA1_T2CL: .res 1
+VIA1_T2CH: .res 1
+VIA1_SR:   .res 1
+VIA1_ACR:  .res 1
+VIA1_PCR:  .res 1
+VIA1_IFR:  .res 1
+VIA1_IER:  .res 1
+VIA1_ORNH: .res 1
 .align 256
 
+; $D200-$D2FF
 ; ACIA
-ACIA1_DATA:  .res  1
-ACIA1_STAT:  .res  1
-ACIA1_CMD:   .res  1
-ACIA1_CTRL:  .res  1
+ACIA1_DATA: .res 1
+ACIA1_STAT: .res 1
+ACIA1_CMD:  .res 1
+ACIA1_CTRL: .res 1
 .align 256
 
+; $D300-$D3FF
 ; 240x64 LCD (T6963C)
 LCD1_DATA: .res 1
-LCD1_CMD: .res 1
+LCD1_CMD:  .res 1
 .align 256
+
+; $D400-$D4FF
+; Reserved for SID
 
 .segment "KORE"
 

@@ -48,11 +48,15 @@ getps:
 init:
         sei
 
+        ; Select last RAM bank
+        lda #$FF
+        sta BANK
+
+        ; Initialize software stack
         lda #<(__STACK_START__)
         sta sp
         lda #>(__STACK_START__)
         sta sp+1
-
         jsr init_jmpvec
 
         ; Illegal nop test

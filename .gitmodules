@@ -4,3 +4,6 @@
 [submodule "gal/xgpro-logic"]
 	path = gal/xgpro-logic
 	url = https://github.com/evolutional/xgpro-logic
+[submodule "WifiModem"]
+	path = WifiModem
+	url = git@github.com:dhansel/WifiModem.git
