@@ -2,6 +2,7 @@
 ; Memory-mapped I/O stuff - VIA, SID, etc
 ;
 
+.export BANK
 .export VIA1_RB
 .export VIA1_RA
 .export VIA1_DDRB

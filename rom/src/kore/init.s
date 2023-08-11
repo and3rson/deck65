@@ -8,6 +8,7 @@
 .export getps, _getps = getps
 
 .importzp sp
+.import BANK
 .import init_jmpvec
 .import __STACK_START__
 .import lcd_printz
