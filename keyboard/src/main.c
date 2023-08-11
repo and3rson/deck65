@@ -14,6 +14,9 @@
 #define ROW_COUNT 8
 #define LAYERS    3
 
+#define REPEAT_RATE  25
+#define REPEAT_DELAY 200
+
 #define PS2CLK  PIN_PD6
 #define PS2DATA PIN_PD7
 
@@ -85,7 +88,11 @@ const uint16_t KEYMAP[LAYERS][COL_COUNT * ROW_COUNT] = {
 uint16_t keyStates[48];
 uint8_t currentLayer = 0;
 
-void handle_key(uint16_t keycode, bool isPressed);
+// Last pressed key to repeat
+uint16_t lastPressedKey = 0;
+uint32_t nextRepeatAt = 0;
+
+uint16_t handle_key(uint16_t keycode, bool isPressed);
 void emit(uint16_t code, bool make);
 void write(uint8_t code);
 void writeBit(uint8_t bit);
@@ -114,6 +121,11 @@ void setup() {
 
 // Scan the matrix
 void loop() {
+    if (lastPressedKey && millis() > nextRepeatAt) {
+        emit(lastPressedKey, true);
+        nextRepeatAt = millis() + 1000 / REPEAT_RATE;
+    }
+
     for (uint8_t y = 0; y < ROW_COUNT; y++) {
         digitalWrite(ROWS[y], LOW);
         for (uint8_t x = 0; x < COL_COUNT; x++) {
@@ -125,11 +137,13 @@ void loop() {
                 if (isPressed) {
                     // Pressed
                     keyStates[index] = currentLayer;
-                    handle_key(KEYMAP[currentLayer][index], true);
+                    lastPressedKey = handle_key(KEYMAP[currentLayer][index], true);
+                    nextRepeatAt = millis() + REPEAT_DELAY;
                 } else {
                     // Released
                     handle_key(KEYMAP[keyStates[index]][index], false);
                     keyStates[index] = INACTIVE;
+                    lastPressedKey = 0;
                 }
             }
         }
@@ -138,14 +152,18 @@ void loop() {
 }
 
 // Decide what to do when the key is pressed/released
-void handle_key(uint16_t keycode, bool isPressed) {
+uint16_t handle_key(uint16_t keycode, bool isPressed) {
     if (keycode == CC_LYR1) {
         currentLayer = isPressed ? 1 : 0;
+        return 0;
     } else if (keycode == CC_LYR2) {
         currentLayer = isPressed ? 2 : 0;
+        return 0;
     } else if (keycode) {
         emit(keycode, isPressed);
+        return keycode;
     }
+    return 0;
 }
 
 // Send PS/2 make/break sequence
