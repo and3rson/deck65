@@ -2,7 +2,7 @@
  * PS/2 keyboard implementation for ATmega328P
  * Supports multi-layer keymaps inspired by QMK firmware (https://qmk.fm/)
  * Keyboard is organized in 6x8 grid to save pins (versus 12x4 arrangement).
- * Matrix scanning order (diode direction) is column-to-row (columns are outputs, rows are inputs).
+ * Matrix scanning order (diode direction) is row-to-column (rows are outputs, columns are inputs).
  * See ../../kicad/keyboard.kicad_sch for schematic
  */
 
@@ -10,12 +10,12 @@
 
 #include "scancodes.h"
 
-#define ROW_COUNT 8
 #define COL_COUNT 6
+#define ROW_COUNT 8
 #define LAYERS    3
 
-#define PS2CLK  PD6
-#define PS2DATA PD7
+#define PS2CLK  PIN_PD6
+#define PS2DATA PIN_PD7
 
 const uint8_t COLS[COL_COUNT] = {PIN_PB0, PIN_PB1, PIN_PB2, PIN_PB3, PIN_PB4, PIN_PB5};
 const uint8_t ROWS[ROW_COUNT] = {PIN_PD0, PIN_PD1, PIN_PD2, PIN_PD3, PIN_PC4, PIN_PC3, PIN_PC2, PIN_PC1};
@@ -29,7 +29,7 @@ const uint16_t KEYMAP[LAYERS][COL_COUNT * ROW_COUNT] = {
         SC_TAB,   SC_Q,     SC_W,     SC_E,     SC_R,     SC_T,
         CC_LYR1,  SC_A,     SC_S,     SC_D,     SC_F,     SC_G,
         SC_LSHFT, SC_Z,     SC_X,     SC_C,     SC_V,     SC_B,
-        SC_LCTRL, _____,    _____,    _____,    _____,    SC_SPACE,
+        SC_LCTRL, SC_ESC,   _____,    _____,    _____,    SC_SPACE,
 
         // Right half
         SC_Y,     SC_U,     SC_I,     SC_O,     SC_P,     SC_BKSPC,
@@ -46,7 +46,7 @@ const uint16_t KEYMAP[LAYERS][COL_COUNT * ROW_COUNT] = {
         // Left half
         _____,    _____,    _____,    _____,    _____,    _____,
         _____,    _____,    _____,    _____,    _____,    _____,
-        _____,    SC_ESC,   _____,    _____,    _____,    _____,
+        _____,    _____,   _____,    _____,    _____,    _____,
         _____,    _____,    _____,    _____,    _____,    _____,
 
         // Right half
@@ -95,12 +95,12 @@ void setup() {
     pinMode(PS2DATA, OUTPUT);
     digitalWrite(PS2CLK, HIGH);
     digitalWrite(PS2DATA, HIGH);
-    for (uint8_t x = 0; x < COL_COUNT; x++) {
-        pinMode(COLS[x], OUTPUT);
-    }
     for (uint8_t y = 0; y < ROW_COUNT; y++) {
         pinMode(ROWS[y], OUTPUT);
-        digitalWrite(ROWS[y], INPUT_PULLUP);
+        digitalWrite(ROWS[y], HIGH);
+    }
+    for (uint8_t x = 0; x < COL_COUNT; x++) {
+        pinMode(COLS[x], INPUT_PULLUP);
     }
     for (int i = 0; i < 48; i++) {
         keyStates[i] = INACTIVE;
@@ -114,10 +114,10 @@ void setup() {
 
 // Scan the matrix
 void loop() {
-    for (uint8_t x = 0; x < COL_COUNT; x++) {
-        digitalWrite(COLS[x], LOW);
-        for (uint8_t y = 0; y < ROW_COUNT; y++) {
-            bool isPressed = digitalRead(ROWS[y]) == LOW; // Key at (x;y) is pressed
+    for (uint8_t y = 0; y < ROW_COUNT; y++) {
+        digitalWrite(ROWS[y], LOW);
+        for (uint8_t x = 0; x < COL_COUNT; x++) {
+            bool isPressed = digitalRead(COLS[x]) == LOW; // Key at (x;y) is pressed
             uint8_t index = y * COL_COUNT + x;
             bool wasPressed = keyStates[index] != INACTIVE;
             if (isPressed != wasPressed) {
@@ -133,7 +133,7 @@ void loop() {
                 }
             }
         }
-        digitalWrite(COLS[x], HIGH);
+        digitalWrite(ROWS[y], HIGH);
     }
 }
 
@@ -143,7 +143,7 @@ void handle_key(uint16_t keycode, bool isPressed) {
         currentLayer = isPressed ? 1 : 0;
     } else if (keycode == CC_LYR2) {
         currentLayer = isPressed ? 2 : 0;
-    } else {
+    } else if (keycode) {
         emit(keycode, isPressed);
     }
 }
