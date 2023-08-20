@@ -31,7 +31,7 @@
 
 ; $D000-$D0FF
 ; RAM banking register
-BANK:       .res  1
+BANK: .res 1
 .align 256
 
 ; $D100-$D1FF
