@@ -8,7 +8,7 @@
 .export getps, _getps = getps
 
 .importzp sp
-.import BANK
+.import BANKS, BANK_CNT
 .import init_jmpvec
 .import __STACK_START__
 .import lcd_printz
@@ -49,9 +49,12 @@ getps:
 init:
         sei
 
-        ; Select last RAM bank
-        lda #$FF
-        sta BANK
+        ; Select first RAM bank
+        ldx #<BANK_CNT
+    @stz:
+        dex
+        stz BANKS, x
+        bne @stz
 
         ; Initialize software stack
         lda #<(__STACK_START__)
@@ -72,12 +75,37 @@ init:
         jsr i2c_init
         jsr sdc_init
 
-        cli
-
         jsr lcd_printfz
         .byte "               ",$81," Deck65 ",$81,"\n",0
         jsr lcd_printfz
         .byte "             by Andrew Dunai  \n",0
+
+        jsr lcd_printfz
+        .byte "Testing banks... ", 0
+
+        ; inc BANK
+        ; lda #$AA
+        ; sta $1000
+        ; inc BANK
+        ; lda #$BB
+        ; sta $1000
+        ;
+        ; lda #$01
+        ; sta BANK
+        ; lda $1000
+        ; stz BANK
+        ; jsr lcd_printhex
+        ;
+        ; lda #$02
+        ; sta BANK
+        ; lda $1000
+        ; stz BANK
+        ; jsr lcd_printhex
+        ;
+        ; lda #$0A
+        ; jsr lcd_printchar
+        ;
+        cli
 
         ; jsr lcd_printfz
         ; .asciiz "Writing AT cmd...\n"
