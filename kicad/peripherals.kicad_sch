@@ -4302,7 +4302,7 @@
     (property "Value" "DS1307N+" (at 205.1559 53.34 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
-    (property "Footprint" "Package_DIP:DIP-8_W7.62mm" (at 203.2 53.34 0)
+    (property "Footprint" "Package_DIP:DIP-8_W7.62mm_Socket" (at 203.2 53.34 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "https://datasheets.maximintegrated.com/en/ds/DS1307.pdf" (at 203.2 45.72 0)
