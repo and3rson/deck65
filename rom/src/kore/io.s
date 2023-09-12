@@ -2,7 +2,7 @@
 ; Memory-mapped I/O stuff - VIA, SID, etc
 ;
 
-.export BANKS, BANK_A, BANK_B, BANK_C, BANK_D, BANK_CNT
+.export SEG_BANKS, SEGA_BANK, SEGB_BANK, SEGC_BANK, SEGD_BANK, SEG_CNT
 .export VIA1_RB
 .export VIA1_RA
 .export VIA1_DDRB
@@ -31,12 +31,12 @@
 
 ; $D000-$D0FF
 ; RAM banking register
-BANKS:
-BANK_A: .res 1
-BANK_B: .res 1
-BANK_C: .res 1
-BANK_D: .res 1
-BANK_CNT = * - BANKS
+SEG_BANKS:
+SEGA_BANK: .res 1
+SEGB_BANK: .res 1
+SEGC_BANK: .res 1
+SEGD_BANK: .res 1
+SEG_CNT = * - SEG_BANKS
 .align 256
 
 ; $D100-$D1FF
