@@ -151,8 +151,5 @@ int system(const char *s) {
     /* __asm__("jsr %w", START); */
     // main() is __cdecl__ and cannot be __fastcall__
     /* ((int __cdecl__ (*)(int, char *[16]))(START))(argc, argv); */
-    ((main_t *)START)(argc, argv);
-
-    // TODO
-    return 0;
+    return ((main_t *)START)(argc, argv);
 }

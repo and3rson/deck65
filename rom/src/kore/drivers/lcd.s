@@ -12,6 +12,7 @@
 .export _cputc = printchar
 .export _gotoxy
 .export _clrscr = clrscr
+.export _printnibble = printnibble
 .export _printhex = printhex
 .export _printword = printword
 .export _tgi_getmaxx

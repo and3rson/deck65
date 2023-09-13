@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
     char *token;
 
     flags.esc = 0;
-    flags.echo = 0;
+    flags.echo = 1; // https://datatracker.ietf.org/doc/html/rfc857#section-3
     flags.crlf = 1;
     flags.iac = 0;
     flags.cmd = 0;
@@ -152,19 +152,20 @@ int main(int argc, char **argv) {
                 }
                 if (c == SB) {
                     // Subnegotiation start
-                    puts("< SB ");
-                    printhex(c);
-                    cputc('\n');
+                    // puts("< SB ");
+                    // printhex(c);
+                    // cputc('\n');
                     flags.cmd = c;
                     continue;
                 }
                 if (c == SE) {
                     // Subnegotiation end
-                    puts("< SE\n");
+                    // puts("< SE\n");
                     flags.cmd = 0;
                     continue;
                 }
                 if (c >= WILL && c <= DONT) {
+                    // puts("< WWDD\n");
                     // General command
                     flags.cmd = c;
                     continue;
@@ -186,11 +187,11 @@ int main(int argc, char **argv) {
                     if (flags.cmd == DONT) {
                         s = (byte *)"DONT";
                     }
-                    puts("< ");
-                    puts(s);
-                    cputc(' ');
-                    printhex(c);
-                    cputc('\n');
+                    // puts("< ");
+                    // puts(s);
+                    // cputc(' ');
+                    // printhex(c);
+                    // cputc('\n');
                     if (flags.cmd == DO && c == OPT_NEGOTIATE_ABOUT_WINDOW_SIZE) {
                         // Send NAWS (40xLCD_ROWS display)
                         uart_write(IAC);
@@ -211,11 +212,11 @@ int main(int argc, char **argv) {
                         wait1ms();
                         uart_write(SE);
                     }
-                    if (flags.cmd == WILL && c == OPT_ECHO) {
-                        flags.echo = 0;
+                    if ((flags.cmd == WILL || flags.cmd == WONT) && c == OPT_ECHO) {
+                        flags.echo = flags.cmd == WONT;
                         uart_write(IAC);
                         wait1ms();
-                        uart_write(DO);
+                        uart_write(flags.cmd == WILL ? DO : DONT);
                         wait1ms();
                         uart_write(OPT_ECHO);
                         wait1ms();
@@ -227,11 +228,13 @@ int main(int argc, char **argv) {
             // Standard data
             if (c == IAC) {
                 // Received IAC
+                // puts("< IAC\n");
                 flags.iac = 1;
                 continue;
             }
             if (c == 0x1B) {
                 // Received ESC
+                // puts("< ESC\n");
                 flags.escseq = 1;
                 escseq_len = 0;
                 continue;
