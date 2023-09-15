@@ -54,7 +54,7 @@ const uint16_t KEYMAP[LAYERS][COL_COUNT * ROW_COUNT] = {
         _____,    _____,    _____,    _____,    _____,    _____,
 
         // Right half
-        _____,    EC_PGUP,  EC_UP,    EC_PGDN,  _____,    _____,
+        SC_MINUS, EC_PGUP,  EC_UP,    EC_PGDN,  _____,    EC_DEL,
         EC_HOME,  EC_LEFT,  EC_DOWN,  EC_RIGHT, SC_GRAVE, _____,
         EC_END,   SC_EQUAL, SC_LBRAC, SC_RBRAC, _____,    _____,
         _____,    _____,    _____,    _____,    _____,    _____,
