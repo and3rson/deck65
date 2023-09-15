@@ -52,27 +52,32 @@ LOROM (10xx) || HIROM (111x):
 
 - W65C02, 512 KB RAM (32KB visible to CPU, banked into 4 x 8 KB segments)
 - 240x64 LCD display (T6963C)
-- I/O: VIA W65C22<ins>N</ins>(6TPG-14) & ACIA W65C51<ins>N</ins>(6TPG-14)
-  > Note: I'm using NMOS-compatible versions (<ins>N</ins> suffix) with open-drain /IRQ line.<br />
+- Built-in [mechanical PS/2 keyboard](./keyboard), powered by ATmega328P
+- Internet! Works through ESP-01
+- VIA W65C22<ins>N</ins>(6TPG-14)
+  Provides:
+  - SPI (used for Micro SD Card adapter)
+  - I2C (used for RTC & EEPROM)
+  - PS/2 host (used for built-in or external keyboard)
+- ACIA W65C51<ins>N</ins>(6TPG-14)n
+  Provides:
+  - Communication with ESP-01
+  - Communication with external devices through pin header
+  > Note: I'm using NMOS-compatible versions of VIA & ACIA (<ins>N</ins> suffix) with open-drain /IRQ line.<br />
   > See http://archive.6502.org/datasheets/wdc_w65c22_sep_13_2010.pdf (page 25) for more details.
 - Address decoder & underclocking - [ATF16V8B-15PU](./gal)
-  > Main crystal is 16 MHz, and the CPU runs at either 8 MHz or 2 MHz.
-  > Reason for this is that T6963C LCD can only operate on up to 2.75 MHz.
-  > So when CPU needs to acccess the LCD, ATF16V8 divides clock speed by 4, bringing it down to 2 MHz.
+  > Main crystal is 16 MHz, and the CPU runs at either 8 MHz or 2 MHz.<br />
+  > Reason for this is that T6963C LCD can only operate on up to 2.75 MHz.<br />
+  > So when CPU needs to acccess the LCD, ATF16V8 divides clock speed by 4, bringing it down to 2 MHz.<br />
   > This is done by implementing a 2-bit counter using registered outputs.
 - Memory banking: 74LS670
-  > Entire RAM (first 32 KB) is divided into 4 x 8 KB segments.
-  > Each segment can use one of its own 16 banks.
-  > This allows to selectively bank parts of RAM in and out.
+  > Entire RAM (first 32 KB) is divided into 4 x 8 KB segments.<br />
+  > Each segment can use one of its own 16 banks.<br />
+  > This allows to selectively bank parts of RAM in and out.<br />
   > Using a machine-tooled socket actually allows to connect JCO-8 or JCO-14 oscillators.
-- Traco Power TSR 1-2450 (drop-in replacement for L7805)
-
-I/O:
-- Built-in [mechanical PS/2 keyboard](./keyboard), powered by ATmega328P
-- Telnet client through ESP-01
-- Micro SD Card adapter
-- Pin header for VIA (Port A)
-- I2C bus
+- Traco Power TSR 1-2450 (drop-in replacement for 7805)
+  > It runs much cooler than L7805 since it's a switching regulator.<br />
+  > I use them a lot, although they are not as cheap as 7805.
 
 V2.0 schematic:
 ![65c02s SBC PCB](./img/v2_0_schematic.png)
