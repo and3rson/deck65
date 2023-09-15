@@ -67,6 +67,8 @@
 #define SC_F8       0x0A
 #define SC_F9       0x01
 #define SC_F10      0x09
+#define SC_F11      0x78
+#define SC_F12      0x07
 #define SC_NUMLK    0x77
 #define SC_SCRLK    0x7E
 #define SC_NM_MINUS 0x7B
