@@ -55,11 +55,13 @@ LOROM (10xx) || HIROM (111x):
 - Built-in [mechanical PS/2 keyboard](./keyboard), powered by ATmega328P
 - Internet! Works through ESP-01
 - VIA W65C22<ins>N</ins>(6TPG-14)
+
   Provides:
   - SPI (used for Micro SD Card adapter)
   - I2C (used for RTC & EEPROM)
   - PS/2 host (used for built-in or external keyboard)
 - ACIA W65C51<ins>N</ins>(6TPG-14)n
+
   Provides:
   - Communication with ESP-01
   - Communication with external devices through pin header
