@@ -14,8 +14,8 @@
 #define ROW_COUNT 8
 #define LAYERS    3
 
-#define REPEAT_RATE  25
-#define REPEAT_DELAY 200
+#define REPEAT_RATE       25
+#define REPEAT_DELAY      200
 #define DEBOUNCE_INTERVAL 5
 
 #define PS2CLK  PIN_PD6
