@@ -63,4 +63,9 @@
   (pad "" np_thru_hole circle (at 5.5 0) (size 1.7018 1.7018) (drill 1.7018) (layers "*.Cu" "*.Mask") (tstamp 47cf309a-4bac-40ec-8485-4877339939e5))
   (pad "1" thru_hole circle (at 0 5.9) (size 2.032 2.032) (drill 1.27) (layers "*.Cu" "*.Mask") (tstamp d45ec43c-e9c6-4bc6-9139-10914c502c89))
   (pad "2" thru_hole circle (at -5 3.8) (size 2.032 2.032) (drill 1.27) (layers "*.Cu" "*.Mask") (tstamp 2ae12007-6162-43f9-bd25-8730c5e627aa))
+  (model "${KIPRJMOD}/3dmodels/Kailh Choc Low Profile Switch.step"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
 )
