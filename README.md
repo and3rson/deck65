@@ -5,8 +5,8 @@
 
 Homebrew 6502-based single-board computer with WiFi, built-in mechanical keyboard, uSD card adapter, I2C/SPI, EEPROM, & RTC.
 
-New discussion: <http://forum.6502.org/viewtopic.php?f=6&t=7682>
-Original thread (old SBC version): <http://forum.6502.org/viewtopic.php?f=12&t=7501>
+- New discussion: <http://forum.6502.org/viewtopic.php?f=6&t=7682>
+- Original thread (old SBC version): <http://forum.6502.org/viewtopic.php?f=12&t=7501>
 
 Pull with `git pull --recurse-submodules`.
 
