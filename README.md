@@ -1,5 +1,6 @@
 # Deck65
 
+![Deck65 SBC](./img/case_9_live.jpg)
 ![Deck65 SBC](./img/v2_0_assembled2.jpg)
 ![Deck65 SBC](./img/v2_0_pcb3.jpg)
 
