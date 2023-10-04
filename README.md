@@ -1,10 +1,10 @@
 # Deck65
 
+Homebrew 6502-based single-board computer with WiFi, built-in mechanical keyboard, uSD card adapter, I2C/SPI, EEPROM, & RTC.
+
 ![Deck65 SBC](./img/case_9_live.jpg)
 ![Deck65 SBC](./img/v2_0_assembled2.jpg)
 ![Deck65 SBC](./img/v2_0_pcb3.jpg)
-
-Homebrew 6502-based single-board computer with WiFi, built-in mechanical keyboard, uSD card adapter, I2C/SPI, EEPROM, & RTC.
 
 - New discussion: <http://forum.6502.org/viewtopic.php?f=6&t=7682>
 - Original thread (old SBC version): <http://forum.6502.org/viewtopic.php?f=12&t=7501>
