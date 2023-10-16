@@ -16,7 +16,7 @@
 
 #define REPEAT_RATE       25
 #define REPEAT_DELAY      200
-#define DEBOUNCE_INTERVAL 5
+#define DEBOUNCE_INTERVAL 10
 
 #define PS2CLK  PIN_PD6
 #define PS2DATA PIN_PD7
@@ -87,8 +87,12 @@ typedef struct {
     // Layer on which the key was pressed, INACTIVE (0xFF) if not pressed.
     // We track this to properly break the key when it's released in case the layer has changed.
     uint8_t layer;
+    // Is the key physically pressed at any point in time.
+    // This is a raw value which is not debounced.
+    // It's used to generate clean value for `layer` after debouncing.
+    uint8_t phys;
     // When was the key pressed (for debouncing)
-    uint32_t pressedAt;
+    uint32_t changedAt;
 } key_state_t;
 
 key_state_t keyStates[COL_COUNT * ROW_COUNT];
@@ -123,7 +127,8 @@ void setup() {
     }
     for (int i = 0; i < COL_COUNT * ROW_COUNT; i++) {
         keyStates[i].layer = INACTIVE;
-        keyStates[i].pressedAt = 0;
+        keyStates[i].phys = HIGH;
+        keyStates[i].changedAt = 0;
     }
 
     // Send BAT
@@ -145,25 +150,30 @@ void loop() {
             bool isPressed = digitalRead(COLS[x]) == LOW; // Key at (x;y) is pressed
             uint8_t index = y * COL_COUNT + x;
             key_state_t *keyState = &keyStates[index];
-            bool wasPressed = keyState->layer != INACTIVE;
+            bool wasPressed = keyState->phys;
             if (isPressed != wasPressed) {
-                // Key state changed
-                if (isPressed) {
-                    // Pressed
-                    keyState->layer = currentLayer;
-                    if (millis() - keyState->pressedAt > DEBOUNCE_INTERVAL) {
-                        // Debounce passed
+                // Key state changed, start debouncing timer
+                keyState->phys = isPressed;
+                keyState->changedAt = millis();
+            }
+
+            // Check if debounce interval passed
+            if (millis() - keyState->changedAt > DEBOUNCE_INTERVAL) {
+                // Debounce interval passed
+                bool wasActive = keyState->layer != INACTIVE;
+                bool isActive = keyState->phys;
+                if (isActive != wasActive) {
+                    if (isActive) {
+                        // Key pressed and is stable
+                        keyState->layer = currentLayer;
                         lastPressedKey = handle_key(KEYMAP[currentLayer][index], true);
                         nextRepeatAt = millis() + REPEAT_DELAY;
-                        keyState->pressedAt = millis();
-                    }
-                } else {
-                    // Released
-                    if (millis() - keyState->pressedAt > DEBOUNCE_INTERVAL) {
+                    } else {
+                        // Key released and is stable
                         handle_key(KEYMAP[keyState->layer][index], false);
                         lastPressedKey = 0;
+                        keyState->layer = INACTIVE;
                     }
-                    keyState->layer = INACTIVE;
                 }
             }
         }

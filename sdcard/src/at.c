@@ -67,16 +67,22 @@ byte handle_esc_command(byte c) {
         puts("Sending telnet options\n");
         uart_write(IAC);
         wait1ms();
+        wait1ms();
         uart_write(DO);
         wait1ms();
+        wait1ms();
         uart_write(OPT_SUPPRESS_GO_AHEAD);
+        wait1ms();
         wait1ms();
 
         uart_write(IAC);
         wait1ms();
+        wait1ms();
         uart_write(WILL);
         wait1ms();
+        wait1ms();
         uart_write(OPT_NEGOTIATE_ABOUT_WINDOW_SIZE);
+        wait1ms();
         wait1ms();
     }
     if (c == 'd') {
@@ -88,6 +94,13 @@ byte handle_esc_command(byte c) {
     }
     if (c == 'c') {
         uart_write(3);
+        wait1ms();
+        wait1ms();
+    }
+    if (c == ']') {
+        puts("Sending ESC\n");
+        uart_write(0x1B);
+        wait1ms();
         wait1ms();
     }
     flags.esc = 0;
@@ -134,6 +147,7 @@ int main(int argc, char **argv) {
             }
             if (c == 10 && flags.crlf) {
                 uart_write(13);
+                wait1ms();
                 wait1ms();
                 uart_write(10);
             } else {
@@ -196,19 +210,27 @@ int main(int argc, char **argv) {
                         // Send NAWS (40xLCD_ROWS display)
                         uart_write(IAC);
                         wait1ms();
+                        wait1ms();
                         uart_write(SB);
+                        wait1ms();
                         wait1ms();
                         uart_write(OPT_NEGOTIATE_ABOUT_WINDOW_SIZE);
                         wait1ms();
+                        wait1ms();
                         uart_write(0);
+                        wait1ms();
                         wait1ms();
                         uart_write(tgi_getmaxx() + 1);
                         wait1ms();
+                        wait1ms();
                         uart_write(0);
+                        wait1ms();
                         wait1ms();
                         uart_write(tgi_getmaxy() + 1);
                         wait1ms();
+                        wait1ms();
                         uart_write(IAC);
+                        wait1ms();
                         wait1ms();
                         uart_write(SE);
                     }
@@ -216,9 +238,12 @@ int main(int argc, char **argv) {
                         flags.echo = flags.cmd == WONT;
                         uart_write(IAC);
                         wait1ms();
+                        wait1ms();
                         uart_write(flags.cmd == WILL ? DO : DONT);
                         wait1ms();
+                        wait1ms();
                         uart_write(OPT_ECHO);
+                        wait1ms();
                         wait1ms();
                     }
                     flags.cmd = 0;

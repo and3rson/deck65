@@ -15,8 +15,8 @@ all: rom.bin api.lib program
 # 	ar65 r rom.lib rom.o ./src/kore/drivers/sdcard2.o
 
 program:
-	# minipro -p W27C512@DIP28 -w rom.bin -S
-	minipro -p SMJ27C512@DIP28 -w rom.bin -S
+	minipro -p W27C512@DIP28 -w rom.bin -S
+	# minipro -p SMJ27C512@DIP28 -w rom.bin -S
 
 rom.bin: Makefile rom.cfg $(OBJ)
 	mkdir -p gen

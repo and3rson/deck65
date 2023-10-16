@@ -26,7 +26,8 @@ PHV =
     ; Fast mode (PHV=Q0)
          /SLOW  *  PHI2
     ; Slow mode (PHV=Q2)
-       +  SLOW  *  Q2
+       ; +  SLOW  *  Q2
+       +  SLOW  *  Q1
 
 ; PHI2 =     Q0
 
